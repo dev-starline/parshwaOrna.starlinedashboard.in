@@ -1,0 +1,207 @@
+﻿@model SL_Bullion.Models.OpenOrder
+@{
+    ViewData["Title"] = "Trade";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string fromDateQuery = Context.Request.Query["fromDate"];
+    string defaultDate = DateTime.Today.ToString("yyyy-MM-dd");
+    string fromDateValue = string.IsNullOrEmpty(fromDateQuery) ? defaultDate : fromDateQuery;
+}
+
+  @* <form asp-action="createTrade" method="post">  *@
+ <form method="post"> 
+    <div class="trade">
+        <div class="container-fluid">
+            <div class="row justify-content-center">
+                <div class="col-md-6 px-2 mt-2 ml-3">
+                    <div class="trade-cvr bg-gray pb-2">
+
+                        <div class="trademain">
+                            <div class="tbx">
+                                <label for="html">Market</label>
+                                <input type="radio" id="Market" name="tradetype" value="M" checked="">
+                            </div>
+                            <div class="tbx">
+                                <label for="html">Limit</label>
+                                <input type="radio" id="Limit" name="tradetype" value="P">
+                            </div>
+                        </div>
+
+                        <table class="mt-2 w-100">
+                            <tr>
+                                <td class="text-left pl-2 w-50 pr-3">
+                                    <label for="searchBox" class="sm-font"><strong>LoginId Or UserName Or FirmName</strong></label>
+                                    <span class="pl-rgt pr-2 float-right">:</span>
+                                </td>
+                                <td class="w-50">
+                                    <input id="searchBox" asp-for="loginId" type="text" class="input-height sm-font pl-1 loginId" />
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-left pl-2 w-50 pr-3">
+                                    <label for="symbolId" class="sm-font"><strong>Symbol</strong></label>
+                                    <span class="pl-rgt pr-2 float-right">:</span>
+                                </td>
+                                <td class="w-50">
+                                    <select asp-for="symbolId" id="symbolId" asp-items="ViewBag.symbol" class="sm-font py-1">
+                                        <option value="0">Select Symbol</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-left pl-2 w-50 pr-3">
+                                    <label for="volume" class="sm-font"><strong>Volume</strong></label>
+                                    <span class="pl-rgt pr-2 float-right">:</span>
+                                </td>
+                                <td class="w-75">
+                                    <input asp-for="volume" id="volume" type="text" class="sm-font trade-inpop" style="border: 1px solid #d2d2d2;" />
+                                </td>
+                            </tr>
+                           @*  <tr>
+                                <td class="text-left pl-2 w-50 pr-3">
+                                    <label for="exchange" class="sm-font"><strong>Exchange Price</strong></label>
+                                    <span class="pl-rgt pr-2 float-right">:</span>
+                                </td>
+                                <td class="w-25">
+                                    <input asp-for="exchange" value="0" type="text" class="sm-font trade-inpop" style="border: 1px solid #d2d2d2;" />
+                                </td>
+                                <td class="w-25"></td>
+                            </tr> *@
+
+                            <tr>
+                                <td class="text-left pl-2 w-50 pr-3">
+                                    <label for="tradeType" class="sm-font"><strong>Trade Type</strong></label>
+                                    <span class="pl-rgt pr-2 float-right">:</span>
+                                </td>
+                                <td class="w-50">
+                                    <select asp-for="tradeType" id="tradeType" class="sm-font py-1">
+                                        <option value="0">Please Select</option>
+                                        <option value="1" class="optmarket">Buy</option>
+                                        <option value="2" class="optmarket">Sell</option>
+                                        <option value="3" class="optlimit">Buy Limit</option>
+                                        <option value="4" class="optlimit">Sell Limit</option>
+                                    </select>
+                                </td>
+                            </tr>
+
+                            @* <tr>
+                                <td class="text-left pl-2 w-50 pr-3">
+                                    <label for="rateLabel" id="rateLabelText" class="sm-font"><strong>Open Price</strong></label>
+                                    <span class="pl-rgt pr-2 float-right">:</span>
+                                </td>
+                                <td class="w-25">
+                                    <input id="rateLabel" asp-for="rate" type="text" class="sm-font trade-inpop" style="border: 1px solid #d2d2d2;" />
+                                </td>
+                                <td class="w-25"></td>
+                            </tr> *@
+
+                            <tr>
+                                <td class="text-left pl-2 w-50 pr-3">
+                                    <label for="rateType" class="sm-font"><strong>Rate Type</strong></label>
+                                    <span class="pl-rgt pr-2 float-right">:</span>
+                                </td>
+                                <td class="w-50">
+                                    <select id="rateType" asp-for="rateType" class="sm-font py-1">
+                                        <option value="fix">Fix</option>
+                                        @* <option value="unFix">UnFix</option> *@
+                                        @* <option value="rateCut">RateCut</option> *@
+                                    </select>
+                                </td>
+                            </tr>
+                            @* <tr> *@
+                            @*     <td class="text-left pl-2 w-50 pr-3"> *@
+                            @*         <label for="premium" class="sm-font"><strong>Premium</strong></label> *@
+                            @*         <span class="pl-rgt pr-2 float-right">:</span> *@
+                            @*     </td> *@
+                            @*     <td class="w-50"> *@
+                            @*         <select asp-for="premium" id="premium" class="sm-font py-1"></select> *@
+                            @*     </td> *@
+                            @* </tr> *@
+                            <tr>
+                                <td class="text-left pl-2 w-50 pr-3">
+                                    <label for="comment" class="sm-font"><strong>Comment</strong></label>
+                                    <span class="pl-rgt pr-2 float-right">:</span>
+                                </td>
+                                <td class="w-75">
+                                    <textarea asp-for="comment" id="comment" cols="30" rows="3"></textarea>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="text-left pl-2 w-50 pr-3">
+                                    <label for="fromDate" class="sm-font"><strong>Date</strong></label>
+                                    <span class="pl-rgt pr-2 float-right">:</span>
+                                </td>
+                                <td class="w-75">
+                                    <input asp-for="fromDate" name="fromDate" value="@fromDateValue" class="d-inline-block" type="date" id="fromDate" />
+                                </td>
+                            </tr>
+                        </table>
+
+                        <table class="texchangemain">
+                            <tbody>
+                                <tr>
+                                    <td class="cp1 text-right"><span>Exchange Price :</span></td>
+                                    <td class="cp3">
+                                        <div class="c-p dc">
+                                            <lable>Sell</lable>
+                                            <input type="text" id="exchangesellPrice" class="txbprice">
+                                        </div>
+                                        <div class="c-p dc">
+                                            <lable>Buy</lable>
+                                            <input type="text" id="exchangebuyPrice" class="txbprice">
+                                        </div>
+                                        <div class="c-p">
+                                            <div class="form-group checkbx-neworder">
+
+                                                <input class="exchangecheck" type="checkbox" id="exchangecheck" checked="">
+                                                <label for="">Auto</label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="cp1 text-right"><span>Open Price :</span></td>
+                                    <td class="cp3">
+                                        <div class="c-p dc">
+                                            <label>Sell</label>
+                                            <input type="text" id="sellPrice" class="txbprice">
+                                        </div>
+                                        <div class="c-p dc">
+                                            <lable>Buy</lable>
+                                            <input type="text" id="buyPrice" class="txbprice">
+                                        </div>
+                                        <div class="c-p">
+                                            <div class="form-group checkbx-neworder">
+                                                <input class="chkIstrade" type="checkbox" id="ratecheck" checked="">
+                                                <label for="">Auto</label>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr class="trlimit" style="display: none;">
+                                    <td class="cp1 text-right"><span class="dvb">Limit Price :</span></td>
+                                    <td class="cp3">
+                                        <div class="c-p">
+                                            <lable>Sell Limit</lable>
+                                            <input type="text" id="sellPriceLimit" class="txbprice">
+                                        </div>
+                                        <div class="c-p">
+                                            <lable>Buy Limit</lable>
+                                            <input type="text" id="buyPriceLimit" class="txbprice">
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="sbt text-center py-2">
+                            <button type="submit" class="btn common-bg d-inline-block mr-1" id="saveOrder" style="width: 100px;">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+<script src="~/adminjs/trade.js"></script>

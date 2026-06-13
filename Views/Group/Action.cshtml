@@ -1,0 +1,83 @@
+﻿@model Group
+<form asp-action="Edit" method="post">
+    <div id="modelPopup">
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editpmodal" style="padding-right: 17px;">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header common-bg rounded-0">
+                <h5 class="modal-title h4 color-white md-font" id="editpmodal"></h5>
+                <button type="button" class="close color-white" data-dismiss="modal" aria-label="Close">
+                    <span class="color-white" aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="col-lg-6 col-md-6 col-sm-12 offset-md-3">
+
+                    <table>
+                        <tr>
+                                    <td class="text-center"><label>Group Name :</label></td>
+                                <td class="numeric"><input asp-for="name" type="text" class="sm-font input-height"></td>
+                        </tr>
+                    </table>
+
+                    <h4 class="common-bg text-center lg-font pb-1">Group Premium</h4>
+                    <table class="bgtwo">
+                        <tbody>
+                            <tr>
+                                <td class="w-20 text-right pb-2 pr-3"> </td>
+                                <td class="text-center"><label for="" class="sm-font mb-0 ">BUY</label></td>
+                                <td class="text-center"><label for="" class="sm-font mb-0 ">SELL</label></td>
+                            </tr>
+                            <tr>
+
+                                <td class="w-20 text-left pb-2 pr-3"><label for="" class="sm-font mb-0 mb-0 pl-3">GOLD</label></td>
+                                <td class="w-40  pb-2">
+                                        <input asp-for="buyPremiumGold" type="text" class="input-height sm-font">
+                                </td>
+                                <td class="w-40  pb-2">
+                                        <input asp-for="sellPremiumGold" type="text" class="input-height sm-font">
+                                </td>
+
+                            </tr>
+                            <tr>
+
+                                <td class="w-20 text-left pb-2 pr-3"> <label for="" class="sm-font mb-0 mb-0 pl-3">SILVER</label></td>
+                                    <td class="w-40 pb-2"> <input asp-for="buyPremiumSilver" type="text" class="input-height sm-font"></td>
+                                    <td class="w-40 pb-2"> <input asp-for="sellPremiumSilver" type="text" class="input-height sm-font"></td>
+                            </tr>
+
+
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="panel-body">
+                    <table class="table">
+                        <thead>
+                            <tr class="common-bg color-white text-center sm-font py-1">
+                                <th class="numeric wtwo">Symbol</th>
+                                        <th class="numeric  wtwo">Enable</th>
+                                        <th class="numeric  wtwo">Buy Premium</th>
+                                        <th class="numeric wtwo">Sell Premium</th>
+                                        <th class="numeric wtwo">One Click</th>
+                                        <th class="numeric wtwo">Step</th>
+                                        <th class="numeric wtwo">In Total</th>
+                            </tr>
+                        </thead>
+                            <tbody class="printSymbol">
+                            
+                        </tbody>
+                    </table>
+
+                </div>
+            </div>
+            <div class="btn-sub text-center">
+                    <button class="btn common-bg sm-font" onclick="edit(@(Model.id));" data-dismiss="modal" aria-label="Close">Save</button>
+            </div>
+        </div>
+    </div>
+</div>
+    </div>
+</form>

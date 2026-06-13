@@ -1,0 +1,143 @@
+﻿@model IEnumerable<SL_Bullion.Models.Group>
+
+@{
+    ViewData["Title"] = "Group";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+ <div class="tab-bottom-cvr w-100 d-inline-block py-2">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <div class="top-cover">
+                    <button class="btn common-bg my-2 mx-2 my-sm-0 sm-font" data-toggle="modal" data-target="#addGroup">Add New Group</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="table-cover">
+            <div class="container-fluid">
+                <div class="table-wrapperr">
+                    <div class="col-md-12 col-sm-12">
+                        <h4 class="text-center mt-0 mb-1">Group List</h4>
+                    </div>
+                    <div class="table-wrapper">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="common-bg thead-font wfive"></th>
+                                    <th class="common-bg thead-font wfive"></th>
+                                    <th class="common-bg thead-font wten"></th>
+                                    <th class="common-bg" colspan="2" style="border: 1px solid #595959; border-bottom: 0;border-top: 0;">GOLD</th>
+                                    <th class="common-bg" colspan="2" style="border: 1px solid #595959; border-bottom: 0; border-top: 0;">SILVER</th>
+                                    <th class="common-bg thead-font wten"></th>
+                                    <th class="common-bg thead-font wten"></th>
+                                </tr>
+                            </thead>
+                            <thead>
+                                <tr>
+                                    <th class="common-bg thead-font wten">Name</th>
+                                    <th class="common-bg thead-font wten">Enable</th>
+                                    <th class="common-bg thead-font wten">Trade</th>
+                                    <th class="common-bg thead-font wten" style="border: 1px solid #595959; border-bottom: 0; border-top: 0;">Buy</th>
+                                    <th class="common-bg thead-font wten" style="border: 1px solid #595959; border-bottom: 0; border-top: 0;">Sell</th>
+                                    <th class="common-bg thead-font wten" style="border: 1px solid #595959; border-bottom: 0; border-top: 0;">Buy</th>
+                                    <th class="common-bg thead-font wten" style="border: 1px solid #595959; border-bottom: 0; border-top: 0;">Sell</th>
+                                    <th class="common-bg thead-font wten">Edit</th>
+                                    <th class="common-bg thead-font wten">Delete</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model) {
+                                <tr>
+                                    <td>
+                                        <div class="content">
+                                        <p>@item.name</p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                        <p>@item.isEnable</p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                        <p>@item.isTrade</p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                        <p>@item.buyPremiumGold</p>
+                                        </div>
+                                    </td>
+    
+                                    <td>
+                                        <div class="content">
+                                        <p>@item.sellPremiumGold</p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                        <p>@item.buyPremiumSilver</p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                        <p>@item.sellPremiumSilver</p>
+                                        </div>
+                                    </td>
+    
+                                    <td class="wfive">
+                                        <div class="content">
+                                        <button class="ajax-model-group" id="@item.id" data-url="@Url.Action($"Edit/{item.id}")">                                           
+                                             <i class="fa fa-pencil-square-o text-primary" aria-hidden="true"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                    <td class="wfive">
+                                        <div class="content">
+                                        <form asp-action="Delete" asp-route-id="@item.id">
+                                            <button onclick="return confirmDelete()">
+                                                <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+                                            </button>
+                                        </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                        }
+                            </tbody>
+                        </table>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+<form asp-action="Create" method="post">
+        <div class="modal fade" id="addGroup" tabindex="-1" role="dialog" aria-labelledby="addgroupmodal" style="padding-right: 17px;">
+            <div class="modal-dialog modal-md">
+                <div class="modal-content">
+                    <div class="modal-header common-bg rounded-0">
+                        <h5 class="modal-title h4 color-white md-font" id="addgroupmodal"></h5>
+                        <button type="button" class="close color-white" data-dismiss="modal" aria-label="Close">
+                            <span class="color-white" aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">GROUP NAME</label><span class="pl-rgt pr-2" style="float: right;">:</span></td>
+                                    <td class="sym-mod-right pb-2"> <input name="name" type="text" placeholder="ENTER GROUP NAME" class="input-height sm-font"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="btn-sub text-center">
+                            <button class="btn common-bg sm-font">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+</form>
+@await Html.PartialAsync("Action", new Group())
+<script src="~/adminjs/group.js"></script>

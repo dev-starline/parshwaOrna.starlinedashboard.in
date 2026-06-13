@@ -1,0 +1,41 @@
+﻿@model IEnumerable<SL_Bullion.Models.CoinInfo>
+
+@{
+    ViewData["Title"] = "CoinInfo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="https://cdn.datatables.net/2.2.2/css/dataTables.dataTables.css" asp-append-version="true" />
+
+<div class="container-fluid">
+    <div class="table-cover">
+        <div class="tab-content" id="nav-tabContent">
+
+            <div class="tab-pane fade show active" id="navexecute" role="tabpanel">
+                <div class="row ml-0 mr-0">
+                </div>
+
+                <div class="table-wrapper">
+                    <table id="example" class="display">
+                        <thead>
+                            <tr>
+                                <th class="common-bg thead-font wtwo">Id</th>
+                                <th class="common-bg thead-font wtwo">User</th>
+                                <th class="common-bg thead-font wfive">Request</th>
+                                <th class="common-bg thead-font wfive">Response</th>
+                                <th class="common-bg thead-font wone">DateTime</th>
+                            </tr>
+                        </thead>
+                        <tbody class="coinInfoList">
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.datatables.net/2.2.2/js/dataTables.js"></script>
+<script src="~/adminjs/coinInfo.js"></script>

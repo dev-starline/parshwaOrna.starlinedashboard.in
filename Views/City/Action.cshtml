@@ -1,0 +1,29 @@
+﻿@model City
+<div class="modal fade" id="addCity" tabindex="-1" role="dialog"
+	 aria-labelledby="cityaddmodal" style="padding-right: 17px;">
+	<div class="modal-dialog modal-md">
+		<div class="modal-content">
+			<div class="modal-header common-bg rounded-0">
+				<h5 class="modal-title h4 color-white md-font"></h5>
+				<button type="button" class="close color-white" data-dismiss="modal" aria-label="Close">
+					<span class="color-white" aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form asp-action="Create" method="post">
+					<table>
+						<tbody>
+							<tr>
+								<td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Name</label><span class="pl-rgt pr-2" style="float: right;">:</span></td>
+								<td class="sym-mod-right pb-2"><input asp-for="Name" type="text" class="input-height sm-font"></td>
+							</tr>
+						</tbody>
+					</table>
+					<div class="btn-sub text-center">
+						<button class="btn common-bg sm-font">Submit</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

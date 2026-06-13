@@ -1,0 +1,246 @@
+﻿@model SL_Bullion.Models.Account
+<form asp-action="Create" method="post">
+    <div class="modal fade" id="addGroup" tabindex="-1" role="dialog" aria-labelledby="accounteditmodal1" style="padding-right: 17px;">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header common-bg rounded-0">
+                    <h5 class="modal-title h4 color-white md-font">Add Account</h5>
+                    <button type="button" class="close color-white" data-dismiss="modal" aria-label="Close">
+                        <span class="color-white" aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6 col-lg-6">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0"> LoginId :</label></td>
+                                        <td class="sym-mod-right pb-2"><input type="text" readonly asp-for="loginId" class="input-height sm-font"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0"> Password :</label></td>
+                                        <td class="sym-mod-right pb-2"> <input type="text" asp-for="password" class="input-height sm-font"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0"> Name :</label></td>
+                                        <td class="sym-mod-right pb-2"> <input type="text" asp-for="name" class="input-height sm-font"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Mobile :</label></td>
+                                        <td class="sym-mod-right pb-2"> <input type="number" asp-for="mobile" class="input-height sm-font"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Email :</label></td>
+                                        <td class="sym-mod-right pb-2"> <input type="email" asp-for="email" class="input-height sm-font"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">City :</label></td>
+                                        <td class="sym-mod-right pb-2"> <input type="text" asp-for="city" class="input-height sm-font"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Firm Name :</label></td>
+                                        <td class="sym-mod-right pb-2"> <input type="text" asp-for="firmName" class="input-height sm-font"></td>
+                                    </tr>
+                                    <tr>
+                                    </tr>
+                                    <tr>
+                                        <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Is Active :</label></td>
+                                        <td class="sym-mod-right pb-2"> <input id="isActive" asp-for="isActive" type="checkbox"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col-md-6 col-lg-6">
+                            <table>
+                                <tbody>
+
+                                    <tr>
+                                        <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Group :</label></td>
+                                        <td class="sym-mod-right pb-2">
+                                            <select asp-for="groupId" class="sm-font py-1">
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Trade Access :</label></td>
+                                        <td class="sym-mod-right pb-2">
+                                            <select asp-for="tradeAccess" class="sm-font py-1">
+                                                <option value="1">Full</option>
+                                                <option value="2">Buy</option>
+                                                <option value="3">Sell</option>
+                                            </select>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Gst Number :</label></td>
+                                        <td class="sym-mod-right pb-2"> <input type="text" asp-for="gst" class="input-height sm-font"></td>
+                                    </tr>
+
+                                     <tr>
+                                        <td class="sym-mod-lef text-left pb-2 pr-3"> <label asp-for="startDate" class="sm-font mb-0">Start Date :</label></td>
+                                        <td class="sym-mod-right pb-2"> <input asp-for="startDate" class="input-height sm-font" type="date" required /></td>
+                                    </tr>
+
+                                    <tr>
+                                        <td class="sym-mod-lef text-left pb-2 pr-3">  <label asp-for="endDate" class="sm-font mb-0">End Date :</label></td>
+                                        <td class="sym-mod-right pb-2"> <input type="date" asp-for="endDate" class="input-height sm-font" required> </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                    <div class="btnall">
+                        <div class="btn-sub text-center">
+                            <button class="btn common-bg sm-font">Save</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<form asp-action="Edit" method="post">
+    <div id="modelPopup">
+        <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="accounteditmodal1" style="padding-right: 17px;">
+            <div class="modal-dialog modal-xl">
+                <div class="modal-content">
+                    <div class="modal-header common-bg rounded-0">
+                        <h5 class="modal-title h4 color-white md-font" id="accounteditmodal1">Edit Account</h5>
+                        <button type="button" class="close color-white" data-dismiss="modal" aria-label="Close">
+                            <span class="color-white" aria-hidden="true">×</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-6 col-lg-6">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0"> LoginId :</label></td>
+                                            <td class="sym-mod-right pb-2"><input type="text" readonly asp-for="loginId" class="input-height sm-font loginId"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0"> Password :</label></td>
+                                            <td class="sym-mod-right pb-2"> <input type="text" asp-for="password" class="input-height sm-font"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0"> Name :</label></td>
+                                            <td class="sym-mod-right pb-2"> <input type="text" asp-for="name" class="input-height sm-font"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Mobile :</label></td>
+                                            <td class="sym-mod-right pb-2"> <input type="number" asp-for="mobile" class="input-height sm-font"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Email :</label></td>
+                                            <td class="sym-mod-right pb-2"> <input type="email" asp-for="email" class="input-height sm-font"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">City :</label></td>
+                                            <td class="sym-mod-right pb-2"> <input type="text" asp-for="city" class="input-height sm-font"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Firm Name :</label></td>
+                                            <td class="sym-mod-right pb-2"> <input type="text" asp-for="firmName" class="input-height sm-font"></td>
+                                        </tr>
+                                        <tr>
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Is Active :</label></td>
+                                            <td class="sym-mod-right pb-2"> <input id="isActive" asp-for="isActive" type="checkbox"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-md-6 col-lg-6">
+                                <table>
+                                    <tbody>
+
+                                        <tr>
+                                            <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Group :</label></td>
+                                            <td class="sym-mod-right pb-2">
+                                                <select asp-for="groupId" asp-items="ViewBag.group" class="sm-font py-1">
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Trade Access :</label></td>
+                                            <td class="sym-mod-right pb-2">
+                                                <select asp-for="tradeAccess" class="sm-font py-1">
+                                                    <option value="1">Full</option>
+                                                    <option value="2">Buy</option>
+                                                    <option value="3">Sell</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Type :</label></td>
+                                            <td class="sym-mod-right pb-2">
+                                                <select asp-for="type" class="sm-font py-1">
+                                                    <option value="none">Common</option>
+                                                    <option value="tcs">TCS</option>
+                                                    <option value="tds">TDS</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Gst Number :</label></td>
+                                            <td class="sym-mod-right pb-2"> <input type="text" asp-for="gst" class="input-height sm-font"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0"> Free Margin :</label></td>
+                                            <td class="sym-mod-right pb-2" id="freeMargin"><span>@(Model.margin - Convert.ToDecimal(ViewBag.usedMargin))</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0"> Used Margin :</label></td>
+                                            <td class="sym-mod-right pb-2"><span>@ViewBag.usedMargin</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Margin :</label></td>
+                                            <td class="sym-mod-right pb-2"><span id="viewMargin">@Model.margin</span></td>
+                                            <input type="hidden" asp-for="margin" />
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Amount :</label></td>
+                                            <td class="sym-mod-right pb-2"> <input type="text" class="input-height sm-font amount"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">startDate :</label></td>
+                                            <td class="sym-mod-right pb-2"> <input type="date" asp-for="startDate" class="input-height sm-font amount"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">endDate :</label></td>
+                                            <td class="sym-mod-right pb-2"> <input type="date" asp-for="endDate" class="input-height sm-font amount"></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+
+                                <div class="btnall">
+                                    <div class="btn-sub text-center" onclick="updateAmount('add')">
+                                        <button type="button" class="btn common-bg sm-font">+ Add Margin</button>
+                                    </div>
+                                    <div class="btn-sub text-center" onclick="updateAmount('withdraw')">
+                                        <button type="button" class="btn common-bg sm-font">- Withdraw Margin</button>
+                                    </div>
+                                    <div class="btn-sub text-center" onclick="updateAmount('resend')">
+                                        <button type="button" class="btn common-bg sm-font">RESEND LOGIN</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="btnall">
+
+                            <div class="btn-sub text-center">
+                                <button class="btn common-bg sm-font">Edit</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

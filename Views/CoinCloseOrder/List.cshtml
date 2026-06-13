@@ -1,0 +1,108 @@
+﻿@model IEnumerable<SL_Bullion.Models.CoinCloseOrderListDto>
+@{
+    ViewData["Title"] = "CoinCloseOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string fromDateQuery = Context.Request.Query["fromDate"];
+    string toDateQuery = Context.Request.Query["toDate"];
+    string loginIdQuery = Context.Request.Query["loginId"];
+    string defaultDate = DateTime.Today.ToString("yyyy-MM-dd");
+    string fromDateValue = string.IsNullOrEmpty(fromDateQuery) ? defaultDate : fromDateQuery;
+    string toDateValue = string.IsNullOrEmpty(toDateQuery) ? defaultDate : toDateQuery;
+}
+
+<div class="tab-bottom-cvr w-100 d-inline-block py-2">
+    <div class="container-fluid">
+        <div class="row">
+            <form asp-action="List" method="GET" class="col-lg-7 col-md-12 col-sm-12">
+                <div class="top-cover">
+                    <div class="form-inline my-2 my-lg-0 justify-content-end">
+                        <div class="datepicket order-sm-1">
+                            <label for="loginId" class="d-inline-block">OrderNo or LoginId :</label>
+                            <input name="loginId" type="number" id="loginId" value="@loginIdQuery">
+                        </div>
+                        <div class="datepicket">
+                            <label for="fromDate" class="d-inline-block">From :</label>
+                            <input name="fromDate" value="@fromDateValue" class="d-inline-block" type="date" id="fromDate">
+                        </div>
+                        <div class="datepicket">
+                            <label for="toDate" class="d-inline-block">To :</label>
+                            <input name="toDate" value="@toDateValue" class="d-inline-block" type="date" id="toDate">
+                        </div>
+                        <div class="submit-btn order-sm-1">
+                            <button formaction="@Url.Action("List")" class="btn common-bg color-white sm-font">Submit</button>
+                            <button formaction="@Url.Action("ExportToExcel")" class="btn common-bg color-white sm-font ml-2" type="submit">Export to Excel</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="table-cover">
+        <div class="row ml-0 mr-0">
+            <div class="col-lg-4 col-md-0 col-sm-12"></div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <h4 class="text-center mt-1 mb-2">Close Order</h4>
+            </div>
+            @*             <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="top-cover">
+                    <div class="form-inline my-2 my-lg-0 justify-content-end">
+                        <form method="get" action="/CloseOrder">
+                            <button type="submit" class="btn common-bg color-white sm-font">All Order</button>
+                        </form>
+                        <button onclick="selectOrder('close')" class="btn common-bg color-white sm-font ml-2">CloseAll</button>
+                        <button onclick="selectOrder('delete')" class="btn common-bg color-white sm-font ml-2">DeleteAll</button>
+                    </div>
+                </div>
+            </div> *@
+        </div>
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="common-bg thead-font wtwo">Deal</th>
+                        <th class="common-bg thead-font wtwo">Login</th>
+                        <th class="common-bg thead-font wfive">Name/Firm</th>
+                        <th class="common-bg thead-font wfive">Open Time</th>
+                        <th class="common-bg thead-font wone">Close Time</th>
+                        <th class="common-bg thead-font wtwo">Type</th>
+                        <th class="common-bg thead-font wtwo">Symbol</th>
+                        <th class="common-bg thead-font wtwo">Quantity</th>
+                        <th class="common-bg thead-font wtwo">O Price</th>
+                        <th class="common-bg thead-font wtwo">Total</th>
+                        <th class="common-bg thead-font wtwo">C Price</th>
+                        <th class="common-bg thead-font wfive">Trade From</th>
+                        <th class="common-bg thead-font wfive">Delete</th>
+                        <th class="common-bg thead-font wtwo">ReOpen</th>
+                        <th class="common-bg thead-font wten">Comment</th>
+                    </tr>
+                </thead>
+                <tbody class="">
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td class="wtwo"><div class="content"><p>@item.Rank-@item.DealNo</p></div></td>
+                            <td class="wtwo"><div class="content"><p>@item.LoginID</p></div></td>
+                            <td class="wfive"><div class="content" title="@item.Name"><p>@item.Name</p></div></td>
+                            <td class="wfive"><div class="content"><p>@item.OpenTradeDateTime</p></div></td>
+                            <td class="wfive"><div class="content"><p>@item.CloseDateTime</p></div></td>
+                            <td class="wone"><div class="content"><p>@item.TradeType</p></div></td>
+                            <td class="wfive"><div class="content"><p>@item.SymbolName</p></div></td>
+                            <td class="wtwo"><div class="content"><p>@item.Volume</p></div></td>
+                            <td class="wtwo"><div class="content"><p>@item.Rate</p></div></td>
+                            <td class="wtwo"><div class="content"><p>@item.Total</p></div></td>
+                            <td class="wtwo"><div class="content"><p>@item.ClosePrice</p></div></td>
+                            <td class="wfive"><div class="content"><p>@item.TradeFrom</p></div></td>
+                            <td class="wtwo"><div class="content"><form asp-action="Delete" asp-route-id="@item.OpenOrderID"><button onclick="return confirmDelete()"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i></button></form></div></td>
+                            <td class="wtwo"><div class="content"><form asp-action="Open" asp-route-id="@item.OpenOrderID"><button onclick="return confirmDelete('open')"><i class="fa fa-external-link text-success" aria-hidden="true"></i></button></form></div></td>
+                            <td class="wfive"><div class="content"><p>@item.Comment</p></div></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+<script src="~/adminjs/order.js"></script>

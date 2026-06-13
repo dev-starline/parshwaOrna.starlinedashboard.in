@@ -1,0 +1,296 @@
+﻿@model IEnumerable<SL_Bullion.Models.Coin>
+
+@{
+	ViewData["Title"] = "Coin";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-8 col-md-12 pl-2 pr-0">
+
+			<div class="tab-bottom-cvr w-100 d-inline-block">
+				<div class="row align-items-center">
+
+					<div class="col-md-12 col-lg-4">
+						<div class="row">
+							<div class="col-lg-12 col-md-5 col-sm-12 bg-white">
+								<div class="main-prem-cover">
+									<h6>Common Premium</h6>
+									<table>
+										<tr>
+
+											<td class="w-25 text-center" style="display:none">
+												<p>Gold Buy</p>
+											</td>
+											<td class="w-25 text-center">
+												<p>Gold Sell</p>
+											</td>
+
+											<td class="w-25 text-center" style="display:none">
+												<p>Silver Buy</p>
+											</td>
+											<td class="w-25 text-center">
+												<p>Silver Sell</p>
+											</td>
+
+
+										</tr>
+
+										<tr>
+											<td class="w-25" style="display:none">
+												<input type="text" class="w-25 input-height text-center goldBuyCommonPremium" value="@(Model.FirstOrDefault(s => s.source == "gold")?.buyCommonPremium ?? 0)">
+											</td>
+											<td class="w-25">
+												<input type="text" class="w-25 input-height text-center goldSellCommonPremium" value="@(Model.FirstOrDefault(s => s.source == "gold")?.sellCommonPremium ?? 0)">
+											</td>
+											<td class="w-25" style="display:none">
+												<input type="text" class="w-25 input-height text-center silverBuyCommonPremium" value="@(Model.FirstOrDefault(s => s.source == "silver")?.buyCommonPremium ?? 0)">
+											</td>
+											<td class="w-25">
+												<input type="text" class="w-25 input-height text-center silverSellCommonPremium" value="@(Model.FirstOrDefault(s => s.source == "silver")?.sellCommonPremium ?? 0)">
+											</td>
+											<td class="w-25">
+												<button onclick="setCommonPremium()" class="common-bg btn sm-font">Save</button>
+											</td>
+										</tr>
+									</table>
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+					<div class="col-md-12 col-lg-4">
+						<div class="row">
+							<div class="col-lg-12 col-md-5 col-sm-12 bg-white">
+								<div class="main-prem-cover">
+									<h6>Header</h6>
+									<table>
+										<tr>
+
+											<td class="w-25 text-center">
+												<p>GOLD<input type="checkbox" name="isGoldCoinHeader" class="isGoldCoinHeader" /></p>
+
+											</td>
+
+											<td class="w-25 text-center">
+												<p>SILVER<input type="checkbox" name="isSilverCoinHeader" class="isSilverCoinHeader" /></p>
+
+											</td>
+
+
+										</tr>
+
+										<tr>
+
+											<td class="w-25">
+												<input type="text" class="w-25 input-height text-center goldCoinHeader" value="">
+											</td>
+
+											<td class="w-25">
+												<input type="text" class="w-25 input-height text-center silverCoinHeader" value="">
+											</td>
+											<td class="w-25">
+												<button onclick="setCoinHeader()" class="common-bg btn sm-font">Save</button>
+											</td>
+										</tr>
+									</table>
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+					@*  <div class="col-lg-2 col-md-12 col-sm-12">
+                    </div> *@
+					<div class="col-lg-4 col-md-12 col-sm-12">
+						<div class="tRate">
+							<div class="trd">
+								<h6 class="common-bg color-white text-center sm-font py-1">Trade</h6>
+								<div class="onof">
+									<input type="radio" name="isTrade" class="isTrade" value=true><strong class="sm-font">ON</strong>
+								</div>
+								<div class="onof">
+									<input type="radio" name="isTrade" class="isTrade" value=false><strong class="sm-font">OFF</strong>
+								</div>
+							</div>
+							<div class="trd">
+								<h6 class="common-bg color-white text-center sm-font py-1">Rate</h6>
+								<div class="onof">
+									<input type="radio" onclick="changeRateType('mcx')" name="isRateType" value=mcx><strong class="sm-font">MCX</strong>
+								</div>
+								<div class="onof">
+									<input type="radio" onclick="changeRateType('bank')" name="isRateType" value=bank><strong class="sm-font">BANK</strong>
+								</div>
+							</div>
+							<div class="trd">
+								<h6 class="common-bg color-white text-center sm-font py-1">Product</h6>
+								<div class="onof">
+									<input type="radio" name="isRate" class="isRate" value=true><strong class="sm-font">ON</strong>
+								</div>
+								<div class="onof">
+									<input type="radio" name="isRate" class="isRate" value=false><strong class="sm-font">OFF</strong>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="table-cover">
+				<div class="row ml-0 mr-0">
+					<div class="col-lg-4 col-md-0 col-sm-12 pl-0">
+						<div class="top-cover">
+							<button class="btn common-bg color-white sm-font" data-toggle="modal" data-target="#symbolCreate">
+								+ Add New
+							</button>
+							<div style="display:flex">
+								<div style="display: inline-block;">All &nbsp;&nbsp;</div>
+
+								<input type="hidden" id="hdnSidTime" value="">
+								<input type="time" id="txtTimestart" class="w-25 input-height text-center">&nbsp;&nbsp;
+								<input type="time" id="txtTimeEnd" class="w-25 input-height text-center">&nbsp;&nbsp;
+								<button onclick="setCoinTradeTime()" class="btn common-bg color-white sm-font ml-2 saveCoinTradeTime">Save</button>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-12 col-sm-12">
+						<h4 class="text-center mb-1 lg-font">CoinList</h4>
+					</div>
+					<div class="col-lg-4 col-md-12 col-sm-12  pr-0">
+						<div class="top-cover">
+							<div class="form-inline my-2 my-lg-0 justify-content-end">
+								<button class="btn common-bg color-white sm-font ml-2 saveAll">Save All</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="table-wrapper">
+
+					<table id="sortable-table">
+						<thead>
+							<tr>
+								<th class="common-bg wfive thead-font">View</th>
+								<th class="common-bg wfive thead-font">Stock</th>
+								<th class="common-bg wten thead-font">Source</th>
+								<th class="common-bg wten thead-font">Name</th>
+								<th class="common-bg wten thead-font">BuyPremium</th>
+								<th class="common-bg wten thead-font">SellPremium</th>
+								<th class="common-bg wten thead-font">Division</th>
+								<th class="common-bg wten thead-font">Multiply</th>
+								<th class="common-bg wten thead-font">Stock</th>
+								<th class="common-bg wten thead-font">R. Stock</th>
+								<th class="common-bg wthree thead-font">GST</th>
+								<th class="common-bg wten thead-font">Coin</th>
+								<th class="common-bg wtwo thead-font">Image</th>
+								<th class="common-bg wfive thead-font">Save</th>
+								<th class="common-bg wfive thead-font">Delete</th>
+							</tr>
+						</thead>
+						<tbody class="symbolList">
+							@foreach (var item in Model)
+							{
+								<tr>
+									<td class="wfive">
+										<div class="content">
+											<input type="checkbox" class="input-height sm-font isView" checked="@(item.isView ? "checked" : null)" value="@item.isView" />
+										</div>
+									</td>
+									<td class="wfive">
+										<div class="content">
+											<input type="checkbox" class="input-height sm-font isStock" checked="@(item.isStock ? "checked" : null)" value="@item.isStock" />
+										</div>
+									</td>
+
+									<td class="wfive">
+										<div class="content">
+											<p>@Html.DisplayFor(modelItem => item.source)</p>
+										</div>
+									</td>
+									<td class="wfive">
+										<div class="content">
+											<input type="text" class="input-height sm-font name" value="@item.name" />
+										</div>
+									</td>
+									<td class="wten">
+										<div class="content">
+											<input type="text" class="input-height sm-font buyPremium" value="@item.buyPremium" />
+										</div>
+									</td>
+									<td class="wten">
+										<div class="content">
+											<input type="text" class="input-height sm-font sellPremium" value="@item.sellPremium" />
+										</div>
+									</td>
+									<td class="wten">
+										<div class="content">
+											<input type="number" class="input-height sm-font division" value="@item.division" />
+										</div>
+									</td>
+									<td class="wten">
+										<div class="content">
+											<input type="number" class="input-height sm-font multiply" value="@item.multiply" />
+										</div>
+									</td>
+									<td class="wten">
+										<div class="content">
+											<input type="number" class="input-height sm-font coinStock" value="@item.coinStock" />
+										</div>
+									</td>
+									<td class="wten">
+										<div class="content">
+											<input type="number" class="input-height sm-font rstock" value="@item.remainingStock" disabled="disabled" />
+										</div>
+									</td>
+									<td class="wten">
+										<div class="content">
+											<input type="number" class="input-height sm-font gst" value="@item.gst" />
+										</div>
+									</td>
+									<td class="wten">
+										<div class="content">
+											<input type="text" class="input-height sm-font coinId" value="@item.coinId" />
+										</div>
+									</td>
+									<td class="wtwo">
+										<div class="content">
+											<button data-url="@Url.Action($"Edit/{item.id}")" class="btn sm-font common-bg color-white ajax-model">
+												View
+											</button>
+										</div>
+									</td>
+									<td class="wfive">
+										<div class="content">
+
+											<button id="@item.id" class="btn sm-font common-bg color-white updatePremium">
+												Save
+											</button>
+										</div>
+									</td>
+									<td class="wfive">
+										<div class="content">
+											<form asp-action="Delete" asp-route-id="@item.id">
+												<button onclick="return confirmDelete()">
+													<i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+												</button>
+											</form>
+										</div>
+									</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		@await Html.PartialAsync("Bank", new CoinBank())
+	</div>
+</div>
+
+<div id="modelPopup"></div>
+@await Html.PartialAsync("Action", new Coin())
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="~/adminjs/coin.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+<script src="~/adminjs/costing.js"></script>

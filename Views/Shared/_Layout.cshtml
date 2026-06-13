@@ -1,0 +1,191 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+	<title>@ViewData["Title"] - SL_Admin</title>
+	<link rel="stylesheet" href="~/css/bootstrap.min.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/css/common.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/css/responsive.css" asp-append-version="true" />
+	<link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+	<!-- Your Site + Fonts + Icons -->
+
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Georgia" asp-append-version="true" />
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" asp-append-version="true" />
+
+	<!-- jQuery & jQuery UI -->
+	<link rel="stylesheet" href="https://code.jquery.com/ui/1.13.2/themes/base/jquery-ui.css">
+	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+	<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+</head>
+<body>
+	<div class="top-header common-bg w-100 d-inline-block">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-4 col-sm-12">
+					<div class="top-cover">
+						<i class="fa fa-user-circle-o color-white icon-font" aria-hidden="true"></i>
+						<span class="color-white sm-font">Welcome</span>
+						<strong class="color-white sm-font userName">@Context.Session.GetString("userName")</strong>
+					</div>
+				</div>
+				<div class="col-md-4 col-sm-12">
+					<div class="top-cover text-center">
+						<strong class="color-white sm-font">Active Users: <span class="activeUsers"></span></strong>
+					</div>
+				</div>
+				<div class="col-md-4 col-sm-12">
+					<div class="top-cover text-right">
+						<div class="dropdown">
+							<a asp-controller="Login" asp-action="Logout" class="btn bg-transparent color-white py-0">
+								<span><i class="fa fa-sign-out" aria-hidden="true"></i></span> Logout
+							</a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	@{
+		var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+	}
+	@{
+		var adminData = Context.Session.GetString("adminData")?.ToString();
+	}
+	<div class="tab-header">
+		<div class="container-fluid">
+			<nav class="navbar navbar-expand-lg navbar-light  navbar-inverse menu">
+				<button class="navbar-toggler" type="button" data-toggle="collapse"
+						data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+						aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse text-center" id="navbarSupportedContent">
+					<ul class="navbar-nav m-auto">
+						<li class="nav-item">
+							<a class="nav-link @(currentController == "Symbol" ? "active" : "")" asp-controller="Symbol" asp-action="List">Symbol</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link @(currentController == "Hedge" ? "active" : "") @(adminData?.Split('|')[4] == "False" ? "hidden" : "")" asp-controller="Hedge" asp-action="List">Hedge</a>
+						</li>
+						<li class="nav-item @(currentController == "Coin" ? "active" : "") @(adminData?.Split('|')[0] == "False" ? "hidden" : "")">
+							<a class="nav-link" asp-controller="Coin" asp-action="List">Coin</a>
+						</li>
+						<li class="nav-item dropdown  @(adminData?.Split('|')[6] == "False" ? "hidden" : "")">
+							<a class="nav-link dropdown-toggle @(currentController == "CoinOpenOrder" || currentController == "CoinCloseOrder" || currentController == "CoinDeleteOrder" || currentController == "CoinSummaryOrder" ? "active" : "")"
+							   data-toggle="dropdown"
+							   role="button"
+							   aria-haspopup="true"
+							   aria-expanded="false">
+								Coin Orders
+							</a>
+							<ul class="dropdown-menu">
+								<li><a asp-controller="CoinOpenOrder" asp-action="List">Open</a></li>
+								<li><a asp-controller="CoinCloseOrder" asp-action="List">Close</a></li>
+								<li><a asp-controller="CoinDeleteOrder" asp-action="List">Delete</a></li>
+								<li><a asp-controller="CoinSummaryOrder" asp-action="List">Summary</a></li>
+
+							</ul>
+						</li>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle @(currentController == "OpenOrder"|| currentController == "UnFixOrder" || currentController == "CloseOrder" || currentController == "DeleteOrder" ? "active" : "")"
+							   data-toggle="dropdown"
+							   role="button"
+							   aria-haspopup="true"
+							   aria-expanded="false">
+								Orders
+							</a>
+							<ul class="dropdown-menu">
+								<li><a asp-controller="OpenOrder" asp-action="List">Open</a></li>
+								<li><a asp-controller="CloseOrder" asp-action="List">Close</a></li>
+								<li><a asp-controller="DeleteOrder" asp-action="List">Delete</a></li>
+								<li><a asp-controller="SummaryOrder" asp-action="List">Summary</a></li>
+
+							</ul>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link @(currentController == "Group" ? "active" : "")" asp-controller="Group" asp-action="List">Group</a>
+						</li>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle @(currentController == "Account" ? "active" : "")"
+							   data-toggle="dropdown"
+							   role="button"
+							   aria-haspopup="true"
+							   aria-expanded="false">
+								Account
+							</a>
+							<ul class="dropdown-menu">
+								<li><a asp-controller="Account" asp-action="List">Approved</a></li>
+								<li><a asp-controller="Register" asp-action="List">Register</a></li>
+							</ul>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link @(currentController == "Kyc" ? "active" : "") @(adminData?.Split('|')[2] == "False" ? "hidden" : "")" asp-controller="Kyc" asp-action="List">KYC</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link @(currentController == "Trade" ? "active" : "")" asp-controller="Trade" asp-action="List">Trade</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link @(currentController == "Update" ? "active" : "")" asp-controller="Update" asp-action="List">Update</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link @(currentController == "Bank" ? "active" : "")" asp-controller="Bank" asp-action="List">Bank</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link @(currentController == "Contact" ? "active" : "")" asp-controller="Contact" asp-action="List">UserDetails</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link @(currentController == "Feedback" ? "active" : "")" asp-controller="Feedback" asp-action="List">FeedbackList</a>
+						</li>
+						<li class="nav-item @(currentController == "Otr" ? "active" : "") @(adminData?.Split('|')[3] == "False" ? "hidden" : "")">
+							<a class="nav-link" asp-controller="Otr" asp-action="List">OTRList</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link @(currentController == "Marketwatch" ? "active" : "")" asp-controller="Marketwatch" asp-action="List">MarketWatch</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link @(currentController == "Setting" ? "active" : "")" asp-controller="Setting" asp-action="List">Setting</a>
+						</li>
+						<li class="nav-item @(adminData?.Split('|')[5] == "False" ? "hidden" : "")">
+							<a class="nav-link @(currentController == "City" ? "active" : "")"
+							   asp-controller="City" asp-action="List">City</a>
+						</li>
+						<li class="nav-item @(adminData?.Split('|')[7] == "False" ? "hidden" : "")">
+							<a class="nav-link @(currentController == "Category" ? "active" : "")"
+							   asp-controller="Category" asp-action="List">Category</a>
+						</li>
+						<li class="nav-item @(adminData?.Split('|')[1] == "False" ? "hidden" : "")">
+							<a class="nav-link @(currentController == "Jewellery" ? "active" : "")"
+							   asp-controller="Jewellery" asp-action="List">Jewellery</a>
+						</li>
+
+						<li class="nav-item @(adminData?.Split('|')[8] == "False" ? "hidden" : "")">
+							<a class="nav-link @(currentController == "Slider" ? "active" : "")"
+							   asp-controller="Slider" asp-action="List">Slider</a>
+						</li>
+					</ul>
+				</div>
+			</nav>
+		</div>
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/@@microsoft/signalr@latest/dist/browser/signalr.min.js"></script>
+
+	<script src="~/adminjs/common.js"></script>
+
+	@RenderBody()
+	<script src="~/js/popper.min.js"></script>
+	<script src="~/js/bootstrap.min.js"></script>
+	@await RenderSectionAsync("Scripts", required: false)
+	@await Component.InvokeAsync("NToastNotify")
+
+	<script>
+		$(document).ready(function () {
+			$("ul li").click(function () {
+				$("li ").removeClass("active");
+				$(this).addClass("active");
+			});
+		});
+	</script>
+</body>
+</html>

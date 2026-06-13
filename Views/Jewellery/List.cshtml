@@ -1,0 +1,173 @@
+﻿@model SL_Bullion.Models.JewelleryViewModel
+
+<style>
+
+	.table td, .table th {
+		padding: 6px;
+		vertical-align: middle
+	}
+
+	input[type="text"]:focus,
+	input[type="file"]:focus,
+	input[type="search"]:focus {
+		border: 2px solid #000;
+		box-shadow: none;
+	}
+
+	.dataTables_filter input[type="search"] {
+		width: 200px;
+	}
+
+	.dataTables_filter label {
+		display: flex;
+		align-items: center;
+		gap: 8px; /* space between 'Search:' and input */
+		margin-bottom: 1px;
+		margin-right: 0;
+		margin-left: 701px;
+	}
+
+	.dataTables_filter {
+		text-align: right !important;
+		border: #000;
+		margin-right: 25px;
+		margin-bottom: 20px;
+	}
+
+	.dataTables_length,
+	.dataTables_info,
+	.dataTables_paginate {
+		display: none !important;
+		margin-right: 0;
+	}
+</style>
+
+@* <div class="container-fluid mt-5"> *@
+<div id="modelPopup">
+	@if (ViewBag.isCategory == true && ViewBag.isJewellery == true)
+	{
+		@await Html.PartialAsync("Action", new Jewellery())
+	}
+	else if (ViewBag.isCategory == true)
+	{
+		@await Html.PartialAsync("Action", new Category())
+	}
+	else if (ViewBag.isJewellery == true)
+	{
+		@await Html.PartialAsync("Jewellery", new Jewellery())
+	}
+</div>
+
+<div class="container-fluid">
+	<div class="d-flex justify-content-between align-items-center mb-3 mt-4">
+		<div>
+			<button class="btn btn-primary" style="width: 120px;" data-toggle="modal" data-target="#jewelleryCreate">
+				ADD IMAGE
+			</button>
+		</div>
+	</div>
+
+	<table id="datatable" class="table table-bordered table-striped dataTable dtr-inline" aria-describedby="example1_info">
+		<thead style="font-size: xx-large; color:white; text-align:center; background-color:black">
+			<tr>
+				<th>Date</th>
+				@if (ViewBag.isCategory == true && ViewBag.isJewellery == true)
+				{
+					<th>Category</th>
+					<th>SubCategory</th>
+				}
+				<th>JewelleryName</th>
+				<th>TagNumber</th>
+				<th>Description</th>
+				<th>Image</th>
+				@* <th>IsHome</th> *@
+				<th>IsDisplay</th>
+				<th>Edit</th>
+				<th>Delete</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var jewellery in Model.Jewelleries)
+			{
+				var category = Model.Categories.FirstOrDefault(c => c.Id == jewellery.CategoryId);
+				var subCategory = Model.SubCategories.FirstOrDefault(s => s.Id == jewellery.SubCategoryId);
+				<tr>
+					<form asp-action="EditJewellery" method="post" enctype="multipart/form-data">
+
+						<input type="hidden" name="Id" value="@jewellery.Id" />
+						<input type="hidden" name="ClientId" value="@jewellery.ClientId" />
+
+					<td>@jewellery.CreatedDate?.ToString("yyyy-MM-dd HH:mm:ss")</td>
+
+						@if (ViewBag.isCategory == true && ViewBag.isJewellery == true)
+						{
+						<td>@category?.Name</td>
+						<td style="text-align:center">@subCategory?.Name</td>
+						}
+
+					<td data-search="@jewellery.Name"> <input type="text" name="Name" value="@jewellery.Name" class="form-control" /></td>
+
+					<td data-search="@jewellery.TagNo"> <input type="text" name="TagNo" value="@jewellery.TagNo" class="form-control" /></td>
+
+					<td data-search="@jewellery.Description"><input type="text" name="Description" value="@jewellery.Description" class="form-control" /></td>
+
+					<td>
+							@{
+								var fileName = !string.IsNullOrEmpty(jewellery.Image)
+								? jewellery.Image.Split('/').Last()
+								: "No file chosen";
+
+								var displayFileName = fileName.Length > 30 ? fileName.Substring(0, 30) + "..." : fileName;
+							}
+						<div style="display: flex; align-items: center;">
+							<div style="width: 20px;">
+									@if (!string.IsNullOrEmpty(jewellery.Image))
+									{
+									<img src="@jewellery.Image" width="20" height="20" />
+									}
+							</div>
+
+							<input type="file"
+								   id="ImageFile-@jewellery.Id"
+								   name="ImageFile"
+								   class="form-control d-none"
+								   accept="image/*"
+								   onchange="validateAndCompressImage(this, 'file-name-@jewellery.Id')" />
+
+							<label for="ImageFile-@jewellery.Id" class="btn btn-sm btn-primary" style="margin-left: 10px;">
+								Choose File
+							</label>
+
+							<span id="file-name-@jewellery.Id" style="margin-left: 10px;" title="@fileName">
+									@displayFileName
+							</span>
+						</div>
+
+						<small id="errorMsg-@jewellery.Id" class="text-danger" style="display:none; padding-left:29px;">
+							Please upload image with 700x480 resolution only.
+						</small>
+					</td>
+
+						@* <td style="text-align:center"><input type="checkbox" name="isHome" value="true" @(jewellery.isHome ? "checked" : "") /></td> *@
+
+					<td style="text-align:center"><input type="checkbox" name="isDisplay" value="true" @(jewellery.isDisplay ? "checked" : "") /></td>
+
+					<td style="text-align:center"><button type="submit" class="btn btn-primary">Save</button></td>
+					</form>
+					<td style="text-align:center">
+						<form asp-action="DeleteJewellery" asp-route-id="@jewellery.Id" method="post">
+							<button class="btn btn-danger" onclick="return confirmDelete();">Delete</button>
+						</form>
+					</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+</div>
+
+
+<script src="~/adminjs/jewellery.js"></script>
+<script src="~/adminjs/category.js"></script>
+<script src="~/adminjs/subcategory.js"></script>
+<script src="~/adminjs/jquery.dataTables.min.js"></script>
+<script src="~/adminJS/dataTables.bootstrap4.min.js"></script>

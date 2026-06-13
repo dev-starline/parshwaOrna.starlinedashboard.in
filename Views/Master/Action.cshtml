@@ -1,0 +1,234 @@
+﻿@model SL_Bullion.Models.Master
+<!-- add modal pop up start -->
+
+<form asp-action="Create">
+    <div class="symboldadd-modal modal fade masterAdd show" tabindex="-1" role="dialog" aria-labelledby="symboladdmodal" style="padding-right: 17px;">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header common-bg rounded-0">
+                    <h5 class="modal-title h4 color-white md-font" id="symboladdmodal"></h5>
+                    <button type="button" class="close color-white" data-dismiss="modal" aria-label="Close">
+                        <span class="color-white" aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mp-sec1">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-12 border-r">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <td class="sym-mod-lef pb-2 pr-3"> <label for="" class="sm-font mb-0">FirmName</label></td>
+                                            <td class="sym-mod-right pb-2"> <input type="text" class="input-height sm-font" asp-for="firmName" /></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="sym-mod-lef pb-2 pr-3"> <label for="" class="sm-font mb-0">ClientName</label></td>
+                                            <td class="sym-mod-right pb-2"> <input type="text" class="input-height sm-font" asp-for="clientName" /></td>
+                                        </tr>
+
+
+                                        <tr>
+                                            <td class="sym-mod-lef pb-2 pr-3"> <label for="" class="sm-font mb-0">Mobile</label></td>
+                                            <td class="sym-mod-right pb-2"> <input type="text" class="input-height sm-font" asp-for="mobile" /></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="sym-mod-lef pb-2 pr-3"> <label for="" class="sm-font mb-0">Address/City</label></td>
+                                            <td class="sym-mod-right pb-2"> <input type="text" class="input-height sm-font" asp-for="city" /></td>
+                                        </tr>
+
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 border-r">
+                                <table>
+                                    <tr>
+                                        <td class="w-50">
+                                            <div class="aclabel">
+                                                <p>User Name</p>
+                                                <input type="text" class="w-50 input-height1 text-center" asp-for="userName" />
+                                            </div>
+                                        </td>
+                                        <td class="w-50">
+                                            <div class="aclabel">
+                                                <p>Password</p>
+                                                <input type="text" class="w-50 input-height1 text-center" asp-for="password" />
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="btn-sub text-center mt-4">
+                                    <button class="btn common-bg">Create</button>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- add modal pop up End -->
+<!-- Edit modal pop up start -->
+<form enctype="multipart/form-data" asp-action="Edit">
+    <input type="hidden" asp-for="id" />
+   
+    <div class="modal fade show" id="editModal" tabindex="-1" aria-labelledby="symboleditaddmodal" style="padding-right: 17px;">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header common-bg rounded-0">
+                    <h5 class="modal-title h4 color-white md-font" id="symboladdmodal"></h5>
+                    <button type="button" class="close color-white" data-dismiss="modal" aria-label="Close">
+                        <span class="color-white" aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mp-sec1">
+                        <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-12 border-r">
+                                <table>
+                                    <tbody>
+
+
+                                        <tr>
+                                            <td class="sym-mod-lef pb-2 pr-3"> <label for="" class="sm-font mb-0">FirmName</label></td>
+                                            <td class="sym-mod-right pb-2"> <input asp-for="firmName" type="text" class="input-height sm-font"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="sym-mod-lef pb-2 pr-3"> <label for="" class="sm-font mb-0">ClientName</label></td>
+                                            <td class="sym-mod-right pb-2"> <input asp-for="clientName" type="text" class="input-height sm-font"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="sym-mod-lef pb-2 pr-3"> <label for="" class="sm-font mb-0">Mobile</label></td>
+                                            <td class="sym-mod-right pb-2"> <input asp-for="mobile" type="text" class="input-height sm-font"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="sym-mod-lef pb-2 pr-3"> <label for="" class="sm-font mb-0">Address/City</label></td>
+                                            <td class="sym-mod-right pb-2"> <input asp-for="city" type="text" class="input-height sm-font"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="sym-mod-lef pb-2 pr-3"> <label for="" class="sm-font mb-0">DomainName</label></td>
+                                            <td class="sym-mod-right pb-2"> <input asp-for="domain" type="text" class="input-height sm-font"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef pb-2 pr-3"> <label for="" class="sm-font mb-0">Total Symbol</label></td>
+                                            <td class="sym-mod-right pb-2"> <input asp-for="symbol" type="text" class="input-height sm-font"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef pb-2 pr-3"> <label for="" class="sm-font mb-0">Total Group</label></td>
+                                            <td class="sym-mod-right pb-2"> <input asp-for="group" type="text" class="input-height sm-font"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef pb-2 pr-3"> <label for="" class="sm-font mb-0">Android Version</label></td>
+                                            <td class="sym-mod-right pb-2"> <input asp-for="versionAndroid" type="text" class="input-height sm-font"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef pb-2 pr-3"> <label for="" class="sm-font mb-0">Ios Version</label></td>
+                                            <td class="sym-mod-right pb-2"> <input asp-for="versionIos" type="text" class="input-height sm-font"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef pb-2 pr-3"> <label for="" class="sm-font mb-0">Password Format</label></td>
+                                            <td class="sym-mod-right pb-2"> <input asp-for="passwordFormat" type="text" class="input-height sm-font"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef pb-2 pr-3"> <label for="" class="sm-font mb-0">Start LoginId</label></td>
+                                            <td class="sym-mod-right pb-2"> <input asp-for="startLoginId" type="text" class="input-height sm-font"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef pb-2 pr-3"> <label for="" class="sm-font mb-0">Start DealNo</label></td>
+                                            <td class="sym-mod-right pb-2"> <input asp-for="startDealNo" type="text" class="input-height sm-font"></td>
+                                        </tr>
+                                        <tr colspan="3">
+                                            <td class="sym-mod-lef pb-2 pr-3"> <label for="" class="sm-font mb-0">Privacy Policy</label></td>
+                                            <td class="sym-mod-right pb-2">
+                                                <input asp-for="privacyPolicyFile" type="file" class="input-height sm-font">
+                                            </td>
+                                            <td><a href="/images/privacyPolicy/@(Model.userName).html" target="_blank">CheckURL</a></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef pb-2 pr-3"> <label for="" class="sm-font mb-0">EndUser Direct Login</label></td>
+                                            <td class="sym-mod-right pb-2"> <input asp-for="isEndUserLogin" type="checkbox"></td>
+                                        </tr>
+                                        <tr>
+                                            <td class="sym-mod-lef pb-2 pr-3"> <label for="" class="sm-font mb-0">Otp</label></td>
+                                            <td class="sym-mod-right pb-2"> <input asp-for="isOtp" type="checkbox"></td>
+                                        </tr>
+
+                                        <tr>
+                                            <td class="sym-mod-lef pb-2 pr-3"> <label for="" class="sm-font mb-0">Total Slider</label></td>
+                                            <td class="sym-mod-right pb-2"> <input asp-for="totalSlider" type="text" class="input-height sm-font"></td>
+                                        </tr>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 border-r">
+                                <table>
+                                    <tr>
+                                        <td class="w-50">
+                                            <div class="aclabel">
+                                                <p>Active</p>
+                                                <input asp-for="isActive" value=true type="radio" checked="@(Model.isActive ? "checked" : null)" />
+                                            </div>
+                                            <div class="aclabel">
+                                                <p>User Name</p>
+                                                <input asp-for="userName" type="text" class="w-50 input-height1 text-center">
+                                            </div>
+                                        </td>
+                                        <td class="w-50">
+                                            <div class="aclabel">
+                                                <p>InActive</p>
+                                                <input asp-for="isActive" value=false type="radio" checked="@(Model.isActive ? null : "checked")" />
+                                            </div>
+                                            <div class="aclabel">
+                                                <p>Password</p>
+                                                <input asp-for="password" type="text" class="w-50 input-height1 text-center">
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <div class="access-cover">
+                                                <P>
+                                                    <span style="font-weight: bold; color: #000; margin-right: 10px; font-size: 16px;">ACCESS:</span>
+                                                    <span><input asp-for="isCoin" type="checkbox">Coin</span>
+                                                    <span><input asp-for="isJewellery" type="checkbox">Jewellery </span>
+                                                    <span><input asp-for="isKyc" type="checkbox">Kyc</span>
+                                                    <span><input asp-for="isOtr" type="checkbox">Otr</span>
+                                                    <span><input asp-for="isMeta" type="checkbox">Hedge</span>
+                                                    <span><input asp-for="isCity" type="checkbox">City</span>
+                                                    <span><input asp-for="isCoinTrade" type="checkbox">Coin Trade</span>
+                                                    <span><input asp-for="isCategory" type="checkbox">Category</span>
+                                                    <span><input asp-for="isSlider" type="checkbox">Slider</span>
+                                                </P>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="btn-sub text-center mt-4">
+                                    <button class="btn common-bg">SAVE</button>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        
+                        @await Html.PartialAsync("Referance", new ReferanceSymbol())
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<!-- Edit modal pop up start -->

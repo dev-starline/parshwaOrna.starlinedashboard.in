@@ -1,0 +1,40 @@
+﻿@model SubCategory
+
+<div class="container mt-5">
+	<div class="modal fade" id="subCategoryCreate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header common-bg rounded-0">
+					<h5 class="modal-title h4 color-white md-font" id="symboladdmodal">Add Sub-Category</h5>
+					<button type="button" class="close color-white" data-dismiss="modal" aria-label="Close">
+						<span class="color-white" aria-hidden="true">&times;</span>
+					</button>
+				</div>
+
+				<div class="modal-body">
+					<form asp-action="CreateSubCategory" method="post" onsubmit="return validateSubCategoryName(this)">
+						<div class="form-group row">
+							<div class="col-md-6">
+								<label asp-for="Name" class="sm-font">Sub-Category Name</label>
+								<input id="subCategoryName" name="Name" type="text" class="form-control sm-font" oninput="hideNameError()" style="border-color: black;" />
+								<small id="nameErrorMsg" class="text-danger" style="display: none;">Please enter SubCategoryName.</small>
+							</div>
+							<div class="col-md-6">
+								<label asp-for="CategoryId" class="sm-font">Category</label>
+								<select asp-for="CategoryId" asp-items="ViewBag.CategoryList" class="form-control sm-font">
+									@* <option value="">-- Select Category --</option> *@
+								</select>
+							</div>
+						</div>
+
+						<div class="form-group row mt-3">
+							<div class="col-md-6 text-left">
+								<button type="submit" class="btn common-bg w-25">Save</button>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

@@ -1,0 +1,136 @@
+﻿@model SL_Bullion.Models.CategorySubCategoryViewModel
+@{
+	ViewData["Title"] = "Category";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+	.table td, .table th {
+		padding: 6px
+	}
+
+	input[type=text]:focus {
+		border: 2px solid #000;
+		box-shadow: none
+	}
+</style>
+<div class="p-4">
+	<div class="container">
+		<div class="row">
+
+			<!-- Category -->
+			<div class="col-md-6 col-sm-12">
+
+				<button class="btn common-bg color-white sm-font" data-toggle="modal" data-target="#categoryCreate" style="margin-bottom:10px">
+					Add Category
+				</button>
+				<div class="mb-4" style="border: 1px solid transparent;box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08)">
+					<table class="table">
+						<thead style="background: linear-gradient(180deg, #3a3a3a 0%, #282626 50%, #0b0b0b 100%);color: #fff;">
+							<tr>
+								<th>CATEGORY</th>
+								<th style="text-align:center">Is Display</th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var item in Model.Categories)
+							{
+								<tr>
+									<form asp-action="Edit" method="post">
+										<input type="hidden" name="Id" value="@item.Id" />
+										<input type="hidden" name="ClientId" value="@item.ClientId" />
+
+									<td>
+										<input type="text" name="Name" value="@item.Name" class="form-control sm-font" />
+										<span asp-validation-for="@item.Name" class="text-danger"></span>
+									</td>
+
+									<td style="text-align:center">
+										<input type="checkbox" name="isDisplay" value="true" @(item.isDisplay ? "checked" : "") />
+										<input type="hidden" name="isDisplay" value="false" />
+									</td>
+
+									<td>
+										<button type="submit" class="btn common-bg color-white sm-font">Save</button>
+									</td>
+									</form>
+
+									<td>
+										<form asp-action="Delete" asp-route-id="@item.Id" method="post">
+											<button type="submit" onclick="return confirm('Delete this category?')">
+												<i class="fa fa-trash text-danger"></i>
+											</button>
+										</form>
+									</td>
+								</tr>
+							}
+
+						</tbody>
+					</table>
+				</div>
+			</div>
+
+			<!-- SubCategory -->
+			<div class="col-md-6 col-sm-12">
+
+				<button class="btn common-bg color-white sm-font" data-toggle="modal" data-target="#subCategoryCreate" style="margin-bottom:10px">
+					Add Sub-Category
+				</button>
+				<div class="mb-4" style="border: 1px solid transparent;box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08)">
+					<table class="table">
+						<thead style="background: linear-gradient(180deg, #3a3a3a 0%, #282626 50%, #0b0b0b 100%);color: #fff;">
+							<tr>
+								<th>CATEGORY</th>
+								<th>SUB-CATEGORY</th>
+								<th>Is Display</th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							@foreach (var sub in Model.SubCategories)
+							{
+								var categoryName = Model.Categories.FirstOrDefault(c => c.Id == sub.CategoryId)?.Name;
+
+								<tr>
+									<form asp-action="EditSubCategory" method="post">
+
+										<input type="hidden" name="Id" value="@sub.Id" />
+										<input type="hidden" name="ClientId" value="@sub.ClientId" />
+										<input type="hidden" name="CategoryId" value="@sub.CategoryId" />
+									<td>@categoryName</td>
+									<td>
+										<input type="text" name="Name" value="@sub.Name" class="form-control sm-font" />
+									</td>
+									<td style="text-align:center">
+										<input type="checkbox" name="isDisplay" value="true" @(sub.isDisplay ? "checked" : "") />
+										<input type="hidden" name="isDisplay" value="false" />
+									</td>
+									<td>
+										<button type="submit" class="btn common-bg color-white sm-font">Save</button>
+									</td>
+									</form>
+									<td>
+										<form asp-action="DeleteSubCategory" asp-route-id="@sub.Id" method="post">
+											<button type="submit" onclick="return confirm('Delete this Sub-Category?')">
+												<i class="fa fa-trash text-danger"></i>
+											</button>
+										</form>
+									</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div id="modelPopup"></div>
+@await Html.PartialAsync("Action", new Category())
+@await Html.PartialAsync("SubCategory", new SubCategory())
+<script src="~/adminjs/jewellery.js"></script>
+<script src="~/adminjs/category.js"></script>
+<script src="~/adminjs/subcategory.js"></script>

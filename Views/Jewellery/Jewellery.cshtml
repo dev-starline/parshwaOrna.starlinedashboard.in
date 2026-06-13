@@ -1,0 +1,45 @@
+﻿@model Jewellery
+
+<div class="container mt-5">
+	<div class="modal fade" id="jewelleryCreate" tabindex="-1" aria-labelledby="addImageModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header common-bg rounded-0">
+					<h5 class="modal-title h4 color-white md-font" id="addImageModalLabel">Add Image</h5>
+					<button type="button" class="close color-white" data-dismiss="modal" aria-label="Close">
+						<span class="color-white" aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<form asp-action="AddJewellery" enctype="multipart/form-data" method="post" onsubmit="return validateCategoryDropdown()">
+					<div class="modal-body">
+						<div class="row">
+
+							<div class="col-md-6 mb-3">
+								<label class="form-label">Name:</label>
+								<input type="text" name="Name" class="form-control" />
+							</div>
+
+							<div class="col-md-6 mb-3">
+								<label class="form-label">Art No:</label>
+								<input type="text" name="TagNo" class="form-control" />
+							</div>
+
+							<div class="col-md-6 mb-3">
+								<label class="form-label">Description:</label>
+								<textarea name="Description" class="form-control"></textarea>
+							</div>
+
+							<div class="col-md-6 mb-3">
+								<label for="ImageFile">Upload Image</label>
+								<input type="file" id="ImageFile" name="ImageFile" class="form-control" accept="image/*" onchange="validateImageSize(this, 'imageError')" />
+							</div>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn common-bg w-100">Submit</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>

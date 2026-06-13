@@ -1,0 +1,235 @@
+﻿@model SL_Bullion.Models.SymbolViewModel
+
+@{
+	ViewData["Title"] = "Symbol";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-lg-8 col-md-12 pl-2 pr-0">
+
+			<div class="tab-bottom-cvr w-100 d-inline-block">
+				<div class="row align-items-center">
+
+					<div class="col-md-12 col-lg-8">
+						<div class="row">
+							<div class="col-lg-12 col-md-5 col-sm-12 bg-white">
+								<div class="main-prem-cover">
+									<h6>Common Premium</h6>
+									<table>
+										<tr>
+
+											<td class="w-15 text-center">
+												<p>Gold Buy</p>
+											</td>
+											<td class="w-15 text-center">
+												<p>Gold Sell</p>
+											</td>
+
+											<td class="w-15 text-center">
+												<p>Silver Buy</p>
+											</td>
+											<td class="w-15 text-center">
+												<p>Silver Sell</p>
+											</td>
+
+
+										</tr>
+
+										<tr>
+											<td>
+												<input type="text" class="w-25 input-height text-center goldBuyCommonPremium" value="@(Model.Symbols.FirstOrDefault(s => s.source == "gold")?.buyCommonPremium??0)">
+											</td>
+											<td>
+												<input type="text" class="w-25 input-height text-center goldSellCommonPremium" value="@(Model.Symbols.FirstOrDefault(s => s.source == "gold")?.sellCommonPremium??0)">
+											</td>
+											<td>
+												<input type="text" class="w-25 input-height text-center silverBuyCommonPremium" value="@(Model.Symbols.FirstOrDefault(s => s.source == "silver")?.buyCommonPremium??0)">
+											</td>
+											<td>
+												<input type="text" class="w-25 input-height text-center silverSellCommonPremium" value="@(Model.Symbols.FirstOrDefault(s => s.source == "silver")?.sellCommonPremium??0)">
+											</td>
+											<td>
+												<button onclick="setCommonPremium()" class="common-bg btn sm-font">Save</button>
+											</td>
+										</tr>
+									</table>
+								</div>
+
+							</div>
+
+						</div>
+					</div>
+
+					<div class="col-lg-4 col-md-12 col-sm-12">
+						<div class="tRate">
+							<div class="trd">
+								<h6 class="common-bg color-white text-center sm-font py-1">Product</h6>
+								<div class="onof">
+									<input type="radio" name="isRate" class="isSwitch" value=true><strong class="sm-font">ON</strong>
+								</div>
+								<div class="onof">
+									<input type="radio" name="isRate" class="isSwitch" value=false><strong class="sm-font">OFF</strong>
+								</div>
+							</div>
+							<div class="trd">
+								<h6 class="common-bg color-white text-center sm-font py-1">Login</h6>
+								<div class="onof">
+									<input type="radio" name="isLogin" class="isSwitch" value=true><strong class="sm-font">ON</strong>
+								</div>
+								<div class="onof">
+									<input type="radio" name="isLogin" class="isSwitch" value=false><strong class="sm-font">OFF</strong>
+								</div>
+							</div>
+							<div class="trd">
+								<h6 class="common-bg color-white text-center sm-font py-1">Trade</h6>
+								<div class="onof">
+									<input type="radio" name="isTrade" class="isSwitch" value=true><strong class="sm-font">ON</strong>
+								</div>
+								<div class="onof">
+									<input type="radio" name="isTrade" class="isSwitch" value=false><strong class="sm-font">OFF</strong>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+
+			</div>
+			<div class="table-cover">
+				<div class="row ml-0 mr-0">
+					<div class="col-lg-4 col-md-0 col-sm-12 pl-0">
+						<div class="top-cover">
+							<button class="btn common-bg color-white sm-font" data-toggle="modal" data-target="#symbolCreate">
+								+ Add New
+							</button>
+						</div>
+					</div>
+					<div class="col-lg-4 col-md-12 col-sm-12 ">
+						<h4 class="text-center mb-1 lg-font">SymbolList</h4>
+					</div>
+					<div class="col-lg-4 col-md-12 col-sm-12  pr-0">
+						<div class="top-cover">
+							<div class="form-inline my-2 my-lg-0 justify-content-end">
+								<button class="btn common-bg color-white sm-font" onclick="changeRateType('mcx')">Exc All</button>
+								<button class="btn common-bg color-white sm-font ml-2" onclick="changeRateType('fix')">Fix All</button>
+								<button class="btn common-bg color-white sm-font ml-2 saveAll">Save All</button>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="table-wrapper">
+
+					<table id="sortable-table">
+						<thead>
+							<tr>
+								<th class="common-bg wone thead-font"></th>
+								<th class="common-bg wone thead-font">View</th>
+								<th class="common-bg wone thead-font">Terminal</th>
+								<th class="common-bg wone thead-font">Trade</th>
+								<th class="common-bg wten thead-font">Name</th>
+								<th class="common-bg wtwo thead-font">Source</th>
+								<th class="common-bg wtwo thead-font">RateType</th>
+								<th class="common-bg wtwo thead-font">BuyPremium</th>
+								<th class="common-bg wtwo thead-font">SellPremium</th>
+								<th class="common-bg wtwo thead-font">Save</th>
+								<th class="common-bg wtwo thead-font">Edit</th>
+								<th class="common-bg wtwo thead-font">Delete</th>
+							</tr>
+						</thead>
+						<tbody class="symbolList">
+							@foreach (var item in Model.Symbols)
+							{
+								<tr>
+									<td class="wone">
+										<div class="content">
+											<i class="fa fa-clock-o" onclick="getSession(@item.id)" aria-hidden="true" data-toggle="modal" data-target="#sessionModal"></i>
+										</div>
+									</td>
+									<td class="wone">
+										<div class="content">
+											<input type="checkbox" class="input-height sm-font isView" @(item.isView ? "checked" : "") />
+										</div>
+									</td>
+									<td class="wone">
+										<div class="content">
+											<input type="checkbox" class="input-height sm-font isTerminal" @(item.isTerminal ? "checked" : "") />
+										</div>
+									</td>
+									<td class="wone">
+										<div class="content">
+											<input type="checkbox" class="input-height sm-font isTrade" @(item.isTrade ? "checked" : "") />
+										</div>
+									</td>
+
+									<td class="wten">
+										<div class="content">
+											<input type="text" class="input-height sm-font sbName" value="@item.name" />
+										</div>
+									</td>
+									<td class="wtwo">
+										<div class="content">
+											<p>@Html.DisplayFor(modelItem => item.source)</p>
+										</div>
+									</td>
+									@* <td class="wtwo">
+                                        <div class="content">
+                                            <p>@Html.DisplayFor(modelItem => item.rateType)</p>
+                                        </div>
+                                    </td> *@
+									<td class="wtwo">
+										<div class="content">
+											<p>
+												@(item.rateType == "mcx" ? "exchange" : item.rateType == "bank" ? "bank" : item.rateType == "fix" ? "fix" : item.rateType)
+											</p>
+										</div>
+									</td>
+									<td class="wtwo">
+										<div class="content">
+											<input type="text" class="input-height sm-font buyPremium" value="@item.buyPremium" />
+										</div>
+									</td>
+									<td class="wtwo">
+										<div class="content">
+											<input type="text" class="input-height sm-font sellPremium" value="@item.sellPremium" />
+										</div>
+									</td>
+									<td class="wtwo">
+										<div class="content">
+											<button id="@item.id" class="btn sm-font common-bg color-white updatePremium">
+												Save
+											</button>
+										</div>
+									</td>
+									<td class="wtwo">
+										<div class="content">
+											<button class="ajax-model" data-url="@Url.Action($"Edit/{item.id}")">
+												<i class="fa fa-pencil-square-o text-primary" aria-hidden="true"></i>
+											</button>
+										</div>
+									</td>
+									<td class="wtwo">
+										<div class="content">
+											<form asp-action="Delete" asp-route-id="@item.id">
+												<button onclick="return confirmDelete()"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i></button>
+											</form>
+										</div>
+									</td>
+								</tr>
+							}
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+		@await Html.PartialAsync("Bank", new BankRate())
+	</div>
+</div>
+
+<div id="modelPopup"></div>
+@await Html.PartialAsync("Action", new Symbol())
+@await Html.PartialAsync("Session", new Symbol())
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="~/adminjs/symbol.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pako/2.1.0/pako.min.js"></script>
+<script src="~/adminjs/costing.js"></script>

@@ -1,0 +1,97 @@
+@media(max-width: 1800px) {
+    .tab-bottom-cvr .tRate .trd {width: 30%; margin-left: 10px;}
+}
+@media(max-width: 1677px) {
+    /* .tab-bottom-cvr form input {width: 100px !important;} */
+}
+@media(max-width:1440px){
+    .table-wrapper table th, .table-wrapper table td {min-width: 30px;}
+}
+@media(max-width:1400px) {
+    form.account-form button {margin: 0 2px !important;padding: 4px;font-size: 12px;}
+}
+@media(max-width:1200px) {
+    .md-font {font-size: 14px;}
+    .premium-table-cover .two .gs-cover .p-cont p {font-size: 12px;}
+    .sm-font {font-size: 11px;}
+    .tab-bottom-cvr nav a.nav-link {font-size: 12px;}
+    .tab-bottom-cvr .tRate .trd {width: 29%;}
+    button.btn {padding: 4px;}
+    .datepicket {margin-bottom: 4px;}
+    .tRate.cointrate .trd {width: 45%;}
+    .top-cover input.accout-inpur-search {width: 100px !important;}
+    
+}
+@media(max-width: 1027px) {
+    .table-wrapper table th, .table-wrapper table td {
+        min-width: 22px;
+    }
+}
+
+@media(max-width:991px) {
+    nav.navbar.navbar-expand-lg.navbar-light {justify-content: right;}
+    .premium-table-cover .two .gs-cover {flex-wrap: wrap; flex-direction: column-reverse;}
+    .premium-table-cover .two .gs-cover:nth-child(2) {flex-wrap: wrap; flex-direction: column-reverse;flex-direction: column;}
+    .premium-table-cover .two .gs-cover .b-cont button {margin-top: 4px;}
+    .premium-table-cover .two .gs-cover .p-cont {width: 100%;}
+    .premium-table-cover .two .gs-cover .left-cover p {font-size: 13px;}
+    .premium-table-cover .two .gs-cover .left-cover p input {margin-left: 0;}
+    .premium-table-cover .two .gs-cover .left-cover {width: 100%;}
+    .premium-table-cover .two .gs-cover .p-cont p {margin-top: 4px;}
+    .premium-table-cover .two .gs-cover .b-cont {width: 100%;}
+    .order-tab {justify-content: center;}
+    .tab-bottom-cvr .tRate .trd {width: 30%;}
+    .tRate.cointrate .trd {width: 47%; margin-top: 4px;}
+    form.account-form {justify-content: center !important;}
+    .sym-mod-right label.sym-mod { padding-left: 0 !important;width: 100%;}
+.sym-mod-right label.sym-mod span {width: 40px;display: inline-block;}
+.sym-mod-right label.sym-mod span:nth-child(2) { width: 20px;}
+   
+}
+
+@media(max-width: 767px){
+    .premium-table-cover .one{ width: 14%;}
+    .premium-table-cover .two {width: 43%;}
+    .datepicket {width: 50%; margin-bottom: 6px;text-align: left;}
+    .tab-bottom-cvr form input {width: 200px !important;}
+    .submit-btn.order-sm-1 {width: 50%;}
+    .datepicket label.d-inline-block {width: 70px;}   
+    .top-header .top-cover {text-align: center;}
+    .tRate.cointrate .trd {width: 48%;}
+    .pag nav ul li.page-item a {font-size: 12px;padding: 8px;}
+}
+@media(max-width:575px) {
+    .premium-table-cover .one {width: 100%;display: inline-block;}
+    .premium-table-cover .two {width: 100%;display: inline-block;}
+    .premium-table-cover .two .gs-cover .left-cover p {font-size: 12px;}
+    .premium-table-cover .two .gs-cover .left-cover input {width: 50px; height: 22px;}
+    .premium-table-cover .two .gs-cover .left-cover {text-align: center;}
+    .premium-table-cover .two .gs-cover .b-cont button {margin-top: 14px;}
+    .lg-font {font-size: 18px;}
+    .tab-bottom-cvr .tRate .trd {width: 31.3%;margin-left: 3px;}
+    .tab-bottom-cvr form input {}
+    .tab-bottom-cvr .top-cover label {display: block !important;}
+    .submit-btn.order-sm-1 {width: 100%; margin-top: 14px;text-align: center;} 
+    .trade-cvr .d-trand-cvr label {width: 40%;padding-right: 12px;}
+    .trade-cvr .d-trand-cvr input {width: 60%;}
+    .trade-cvr .d-trand-cvr select {width: 60%;}
+    .trade-cvr .d-trand-cvr textarea {width: 60%;}
+    .trade-cvr .d-trand-cvr .inputs-cvr {width: 60%;}
+    .tab-bottom-cvr nav a.nav-link {margin-bottom: 4px;padding: 4px;font-size: 11px;}
+    .tab-bottom-cvr .top-cover .datepicket input {width: 100% !important;}
+    .datepicket {width: 100%;}
+    .btn {padding: 4px; font-size: 10px;}
+    .table-wrapper table th, .table-wrapper table td {padding: 3px;min-width: 60px;}
+    .top-cover.update-form input {width: 100%;margin-top: 6px;}
+    .top-cover.update-form button {width: 100%;}
+    .edit-accout-details input {height: 20px;}
+    .contact-table input {min-height: 20px;}
+    .mbt {margin-bottom: 8px;}
+    .sym-mod-lef {width: 50%;}
+.sym-mod-right {width: 50%;}
+.sym-mod {width: 100%;}
+
+.sym-mod-right label.sym-mod { padding-left: 0 !important;}
+.sym-mod-right label.sym-mod span {width: 40px;display: inline-block;}
+.sym-mod-right label.sym-mod span:nth-child(2) { width: 20px;}
+}

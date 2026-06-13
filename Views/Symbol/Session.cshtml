@@ -1,0 +1,141 @@
+﻿@model Symbol
+<div class="modal fade" id="sessionModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog modal-md" role="document">
+    <div class="modal-content">
+        <div class="modal-header common-bg rounded-0">
+            <h5 class="modal-title h4 color-white md-font" id="symboladdmodal">
+                Trading Session 
+            </h5>
+            <button type="button"
+                    class="close color-white"
+                    data-dismiss="modal"
+                    aria-label="Close">
+                <span class="color-white" aria-hidden="true">×</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12">
+                    <div class="timecover">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td class="w-20">
+                                        <h6>All</h6>
+                                    </td>
+                                    <td class="w-40">
+                                        <input type="time" class="startTime" id="startTimeAll">
+                                        <input type="button" id="btnStart" class="btn common-bg" value="ok">
+                                        <input type="hidden" id="hdnSymbolId"/>
+                                    </td>
+
+                                    <td class="w-40">
+                                            <input type="time" class="endTime" id="endTimeAll">
+                                        <input type="button" id="btnEnd" class="btn common-bg" value="ok">
+                                    </td>
+                                </tr>
+
+
+                                <tr class="common-bg">
+                                    <td class="w-20">Days</td>
+                                    <td class="w-40">Start Time Hours/Minutes</td>
+                                    <td class="w-40">End Time Hours/Minutes</td>
+                                </tr>
+
+
+                                <tr>
+                                    <td class="w-20">
+                                        <h6>Sunday</h6>
+                                    </td>
+                                    <td class="w-40">
+                                            <input type="time" class="startTime" id="startSunday">
+                                    </td>
+
+                                    <td class="w-40">
+                                            <input type="time" class="endTime" id="endSunday">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-20">
+                                        <h6>Monday</h6>
+                                    </td>
+                                    <td class="w-40">
+                                            <input type="time" class="startTime" id="startMonday">
+                                    </td>
+
+                                    <td class="w-40">
+                                            <input type="time" class="endTime" id="endMonday">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-20">
+                                        <h6>Tuesday</h6>
+                                    </td>
+                                    <td class="w-40">
+                                            <input type="time" class="startTime" id="startTuesday">
+                                    </td>
+
+                                    <td class="w-40">
+                                            <input type="time" class="endTime" id="endTuesday">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-20">
+                                        <h6>Wednesday</h6>
+                                    </td>
+                                    <td class="w-40">
+                                            <input type="time" class="startTime" id="startWednesday">
+                                    </td>
+
+                                    <td class="w-40">
+                                            <input type="time" class="endTime" id="endWednesday">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-20">
+                                        <h6>Thursday</h6>
+                                    </td>
+                                    <td class="w-40">
+                                            <input type="time" class="startTime" id="startThursday">
+                                    </td>
+
+                                    <td class="w-40">
+                                            <input type="time" class="endTime" id="endThursday">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-20">
+                                        <h6>Friday</h6>
+                                    </td>
+                                    <td class="w-40">
+                                            <input type="time" class="startTime" id="startFriday">
+                                    </td>
+
+                                    <td class="w-40">
+                                            <input type="time" class="endTime" id="endFriday">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-20">
+                                        <h6>Saturday</h6>
+                                    </td>
+                                    <td class="w-40">
+                                            <input type="time" class="startTime" id="startSaturday">
+                                    </td>
+
+                                    <td class="w-40">
+                                            <input type="time" class="endTime" id="endSaturday">
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="btn-sub text-center mt-2">
+                <button type="button" class="btn common-bg saveSession">Sumbit</button>
+            </div>
+        </div>
+    </div>
+</div>
+</div>

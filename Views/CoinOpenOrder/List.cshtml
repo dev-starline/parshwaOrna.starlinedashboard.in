@@ -1,0 +1,276 @@
+﻿@model IEnumerable<SL_Bullion.Models.OpenOrderCoinDto>
+@{
+    ViewData["Title"] = "OpenOrderCoin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string fromDateQuery = Context.Request.Query["fromDate"];
+    string toDateQuery = Context.Request.Query["toDate"];
+    string loginIdQuery = Context.Request.Query["loginId"];
+    string defaultDate = DateTime.Today.ToString("yyyy-MM-dd");
+    string fromDateValue = string.IsNullOrEmpty(fromDateQuery) ? defaultDate : fromDateQuery;
+    string toDateValue = string.IsNullOrEmpty(toDateQuery) ? defaultDate : toDateQuery;
+    string allRecordQuery = Context.Request.Query["allRecord"];
+
+}
+<form id="closeForm" method="post">
+    @Html.AntiForgeryToken()
+</form>
+
+
+<div class="tab-bottom-cvr w-100 d-inline-block py-2">
+    <div class="container-fluid">
+        <div class="row">
+            @* <div class="col-lg-5 col-md-12 col-sm-12">
+                <div class="top-cover">
+                    <nav>
+                        <div class="nav order-tab" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" id="execute" data-toggle="tab" href="#navexecute" role="tab" aria-controls="nav-execute" aria-selected="true">Execute</a>
+                            <a class="nav-item nav-link" id="pending" data-toggle="tab" href="#navpending" role="tab" aria-controls="nav-pending" aria-selected="false">Pending</a>
+                        </div>
+                    </nav>
+                </div>
+            </div> *@
+            <form asp-action="List" method="GET" class="col-lg-7 col-md-12 col-sm-12">
+                <div class="top-cover">
+                    <div class="form-inline my-2 my-lg-0 justify-content-end">
+                        <div class="datepicket order-sm-1" style="display:none">
+                            <label for="allRecord" class="d-inline-block">All :</label>
+                            <input type="text" name="allRecord" value="false" />
+                        </div>
+                        <div class="datepicket order-sm-1">
+                            <label for="loginId" class="d-inline-block">OrderNo or LoginId :</label>
+                            <input name="loginId" type="number" id="loginId" value="@loginIdQuery">
+                        </div>
+                        <div class="datepicket">
+                            <label for="fromDate" class="d-inline-block">From :</label>
+                            <input name="fromDate" value="@fromDateValue" class="d-inline-block" type="date" id="fromDate">
+                        </div>
+                        <div class="datepicket">
+                            <label for="toDate" class="d-inline-block">To :</label>
+                            <input name="toDate" value="@toDateValue" class="d-inline-block" type="date" id="toDate">
+                        </div>
+                        <div class="submit-btn order-sm-1">
+                            <button formaction="@Url.Action("List")" class="btn common-bg color-white sm-font">Submit</button>
+                            <button formaction="@Url.Action("ExportToExcel")" class="btn common-bg color-white sm-font ml-2" type="submit">Export to Excel</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="table-cover">
+        <div class="tab-content" id="nav-tabContent">
+
+            <div class="tab-pane fade show active" id="navexecute" role="tabpanel" aria-labelledby="execute">
+                <div class="row ml-0 mr-0">
+                    <div class="col-lg-4 col-md-0 col-sm-12"></div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <h4 class="text-center mt-0 mb-1">Execute Order</h4>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="top-cover">
+
+                            <div class="form-inline my-2 my-lg-0 justify-content-end">
+                                <form method="get" action="/CoinOpenOrder">
+                                    <button type="submit" class="btn common-bg color-white sm-font">All Order</button>
+                                </form>
+                                <button onclick="selectOrder('close')" class="btn common-bg color-white sm-font ml-2">CloseAll</button>
+                                <button onclick="selectOrder('delete')" class="btn common-bg color-white sm-font ml-2">DeleteAll</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="common-bg thead-font wone">
+                                    <input type="checkbox" id="selectAll" onclick="toggleAll(this)" />
+                                </th>
+                                <th class="common-bg thead-font wtwo">Deal</th>
+                                <th class="common-bg thead-font wtwo">Login</th>
+                                <th class="common-bg thead-font wfive">Name</th>
+                                <th class="common-bg thead-font wfive">Time</th>
+                                <th class="common-bg thead-font wone">Type</th>
+                                <th class="common-bg thead-font wtwo">Symbol</th>
+                                <th class="common-bg thead-font wtwo">Quantity</th>
+                                <th class="common-bg thead-font wtwo">Exchange</th>
+                                <th class="common-bg thead-font wtwo">O Price</th>
+                                <th class="common-bg thead-font wfive">Total</th>
+                                <th class="common-bg thead-font wfive">Trade From</th>
+                                <th class="common-bg thead-font wtwo">Close</th>
+                                <th class="common-bg thead-font wtwo">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody class="">
+                            @foreach (var item in Model)
+                            {
+                                @* if (@item.TradeType == "1" || @item.TradeType == "2")
+                                { *@
+                                <tr>
+                                    <td class="wone"><div class="content"><input name="selectedItems" id="@item.OpenOrderID" type="checkbox" asp-for="@item.IsSelected" /></div></td>
+                                    <td class="wtwo"><div class="content"><p>@item.Rank-@item.DealNo</p></div></td>
+                                    <td class="wtwo"><div class="content"><p>@item.LoginID</p></div></td>
+                                    <td class="wfive"><div class="content"><p>@item.Name</p></div></td>
+                                    <td class="wfive"><div class="content"><p>@item.OpenTradeDateTime</p></div></td>
+                                    <td class="wone"><div class="content"><p>@item.TradeType</p></div></td>
+                                    <td class="wone"><div class="content"><p>@item.SymbolName</p></div></td>
+                                    <td class="wtwo"><div class="content"><p>@item.Volume</p></div></td>
+                                    <td class="wtwo"><div class="content"><p>@item.Exchange</p></div></td>
+                                    <td class="wtwo"><div class="content"><p>@item.Rate</p></div></td>
+                                    <td class="wfive"><div class="content"><p>@item.Total</p></div></td>
+                                    <td class="wtwo"><div class="content"><p>@item.TradeFrom</p></div></td>
+                                    <td class="wtwo"><div class="content"><button class="ajax-model" data-url="@Url.Action($"CloseOrder/{item.OpenOrderID}")"><i class="fa fa-external-link text-danger" aria-hidden="true"></i></button></div></td>
+                                    <td class="wtwo"><div class="content"><form asp-action="Delete" asp-route-id="@item.OpenOrderID"><button onclick="return confirmDelete()"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i></button></form></div></td>
+                                </tr>
+                                @* } *@
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div class="tab-pane fade" id="navpending" role="tabpanel" aria-labelledby="pending">
+                <div class="row ml-0 mr-0">
+                    <div class="col-lg-4 col-md-0 col-sm-12"></div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <h4 class="text-center mt-1 mb-2">Pending Order</h4>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="top-cover">
+                            <div class="form-inline my-2 my-lg-0 justify-content-end">
+                                <button class="btn common-bg color-white sm-font">All Order</button>
+                                <button class="btn common-bg color-white sm-font ml-2">Export to Excel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="common-bg thead-font wtwo">OrderNo</th>
+                                <th class="common-bg thead-font wtwo">LoginId</th>
+                                <th class="common-bg thead-font wfive">FirmName</th>
+                                <th class="common-bg thead-font wfive">Symbol</th>
+                                <th class="common-bg thead-font wone">RateType</th>
+                                <th class="common-bg thead-font wtwo">TradeType</th>
+                                <th class="common-bg thead-font wtwo">Quantity</th>
+                                <th class="common-bg thead-font wtwo">Price</th>
+                                <th class="common-bg thead-font wfive">Total</th>
+                                <th class="common-bg thead-font wtwo">From</th>
+                                <th class="common-bg thead-font wten">Time</th>
+                                <th class="common-bg thead-font wten">UpdateTime</th>
+                                <th class="common-bg thead-font wfive">IP</th>
+                                <th class="common-bg thead-font wtwo">Open</th>
+                                <th class="common-bg thead-font wtwo">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody class="executeOrder">
+                            @foreach (var item in Model)
+                            {
+                                if (@item.TradeType == "3" || @item.TradeType == "4")
+                                {
+                                    <tr>
+                                        <td class="wtwo"><div class="content"><p>@item.DealNo</p></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.LoginID</p></div></td>
+                                        @*  <td class="wfive"><div class="content"><p>@item.FirmName</p></div></td> *@
+                                        <td class="wfive"><div class="content"><p>@item.SymbolName</p></div></td>
+                                        @*  <td class="wone"><div class="content"><p>@item.rateType</p></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.tradeTypeView</p></div></td> *@
+                                        <td class="wtwo"><div class="content"><p>@item.Volume</p></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.Rate</p></div></td>
+                                        <td class="wfive"><div class="content"><p>@item.Total</p></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.TradeFrom</p></div></td>
+                                        <td class="wten"><div class="content"><p>@item.OpenTradeDateTime</p></div></td>
+                                        @* <td class="wten"><div class="content"><p>@item.editorderTime.ToString("dd-MM-yyyy HH:mm:ss")</p></div></td> *@
+                                        <td class="wfive"><div class="content"><p>@item.IP</p></div></td>
+                                        <td class="wtwo"><div class="content"><form asp-action="Open" asp-route-id="@item.OpenOrderID"><button onclick="return confirmDelete('open')"><i class="fa fa-external-link text-success" aria-hidden="true"></i></button></form></div></td>
+                                        <td class="wtwo"><div class="content"><form asp-action="Delete" asp-route-id="@item.OpenOrderID"><button onclick="return confirmDelete()"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i></button></form></div></td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/adminjs/coinOrder.js"></script>
+
+<div id="modelPopup"></div>
+@await Html.PartialAsync("Action", new OpenOrderCoin())
+
+<script>
+    function toggleAll(source) {
+        const checkboxes = document.querySelectorAll('input[name="selectedItems"]');
+        checkboxes.forEach(cb => cb.checked = source.checked);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const checkboxes = document.querySelectorAll('input[name="selectedItems"]');
+        const selectAll = document.getElementById('selectAll');
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', () => {
+                if (!cb.checked) selectAll.checked = false;
+                else if ([...checkboxes].every(c => c.checked)) selectAll.checked = true;
+            });
+        });
+    });
+
+</script>
+@section Scripts {
+    <script>
+
+
+        function selectOrder(type)
+         {
+
+                var selectedIds = [];
+                $("input[type='checkbox'][name='selectedItems']").each(function () {
+                    if($(this)[0].checked)
+                    {
+                        selectedIds.push($(this)[0].id);
+                            console.log("Selected IDs:", selectedIds);
+                    }
+                });
+                var token = $('#closeForm input[name="__RequestVerificationToken"]').val();
+                 if(type=="close")
+                 {
+                    $.ajax({
+                        url: '@Url.Action("CloseOrderList", "CoinOpenOrder")',
+                        type: 'POST',
+                        data: {
+                            __RequestVerificationToken: token,
+                                    ids: selectedIds
+                        },
+                        success: function (res) {
+                               location.reload();
+                        },
+                        error: function (xhr) {
+                            console.error("Error", xhr.status, xhr.responseText);
+                        }
+                    });
+                }else  if(type=="delete"){
+                    $.ajax({
+                        url: '@Url.Action("DeleteOrderList", "CoinOpenOrder")',
+                        type: 'POST',
+                        data: {
+                            __RequestVerificationToken: token,
+                                    ids: selectedIds
+                        },
+                        success: function (res) {
+                                location.reload();
+                        },
+                        error: function (xhr) {
+                            console.error("Error", xhr.status, xhr.responseText);
+                        }
+                    });
+                }
+            }
+    </script>
+}

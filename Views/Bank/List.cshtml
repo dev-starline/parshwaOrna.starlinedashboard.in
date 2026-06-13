@@ -1,0 +1,108 @@
+﻿@model IEnumerable<SL_Bullion.Models.Bank>
+
+@{
+    ViewData["Title"] = "Bank";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="tab-bottom-cvr w-100 d-inline-block">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-4 col-sm-12">
+                <div class="top-cover">
+                    <button class="btn common-bg my-2 mx-2 my-sm-0 sm-font" data-toggle="modal" data-target="#addBank">Add Bank</button>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <div class="top-cover">
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-12">
+                <div class="top-cover text-center">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="table-cover">
+    <div class="container-fluid">
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="common-bg thead-font wten">Date</th>
+                        <th class="common-bg thead-font wten">AccountName</th>
+                        <th class="common-bg thead-font wten">BankName</th>
+                        <th class="common-bg thead-font wten">AccountNumber</th>
+                        <th class="common-bg thead-font wten">IFSCCode</th>
+                        <th class="common-bg thead-font wten">BranchName</th>
+                        <th class="common-bg thead-font wten">BankLogo</th>
+                        <th class="common-bg thead-font wten">Edit</th>
+                        <th class="common-bg thead-font wten">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model) {
+                    <tr>
+                        <td>
+                            <div class="content">
+                                    <p>@Html.DisplayFor(modelItem => item.modifiedDate)</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="content">
+                                    <p>@Html.DisplayFor(modelItem => item.accountName)</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="content">
+                                    <p>@Html.DisplayFor(modelItem => item.bankName)</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="content">
+                                    <p>@Html.DisplayFor(modelItem => item.accountNumber)</p>
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="content">
+                                    <p>@Html.DisplayFor(modelItem => item.ifscCode)</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="content">
+                                    <p>@Html.DisplayFor(modelItem => item.branchName)</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="content">
+                                    <p>@Html.DisplayFor(modelItem => item.bankLogo)</p>
+                            </div>
+                        </td>
+
+                        <td class="wfive">
+                            <div class="content">
+                                    <button class="ajax-model" data-url="@Url.Action($"Edit/{item.id}")">
+                                        <i class="fa fa-pencil-square-o text-primary" aria-hidden="true"></i>
+                                </button>
+                            </div>
+                        </td>
+                        <td class="wfive">
+                            <div class="content">
+                                    <form asp-action="Delete" asp-route-id="@item.id">
+                                        <button onclick="return confirmDelete()">
+                                            <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+                                        </button>
+                                    </form>
+                            </div>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<div id="modelPopup"></div>
+@await Html.PartialAsync("Action", new Bank())

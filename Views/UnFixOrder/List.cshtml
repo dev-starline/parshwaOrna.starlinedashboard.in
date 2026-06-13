@@ -1,0 +1,181 @@
+﻿@model IEnumerable<SL_Bullion.Models.UnFixOrder>
+@{
+    ViewData["Title"] = "UnFixOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<div class="tab-bottom-cvr w-100 d-inline-block py-2">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-5 col-md-12 col-sm-12">
+                
+            </div>
+            <form asp-action="search" method="GET" class="col-lg-7 col-md-12 col-sm-12">
+                <div class="top-cover">
+                    <div class="form-inline my-2 my-lg-0 justify-content-end">
+                        <div class="datepicket order-sm-1">
+                            <label for="datepicker" class="d-inline-block">OrderNo or LoginId :</label>
+                            <input name="loginId" type="text">
+                        </div>
+                        <div class="datepicket">
+                            <label for="datepicker" class="d-inline-block">From :</label>
+                            <input name="fromDate" value="@DateTime.Today.ToString("yyyy-MM-dd")" class="d-inline-block" type="date" id="fromDate">
+                        </div>
+                        <div class="datepicket">
+                            <label for="datepicker" class="d-inline-block">To :</label>
+                            <input name="toDate" value="@DateTime.Today.ToString("yyyy-MM-dd")" class="d-inline-block" type="date" id="toDate">
+                        </div>
+                        <div class="submit-btn order-sm-1">
+                            <button class="btn common-bg color-white sm-font">Submit</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="table-cover">
+        <div class="tab-content" id="nav-tabContent">
+
+            <div class="tab-pane fade show active" id="navexecute" role="tabpanel" aria-labelledby="execute">
+                <div class="row ml-0 mr-0">
+                    <div class="col-lg-4 col-md-0 col-sm-12"></div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <h4 class="text-center mt-0 mb-1">UnFix Order</h4>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="top-cover">
+                            <div class="form-inline my-2 my-lg-0 justify-content-end">
+                                <button class="btn common-bg color-white sm-font">All Order</button>
+                                <button class="btn common-bg color-white sm-font ml-2">Export to Excel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="common-bg thead-font wone"></th>
+                                <th class="common-bg thead-font wtwo">OrderNo</th>
+                                <th class="common-bg thead-font wtwo">LoginId</th>
+                                <th class="common-bg thead-font wfive">Name/Firm</th>
+                                <th class="common-bg thead-font wfive">Symbol</th>
+                                <th class="common-bg thead-font wone">RateType</th>
+                                <th class="common-bg thead-font wtwo">TradeType</th>
+                                <th class="common-bg thead-font wtwo">Quantity</th>
+                                <th class="common-bg thead-font wtwo">Margin</th>
+                                <th class="common-bg thead-font wtwo">Exchange</th>
+                                <th class="common-bg thead-font wtwo">Price</th>
+                                <th class="common-bg thead-font wfive">Total</th>
+                                <th class="common-bg thead-font wtwo">From</th>
+                                <th class="common-bg thead-font wten">Time</th>
+                                <th class="common-bg thead-font wten">UpdateTime</th>
+                                <th class="common-bg thead-font wfive">IP</th>
+                                <th class="common-bg thead-font wfive">Comment</th>
+                                <th class="common-bg thead-font wtwo">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody class="executeOrder">
+                            @foreach (var item in Model)
+                            {
+                                if (@item.tradeType == 1 || @item.tradeType == 2)
+                                {
+                                    <tr>
+                                        <td class="wone"><div class="content"><input name="selectedItems" id="@item.id" type="checkbox" /></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.dealNo</p></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.loginId</p></div></td>
+                                        <td class="wfive"><div class="content"><p>@item.name</p></div></td>
+                                        <td class="wfive"><div class="content"><p>@item.symbolName</p></div></td>
+                                        <td class="wone"><div class="content"><p>@item.rateType</p></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.tradeTypeView</p></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.volume</p></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.margin</p></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.exchange</p></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.rate</p></div></td>
+                                        <td class="wfive"><div class="content"><p>@item.total</p></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.deviceType</p></div></td>
+                                        <td class="wten"><div class="content"><p>@item.orderTime.ToString("dd-MM-yyyy HH:mm:ss")</p></div></td>
+                                        <td class="wten"><div class="content"><p>@item.editorderTime.ToString("dd-MM-yyyy HH:mm:ss")</p></div></td>
+                                        <td class="wfive"><div class="content"><p>@item.ip</p></div></td>
+                                        <td class="wfive"><div class="content"><p>@item.comment</p></div></td>
+                                        <td class="wtwo"><div class="content"><form asp-action="Delete" asp-route-id="@item.id"><button onclick="return confirmDelete()"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i></button></form></div></td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+            <div class="tab-pane fade" id="navpending" role="tabpanel" aria-labelledby="pending">
+                <div class="row ml-0 mr-0">
+                    <div class="col-lg-4 col-md-0 col-sm-12"></div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <h4 class="text-center mt-1 mb-2">Pending Order</h4>
+                    </div>
+                    <div class="col-lg-4 col-md-6 col-sm-12">
+                        <div class="top-cover">
+                            <div class="form-inline my-2 my-lg-0 justify-content-end">
+                                <button class="btn common-bg color-white sm-font">All Order</button>
+                                <button class="btn common-bg color-white sm-font ml-2">Export to Excel</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="common-bg thead-font wtwo">OrderNo</th>
+                                <th class="common-bg thead-font wtwo">LoginId</th>
+                                <th class="common-bg thead-font wfive">Name/Firm</th>
+                                <th class="common-bg thead-font wfive">Symbol</th>
+                                <th class="common-bg thead-font wone">RateType</th>
+                                <th class="common-bg thead-font wtwo">TradeType</th>
+                                <th class="common-bg thead-font wtwo">Quantity</th>
+                                <th class="common-bg thead-font wtwo">Price</th>
+                                <th class="common-bg thead-font wfive">Total</th>
+                                <th class="common-bg thead-font wtwo">From</th>
+                                <th class="common-bg thead-font wten">Time</th>
+                                <th class="common-bg thead-font wten">UpdateTime</th>
+                                <th class="common-bg thead-font wfive">IP</th>
+                                <th class="common-bg thead-font wtwo">Open</th>
+                                <th class="common-bg thead-font wtwo">Delete</th>
+                            </tr>
+                        </thead>
+                        <tbody class="executeOrder">
+                            @foreach (var item in Model)
+                            {
+                                if (@item.tradeType == 3 || @item.tradeType == 4)
+                                {
+                                    <tr>
+                                        <td class="wtwo"><div class="content"><p>@item.dealNo</p></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.loginId</p></div></td>
+                                        <td class="wfive"><div class="content"><p>@item.name</p></div></td>
+                                        <td class="wfive"><div class="content"><p>@item.symbolName</p></div></td>
+                                        <td class="wone"><div class="content"><p>@item.rateType</p></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.tradeTypeView</p></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.volume</p></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.rate</p></div></td>
+                                        <td class="wfive"><div class="content"><p>@item.total</p></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.deviceType</p></div></td>
+                                        <td class="wten"><div class="content"><p>@item.orderTime.ToString("dd-MM-yyyy HH:mm:ss")</p></div></td>
+                                        <td class="wten"><div class="content"><p>@item.editorderTime.ToString("dd-MM-yyyy HH:mm:ss")</p></div></td>
+                                        <td class="wfive"><div class="content"><p>@item.ip</p></div></td>
+                                        <td class="wtwo"><div class="content"><form asp-action="Open" asp-route-id="@item.id"><button onclick="return confirmDelete('open')"><i class="fa fa-external-link text-success" aria-hidden="true"></i></button></form></div></td>
+                                        <td class="wtwo"><div class="content"><form asp-action="Delete" asp-route-id="@item.id"><button onclick="return confirmDelete()"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i></button></form></div></td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/adminjs/order.js"></script>

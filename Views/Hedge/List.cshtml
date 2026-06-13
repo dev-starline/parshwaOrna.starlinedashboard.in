@@ -1,0 +1,93 @@
+﻿@model IEnumerable<SL_Bullion.Models.Hedge>
+
+@{
+    ViewData["Title"] = "Hedge";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container-fluid">
+    
+    <div class="row">
+        <div class="col-lg-4 col-md-4  mt-2">
+            <div class="tab-bottom-cvr hedge">
+                <div class="tRate">
+                    <div class="trd">
+                        <h6 class="common-bg color-white text-center sm-font py-1">
+                            HEDGE
+                        </h6>
+                        <div class="onof">
+                            <input type="radio" name="isHedge" class="isSwitch" value=true /><strong class="sm-font">ON</strong>
+                        </div>
+                        <div class="onof">
+                            <input type="radio" name="isHedge" class="isSwitch" value=false /><strong class="sm-font">OFF</strong>
+                        </div>
+                    </div>
+                </div>
+                <div class="hedgename">
+                    <input type="text" placeholder="Hedge_Symbol_Name" class="w-75 input-height text-center name" />
+                    <span><button class="common-bg btn sm-font saveSymbol">Save</button></span>
+                </div>
+            </div>
+            <div class="symbollist">
+                <h6 class="py-2 common-bg"><strong>Symbol List</strong></h6>
+
+                <table>
+
+                    <tbody class="hedgeSymbolList">
+                       
+        </tbody>
+        </table>
+        </div>
+    </div>
+
+<div class="col-lg-8 col-md-8 mt-2">
+    <div class="common-premium">
+        <div class="premium-table-cover"></div>
+    </div>
+    <div class="table-cover">
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="common-bg wten thead-font">Symbol</th>
+                        <th class="common-bg wten thead-font">Symbol Hedge</th>
+                        <th class="common-bg wten thead-font">Divided</th>
+                        <th class="common-bg wten thead-font">isHedge</th>
+                        <th class="common-bg wfive thead-font"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                     @foreach (var item in Model) {
+                    <tr>
+                        <td class="wten"><span>@item.symbolName</span></td>
+                        <td class="wten">
+                            <div class="content">
+                                <select asp-items="@(new SelectList(ViewBag.hedgeSymbol, "Value", "Text", item.hedgeSymbolId))" class="w-100 sm-font hedgeSymbol">
+                                </select>
+                            </div>
+                        </td>
+                        <td class="wten">
+                            <div class="content">
+                                        <input type="text" class="input-height sm-font division" value="@item.division" />
+                            </div>
+                        </td>
+                        <td class="wten">
+                            <div class="content">
+                                 <input type="checkbox" class="input-height sm-font status" checked="@(item.status ? "checked" : null)" />
+                            </div>
+                        </td>
+                        <td class="wfive">
+                            <div class="content">
+                                <button id="@item.id" class="btn sm-font common-bg color-white updateHedge">Save</button>
+                            </div>
+                        </td>
+                    </tr>
+                        }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+      </div>
+</div>
+    </div>
+<script src="~/adminjs/hedge.js"></script>

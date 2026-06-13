@@ -1,0 +1,101 @@
+﻿@model IEnumerable<SL_Bullion.Models.Update>
+
+@{
+	ViewData["Title"] = "Update";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="tab-bottom-cvr w-100 d-inline-block">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-6 col-md-4 col-sm-12 align-self-center">
+				<div class="top-cover">
+					<button class="btn common-bg color-white my-2 mx-2 my-sm-0 sm-font" data-toggle="modal" data-target="#addModal">+Add Update</button>
+				</div>
+			</div>
+			<div class="col-lg-6 col-md-8 col-sm-12 align-self-center">
+				<div class="top-cover text-right update-form">
+					<div class="form-inline my-2 my-lg-0 justify-content-end">
+						<form asp-action="search" method="GET">
+
+							<input type="date" name="fromDate" id="fromDate" class="text-left"
+								   value="@(ViewBag.FromDate == null ? DateTime.Today.ToString("yyyy-MM-dd")
+							       : ((DateTime)ViewBag.FromDate).ToString("yyyy-MM-dd"))" />
+
+							<input type="date" name="toDate" id="toDate" class="text-left"
+								   value="@(ViewBag.ToDate == null ? DateTime.Today.ToString("yyyy-MM-dd")
+									: ((DateTime)ViewBag.ToDate).ToString("yyyy-MM-dd"))" />
+
+							<button class="btn common-bg color-white my-2 my-sm-0 sm-font">Search</button>
+						</form>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+<div class="table-cover">
+	<div class="container-fluid">
+		<div class="table-wrapper">
+			<table>
+				<thead>
+					<tr>
+						<th class="common-bg thead-font wten">Date</th>
+						<th class="common-bg thead-font wten">Title</th>
+						<th class="common-bg thead-font wten">Message</th>
+						<th class="common-bg thead-font wten">Description</th>
+						<th class="common-bg thead-font wten">Resend</th>
+						<th class="common-bg thead-font wten">Delete</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var item in Model)
+					{
+						<tr>
+							<td>
+								<div class="content">
+									<p>@Html.DisplayFor(modelItem => item.modifiedDate)</p>
+								</div>
+							</td>
+							<td>
+								<div class="content">
+									<p>@Html.DisplayFor(modelItem => item.title)</p>
+								</div>
+							</td>
+							<td>
+								<div class="content">
+									<p>@Html.DisplayFor(modelItem => item.message)</p>
+								</div>
+							</td>
+							<td>
+								<div class="content">
+									<p>@Html.DisplayFor(modelItem => item.description)</p>
+								</div>
+							</td>
+							<td class="wfive">
+								<div class="content">
+									<form asp-action="Resend" asp-route-id="@item.id" style="display: inline;">
+										<button onclick="return confirmResend()">
+											<i class="fa fa-paper-plane text-success" aria-hidden="true"></i>
+										</button>
+									</form>
+								</div>
+							</td>
+							<td class="wfive">
+								<div class="content">
+									<form asp-action="Delete" asp-route-id="@item.id">
+										<button onclick="return confirmDelete()">
+											<i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+										</button>
+									</form>
+								</div>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+<div id="modelPopup"></div>
+@await Html.PartialAsync("Action", new Update())

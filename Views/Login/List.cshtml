@@ -1,0 +1,40 @@
+﻿@model SL_Bullion.Models.Master
+@{
+    Layout = null;
+    ViewData["Title"] = "Login";
+}
+<!doctype html>
+<html lang="en">
+<head>
+    <link rel="preconnect" href="https://fonts.gstatic.com" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/login.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" asp-append-version="true" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;600&display=swap" rel="stylesheet" asp-append-version="true" />
+    <title>@ViewData["Title"] - Admin</title>
+</head>
+
+<body>
+    <div class="login-main-cover">
+
+        <form asp-action="Login">
+            <div class="background">
+                <div class="shape"><img src="~/img/logo-dark.png"></div>
+            </div>
+            <h3>Admin Here</h3>
+
+            <label for="username">UserName</label>
+            <input placeholder="Email or Phone" asp-for="userName" />
+
+            <label for="password">Password</label>
+            <input placeholder="Password" type="password" asp-for="password" />
+
+
+            <button value="Login">Login</button>
+
+        </form>
+    </div>
+    @await Component.InvokeAsync("NToastNotify")
+
+</body>
+
+</html>

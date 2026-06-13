@@ -1,0 +1,10 @@
+{
+    "baseUrl": "http://16.60.31.104",
+    "endpoint": ":8001/api/bullion",
+    "terminalEndpoint": ":8001/api/terminal",
+    "socketPort": "1001",
+    "prjName": "parshwaorna",
+    "androidUrl": "",
+    "iosUrl": "",
+    "hasUnfix": false
+}

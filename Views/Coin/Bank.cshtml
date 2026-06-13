@@ -1,0 +1,286 @@
+﻿@model CoinBank
+
+<div class="col-lg-4 col-md-12 pl-2 pr-2">
+    <form asp-action="updateBank">
+        <input type="hidden" id="bankId" asp-for="id" />
+        <div class="ex-right-cvr text-center">
+            <div class="bnk-rate mt-1">
+                <h6 class="py-1 common-bg "><strong>Bank Rate</strong></h6>
+                <div class="table-cover">
+
+                    <div class="table-wrapper">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="content">
+                                            <p class="text-left pl-3"><strong></strong></p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                            <h6>
+                                                <strong>Gold</strong> <strong class="mt-1 d-block comexGold">1991.43</strong>
+                                            </h6>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                            <h6>
+                                                <strong>Silver</strong> <strong class="mt-1 d-block comexSilver">23.7912</strong>
+                                            </h6>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="content">
+                                            <p class="text-left pl-3"><strong>Premium ($)</strong></p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                            <input asp-for="premiumGold" class="sm-font input-height" type="text" value="0">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                            <input asp-for="premiumSilver" class="sm-font input-height" type="text" value="0">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="content">
+                                            <p class="text-left pl-3"><strong>INR/DG INR</strong></p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                            <p class="text-center mb-1 "><strong class="spotGold">83.368</strong></p>
+                                            <select asp-for="spotTypeGold" class="sm-font mb-1">
+                                                <option value="INRSpot">INRSpot</option>
+                                                <option value="DGINRSPOT">DGINRSpot</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                            <p class="text-center mb-1 "><strong class="spotSilver">83.368</strong></p>
+                                            <select asp-for="spotTypeSilver" class="sm-font mb-1">
+                                                <option value="INRSpot">INRSpot</option>
+                                                <option value="DGINRSPOT">DGINRSpot</option>
+                                            </select>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="content">
+                                            <p class="text-left pl-3"><strong>Inter Bank</strong></p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                            <input asp-for="interBankGold" class="sm-font input-height" type="text" value="0">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                            <input asp-for="interBankSilver" class="sm-font input-height" type="text" value="0">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="content">
+                                            <p class="text-left pl-3">
+                                                <strong>
+                                                    Conversion(Multiply
+                                                    By)
+                                                </strong>
+                                            </p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                            <input asp-for="conversionGold" class="sm-font input-height" type="text"
+                                                   value="31.99">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                            <input asp-for="conversionSilver" class="sm-font input-height" type="text" value="1">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="content">
+                                            <p class="text-left pl-3"><strong>Custom Duty</strong></p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                            <input asp-for="customDutyGold" class="sm-font input-height" type="text"
+                                                   value="811626.8">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                            <input asp-for="customDutySilver" class="sm-font input-height" type="text" value="0">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="content">
+                                            <p class="text-left pl-3"><strong>Margin</strong></p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                            <input asp-for="marginGold" class="sm-font input-height" type="text" value="0">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                            <input asp-for="marginSilver" class="sm-font input-height" type="text" value="0">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="content">
+                                            <p class="text-left pl-3"><strong>GST (%),oz to kg</strong></p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                            <input asp-for="gstGold" class="sm-font input-height" type="text" value="0">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                            <input asp-for="gstSilver" class="sm-font input-height" type="text" value="0">
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>
+                                        <div class="content">
+                                            <p class="text-left pl-3"><strong>Total</strong></p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                            <h6><strong class="sm-font totalGold">62886</strong></h6>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                            <h6><strong class="sm-font totalSilver">2007.95</strong></h6>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="content">
+                                            <p class="text-left pl-3"><strong>DIV (/)</strong></p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                            <input asp-for="divisionGold" class="sm-font input-height" type="text" value="1">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                            <input asp-for="divisionSilver" class="sm-font input-height" type="text" value="1">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="content">
+                                            <p class="text-left pl-3"><strong>Multiply(*)</strong></p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                            <input asp-for="multiplyGold" class="sm-font input-height" type="text" value="1">
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                            <input asp-for="multiplySilver" class="sm-font input-height" type="text" value="1">
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <div class="content">
+                                            <p class="text-left pl-3"><strong></strong></p>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                            <h6><strong class="sm-font grandTotalGold">62884.92</strong></h6>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="content">
+                                            <h6><strong class="sm-font grandTotalSilver">2007.95</strong></h6>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button class="btn common-bg my-2">Submit</button>
+                        <h6 class="py-1 common-bg my-2"><strong>Defference</strong></h6>
+                        <div class="gs-diffrence">
+                            <div class="row m-0">
+                                <div class="col-md-6 p-0" style="border-right: 2px solid #fff;">
+                                    <div class="gs-cvr">
+                                        <p class="text-center sm-font common-bg py-1">Gold</p>
+                                        <div class="gs-cvr-r-main">
+                                            <div class="gs-cvr-r">
+                                                <h6 class="mb-1 sm-font">MCX</h6>
+                                                <h6 class="mb-1 sm-font mcxGold">61020</h6>
+                                            </div>
+                                            <div class="gs-cvr-r">
+                                                <h6 class="mb-1 sm-font">BANK</h6>
+                                                <h6 class="mb-1 sm-font grandTotalGold">61020</h6>
+                                            </div>
+                                            <p class="w-100 gsrat py-1 diffGold">1864.92</p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-md-6 p-0" style="border-left: 2px solid #fff;">
+                                    <div class="gs-cvr">
+                                        <p class="text-center sm-font common-bg py-1">Silver</p>
+                                        <div class="gs-cvr-r-main">
+                                            <div class="gs-cvr-r">
+                                                <h6 class="mb-1 sm-font">MCX</h6>
+                                                <h6 class="mb-1 sm-font mcxSilver">61020</h6>
+                                            </div>
+                                            <div class="gs-cvr-r">
+                                                <h6 class="mb-1 sm-font">BANK</h6>
+                                                <h6 class="mb-1 sm-font grandTotalSilver">61020</h6>
+                                            </div>
+                                            <p class="w-100 gsrat py-1 diffSilver">1864.92</p>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </form>
+</div>

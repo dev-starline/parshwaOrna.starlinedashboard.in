@@ -1,0 +1,307 @@
+﻿@model IEnumerable<SL_Bullion.Models.OpenOrder>
+@{
+	ViewData["Title"] = "OpenOrder";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+	string fromDateQuery = Context.Request.Query["fromDate"];
+	string toDateQuery = Context.Request.Query["toDate"];
+	string loginIdQuery = Context.Request.Query["loginId"];
+	string defaultDate = DateTime.Today.ToString("yyyy-MM-dd");
+	string fromDateValue = string.IsNullOrEmpty(fromDateQuery) ? defaultDate : fromDateQuery;
+	string toDateValue = string.IsNullOrEmpty(toDateQuery) ? defaultDate : toDateQuery;
+
+}
+
+<div class="tab-bottom-cvr w-100 d-inline-block py-2">
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-lg-5 col-md-12 col-sm-12">
+				<div class="top-cover">
+					@*  <nav>
+                        <div class="nav order-tab" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" id="execute" data-toggle="tab" href="#navexecute" role="tab" aria-controls="nav-execute" aria-selected="true">Execute</a>
+                            <a class="nav-item nav-link" id="pending" data-toggle="tab" href="#navpending" role="tab" aria-controls="nav-pending" aria-selected="false">Pending</a>
+                        </div>
+                    </nav> *@
+				</div>
+			</div>
+			<form asp-action="search" method="GET" class="col-lg-7 col-md-12 col-sm-12">
+				<div class="top-cover">
+					<div class="form-inline my-2 my-lg-0 justify-content-end">
+						<div class="datepicket order-sm-1">
+							<label for="loginId" class="d-inline-block">OrderNo or LoginId :</label>
+							<input name="loginId" type="text" id="loginId" value="@loginIdQuery">
+						</div>
+						<div class="datepicket">
+							<label for="fromDate" class="d-inline-block">From :</label>
+							<input name="fromDate" value="@fromDateValue" class="d-inline-block" type="date" id="fromDate">
+						</div>
+						<div class="datepicket">
+							<label for="toDate" class="d-inline-block">To :</label>
+							<input name="toDate" value="@toDateValue" class="d-inline-block" type="date" id="toDate">
+						</div>
+						<div class="submit-btn order-sm-1">
+							<button formaction="@Url.Action("search")" class="btn common-bg color-white sm-font">Submit</button>
+							<button formaction="@Url.Action("ExportToExcel")" class="btn common-bg color-white sm-font ml-2" type="submit">Export to Excel</button>
+						</div>
+					</div>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="container-fluid">
+	<div class="table-cover eo">
+		<div class="row ml-0 mr-0">
+			<div class="col-lg-4 col-md-0 col-sm-12"></div>
+			<div class="col-lg-4 col-md-6 col-sm-12">
+				<h4 class="text-center mt-0 mb-1">Execute Order</h4>
+			</div>
+			<div class="col-lg-4 col-md-6 col-sm-12">
+				<div class="top-cover">
+					<div class="form-inline my-2 my-lg-0 justify-content-end">
+						<button class="btn common-bg color-white sm-font">All Order</button>
+						<button onclick="selectOrder('close')" class="btn common-bg color-white sm-font ml-2">CloseAll</button>
+						<button onclick="selectOrder('delete')" class="btn common-bg color-white sm-font ml-2">DeleteAll</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="table-wrapper vg">
+			<table>
+				<thead class="scrolltb">
+					<tr>
+						<th class="common-bg thead-font wone">
+							<input type="checkbox" id="selectAll" onclick="toggleAll(this)" />
+						</th>
+						<th class="common-bg thead-font wtwo">OrderNo</th>
+						<th class="common-bg thead-font wtwo">LoginId</th>
+						<th class="common-bg thead-font wfive">Name/Firm</th>
+						<th class="common-bg thead-font wfive">Symbol</th>
+						<th class="common-bg thead-font wone">RateType</th>
+						<th class="common-bg thead-font wtwo">TradeType</th>
+						<th class="common-bg thead-font wtwo">Quantity</th>
+						<th class="common-bg thead-font wtwo">Margin</th>
+						<th class="common-bg thead-font wtwo">Exchange</th>
+						<th class="common-bg thead-font wfive">Diffrence</th>
+						<th class="common-bg thead-font wtwo">Price</th>
+						<th class="common-bg thead-font wfive">Total</th>
+						<th class="common-bg thead-font wfive">Total+Tax</th>
+						<th class="common-bg thead-font wtwo">From</th>
+						<th class="common-bg thead-font wten">Time</th>
+						<th class="common-bg thead-font wten">UpdateTime</th>
+						<th class="common-bg thead-font wfive">IP</th>
+						<th class="common-bg thead-font wfive">Comment</th>
+						<th class="common-bg thead-font wtwo">Close</th>
+						<th class="common-bg thead-font wtwo">Delete</th>
+					</tr>
+				</thead>
+				<tbody class="executeOrder">
+					@{
+						DateTime? lastDate = null;
+					}
+					@foreach (var item in Model.OrderByDescending(x => x.orderTime.Date))
+					{
+						if (item.tradeType == 1 || item.tradeType == 2)
+						{
+							if (lastDate != item.orderTime.Date)
+							{
+								lastDate = item.orderTime.Date;
+								<tr class="date-row bg-light">
+									<td colspan="21">
+										<strong class="smy">@item.orderTime.ToString("dd-MM-yyyy")</strong>
+									</td>
+								</tr>
+							}
+							<tr>
+								<td class="wone"><div class="content"><input name="selectedItems" id="@item.id" type="checkbox" /></div></td>
+								<td class="wtwo"><div class="content"><p>@item.dealNo</p></div></td>
+								<td class="wtwo">
+									<div class="content">
+										<p>
+											<a href="javascript:void(0);" onclick="showOrderPopup('@item.loginId')" class="login-id-link">@item.loginId</a>
+										</p>
+									</div>
+								</td>
+								@* <td class="wtwo"><div class="content"><p>@item.loginId</p></div></td> *@
+								<td class="wfive"><div class="content"><p>@item.name/@item.firm</p></div></td>
+								<td class="wfive"><div class="content @(item.isHedge ? "text-isHedge" : "")"><p>@item.symbolName</p></div></td>
+								<td class="wone"><div class="content"><p>@(item.rateType == "mcx" ? "exchange" : item.rateType)</p></div></td>
+								<td class="wtwo"><div class="content"><p>@item.tradeTypeView</p></div></td>
+								<td class="wtwo"><div class="content"><p>@item.volume</p></div></td>
+								<td class="wtwo"><div class="content"><p>@item.margin</p></div></td>
+								<td class="wtwo"><div class="content"><p>@item.exchange</p></div></td>
+								<td class="wfive"><div class="content"><p>@item.differenceRate</p></div></td>
+								<td class="wtwo"><div class="content"><p>@item.rate</p></div></td>
+								<td class="wfive"><div class="content"><p>@item.total</p></div></td>
+								<td class="wfive"><div class="content"><p>@item.tax</p></div></td>
+								<td class="wtwo"><div class="content"><p>@item.deviceType</p></div></td>
+								<td class="wten"><div class="content"><p>@item.orderTime.ToString("dd-MM-yyyy HH:mm:ss")</p></div></td>
+								<td class="wten"><div class="content"><p>@item.editorderTime.ToString("dd-MM-yyyy HH:mm:ss")</p></div></td>
+								<td class="wfive"><div class="content"><p>@item.ip</p></div></td>
+								<td class="wfive"><div class="content"><p>@item.comment</p></div></td>
+								<td class="wtwo"><div class="content"><button class="ajax-model" data-url="@Url.Action($"CloseOrder/{item.id}")"><i class="fa fa-external-link text-danger" aria-hidden="true"></i></button></div></td>
+								<td class="wtwo"><div class="content"><form asp-action="Delete" asp-route-id="@item.id"><button onclick="return confirmDelete()"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i></button></form></div></td>
+							</tr>
+						}
+					}
+				</tbody>
+				@*  <tbody class="executeOrder">
+                            @foreach (var item in Model)
+                            {
+                                if (@item.tradeType == 1 || @item.tradeType == 2)
+                                {
+                                    <tr>
+                                        <td class="wone"><div class="content"><input name="selectedItems" id="@item.id" type="checkbox" /></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.dealNo</p></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.loginId</p></div></td>
+                                        <td class="wfive"><div class="content"><p>@item.name/@item.firm</p></div></td>
+                                        <td class="wfive"><div class="content @(item.isHedge ? "text-isHedge" : "")"><p>@item.symbolName</p></div></td>
+                                        <td class="wone"><div class="content"><p>@item.rateType</p></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.tradeTypeView</p></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.volume</p></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.margin</p></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.exchange</p></div></td>
+                                        <td class="wfive"><div class="content"><p>@item.differenceRate</p></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.rate</p></div></td>
+                                        <td class="wfive"><div class="content"><p>@item.total</p></div></td>
+                                        <td class="wfive"><div class="content"><p>@item.tax</p></div></td>
+                                        <td class="wtwo"><div class="content"><p>@item.deviceType</p></div></td>
+                                        <td class="wten"><div class="content"><p>@item.orderTime.ToString("dd-MM-yyyy HH:mm:ss")</p></div></td>
+                                        <td class="wten"><div class="content"><p>@item.editorderTime.ToString("dd-MM-yyyy HH:mm:ss")</p></div></td>
+                                        <td class="wfive"><div class="content"><p>@item.ip</p></div></td>
+                                        <td class="wfive"><div class="content"><p>@item.comment</p></div></td>
+                                        <td class="wtwo"><div class="content"><button class="ajax-model" data-url="@Url.Action($"CloseOrder/{item.id}")"><i class="fa fa-external-link text-danger" aria-hidden="true"></i></button></div></td>
+                                        <td class="wtwo"><div class="content"><form asp-action="Delete" asp-route-id="@item.id"><button onclick="return confirmDelete()"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i></button></form></div></td>
+                                    </tr>
+                                }
+                            }
+                        </tbody> *@
+			</table>
+		</div>
+	</div>
+
+	<!-- Bootstrap Modal -->
+	<!-- OrderPopup Modal -->
+	<div class="modal fade" id="orderModal" tabindex="-1" role="dialog" aria-labelledby="orderModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-xl ood" role="document">
+			<div class="modal-content">
+				<div class="modal-header hdrmdl">
+					<h5 class="modal-title" id="orderModalLabel"><span id="txtnameandfirm"></span> | LoginId: <span id="txtloginid"></span> | Group: <span id="txtgroup"></span></h5>
+					<h5 class="modal-title" id="orderModalTotal">
+						Order Count: <span id="txtOcount"></span>
+						| Gold Buy Quantity: <span id="txtBTGoldQty"></span>
+						| Silver Buy Quantity: <span id="txtBTSilverQty"></span>
+						| Gold Sell Quantity: <span id="txtSTGoldQty"></span>
+						| Silver Sell Quantity: <span id="txtSTSilverQty"></span>
+						| Grand Total: <span id="txtGrandTotal"></span>
+					</h5>
+					<button type="button" class="close clbtn" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<div id="orderDetailsContent">
+						<!-- Order details will be loaded here -->
+						<p>Loading...</p>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- OrderPopup Modal -->
+
+	<div class="table-cover">
+		<div class="row ml-0 mr-0">
+			<div class="col-lg-4 col-md-0 col-sm-12"></div>
+			<div class="col-lg-4 col-md-6 col-sm-12">
+				<h4 class="text-center mt-1 mb-2">Pending Order</h4>
+			</div>
+			<div class="col-lg-4 col-md-6 col-sm-12">
+				<div class="top-cover">
+					<div class="form-inline my-2 my-lg-0 justify-content-end">
+						<button class="btn common-bg color-white sm-font">All Order</button>
+						<button class="btn common-bg color-white sm-font ml-2">Export to Excel</button>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="table-wrapper vg">
+			<table>
+				<thead>
+					<tr>
+						<th class="common-bg thead-font wtwo">OrderNo</th>
+						<th class="common-bg thead-font wtwo">LoginId</th>
+						<th class="common-bg thead-font wfive">Name/Firm</th>
+						<th class="common-bg thead-font wfive">Symbol</th>
+						<th class="common-bg thead-font wone">RateType</th>
+						<th class="common-bg thead-font wtwo">TradeType</th>
+						<th class="common-bg thead-font wtwo">Quantity</th>
+						<th class="common-bg thead-font wtwo">Price</th>
+						<th class="common-bg thead-font wfive">Total</th>
+						<th class="common-bg thead-font wtwo">From</th>
+						<th class="common-bg thead-font wten">Time</th>
+						<th class="common-bg thead-font wten">UpdateTime</th>
+						<th class="common-bg thead-font wfive">IP</th>
+						<th class="common-bg thead-font wtwo">Open</th>
+						<th class="common-bg thead-font wtwo">Delete</th>
+					</tr>
+				</thead>
+				<tbody class="executeOrder">
+					@foreach (var item in Model)
+					{
+						if (@item.tradeType == 3 || @item.tradeType == 4)
+						{
+							<tr>
+								<td class="wtwo"><div class="content"><p>@item.dealNo</p></div></td>
+								<td class="wtwo"><div class="content"><p>@item.loginId</p></div></td>
+								<td class="wfive"><div class="content"><p>@item.name</p></div></td>
+								<td class="wfive"><div class="content"><p>@item.symbolName</p></div></td>
+								<td class="wone"><div class="content"><p>@(item.rateType == "mcx" ? "exchange" : item.rateType)</p></div></td>
+								<td class="wtwo"><div class="content"><p>@item.tradeTypeView</p></div></td>
+								<td class="wtwo"><div class="content"><p>@item.volume</p></div></td>
+								<td class="wtwo"><div class="content"><p>@item.rate</p></div></td>
+								<td class="wfive"><div class="content"><p>@item.total</p></div></td>
+								<td class="wtwo"><div class="content"><p>@item.deviceType</p></div></td>
+								<td class="wten"><div class="content"><p>@item.orderTime.ToString("dd-MM-yyyy HH:mm:ss")</p></div></td>
+								<td class="wten"><div class="content"><p>@item.editorderTime.ToString("dd-MM-yyyy HH:mm:ss")</p></div></td>
+								<td class="wfive"><div class="content"><p>@item.ip</p></div></td>
+								<td class="wtwo"><div class="content"><form asp-action="Open" asp-route-id="@item.id"><button onclick="return confirmDelete('open')"><i class="fa fa-external-link text-success" aria-hidden="true"></i></button></form></div></td>
+								<td class="wtwo"><div class="content"><form asp-action="Delete" asp-route-id="@item.id"><button onclick="return confirmDelete()"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i></button></form></div></td>
+							</tr>
+						}
+					}
+				</tbody>
+			</table>
+		</div>
+
+	</div>
+
+</div>
+
+<div id="modelPopup"></div>
+@await Html.PartialAsync("Action", new OpenOrder())
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.4/socket.io.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+<script src="~/adminjs/order.js"></script>
+
+<script>
+	function toggleAll(source) {
+		const checkboxes = document.querySelectorAll('input[name="selectedItems"]');
+		checkboxes.forEach(cb => cb.checked = source.checked);
+	}
+
+	document.addEventListener('DOMContentLoaded', () => {
+		const checkboxes = document.querySelectorAll('input[name="selectedItems"]');
+		const selectAll = document.getElementById('selectAll');
+
+		checkboxes.forEach(cb => {
+			cb.addEventListener('change', () => {
+				if (!cb.checked) selectAll.checked = false;
+				else if ([...checkboxes].every(c => c.checked)) selectAll.checked = true;
+			});
+		});
+	});
+</script>

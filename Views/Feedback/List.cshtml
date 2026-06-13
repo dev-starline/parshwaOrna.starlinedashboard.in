@@ -1,0 +1,65 @@
+﻿@model IEnumerable<SL_Bullion.Models.Feedback>
+
+@{
+    ViewData["Title"] = "Feedback";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="table-cover">
+    <div class="container-fluid">
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="common-bg thead-font wten">Name</th>
+                        <th class="common-bg thead-font wten">Mobile</th>
+                        <th class="common-bg thead-font wten">Email</th>
+                        <th class="common-bg thead-font wten">Message</th>
+                        <th class="common-bg thead-font wten">Subject</th>
+                        <th class="common-bg thead-font wten">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model) {
+                    <tr>
+
+                        <td>
+                            <div class="content">
+                                    <p>@Html.DisplayFor(modelItem => item.name)</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="content">
+                                    <p>@Html.DisplayFor(modelItem => item.mobile)</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="content">
+                                    <p>@Html.DisplayFor(modelItem => item.email)</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="content">
+                                    <p>@Html.DisplayFor(modelItem => item.message)</p>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="content">
+                                    <p>@Html.DisplayFor(modelItem => item.subject)</p>
+                            </div>
+                        </td>
+                        <td class="wfive">
+                            <div class="content">
+                                    <form asp-action="Delete" asp-route-id="@item.id">
+                                        <button onclick="return confirmDelete()">
+                                            <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+                                        </button>
+                                    </form>
+                            </div>
+                        </td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

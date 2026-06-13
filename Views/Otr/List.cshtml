@@ -1,0 +1,89 @@
+﻿@model IEnumerable<SL_Bullion.Models.Otr>
+
+@{
+    ViewData["Title"] = "OTR";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="tab-bottom-cvr w-100 d-inline-block">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="align-content-lg-end">
+                <div class="top-cover text-right update-form">
+                    <div class="form-inline my-2 my-lg-0 justify-content-end">
+                        <form asp-action="search" method="GET">
+                            <input type="date" name="fromDate" id="fromDate" class="text-left" value="@DateTime.Today.ToString("yyyy-MM-dd")">
+                            <input type="date" name="toDate" id="toDate" class="text-left" value="@DateTime.Today.ToString("yyyy-MM-dd")">
+                            <button class="btn common-bg color-white my-2 my-sm-0 sm-font">Search</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="table-cover">
+    <div class="container-fluid">
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="common-bg thead-font wten">Date</th>
+                        <th class="common-bg thead-font wten">Name</th>
+                        <th class="common-bg thead-font wten">FirmName</th>
+                        <th class="common-bg thead-font wten">Mobile</th>
+                        <th class="common-bg thead-font wten">City</th>
+                        <th class="common-bg thead-font wten">IP</th>
+                        <th class="common-bg thead-font wten">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                <div class="content">
+                                    <p>@Html.DisplayFor(modelItem => item.modifiedDate)</p>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="content">
+                                    <p>@Html.DisplayFor(modelItem => item.name)</p>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="content">
+                                    <p>@Html.DisplayFor(modelItem => item.firmname)</p>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="content">
+                                    <p>@Html.DisplayFor(modelItem => item.mobile)</p>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="content">
+                                    <p>@Html.DisplayFor(modelItem => item.city)</p>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="content">
+                                    <p>@Html.DisplayFor(modelItem => item.ip)</p>
+                                </div>
+                            </td>
+                            <td class="wfive">
+                                <div class="content">
+                                    <form asp-action="Delete" asp-route-id="@item.id">
+                                        <button onclick="return confirmDelete()">
+                                            <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,153 @@
+﻿@model IEnumerable<SL_Bullion.Models.ReferanceSymbol>
+
+@{
+    ViewData["Title"] = "Setting";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="rateDif">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-3 px-2 mt-2">
+                <div class="rate-dif-main-cover bg-gray pb-2">
+
+                    <h5 class="common-bg py-1 text-center rounded">Reference </h5>
+                    <table>
+                        @foreach (var item in Model) {
+                        <tr>
+                            <td class="w-25">
+                                <div class="content">
+                                        <input class="isView" checked="@(item.isView ? "checked" : null)" type="checkbox">
+                                </div>
+                            </td>
+                                    <td class="w-25">@item.source</td>
+                                    <td class="w-25"> <input type="text" class="input-height sm-font name" value="@item.name"></td>
+                            <td class="w-25">
+                                <div class="sbt text-center py-2">
+                                        <button id=@item.id class="btn common-bg color-white sm-font updateReferance">Update</button>
+                                </div>
+                            </td>
+                        </tr>
+                        }
+                        
+                    </table>
+                </div>
+            </div>
+            <div class="col-md-3 px-2 mt-2">
+                <div class="horizontal-form-box bg-gray">
+                    <div class="cnp text-center">
+                        <h5 class="common-bg py-1 text-center rounded">Order Setting</h5>
+                    </div>
+                    <table>
+                        <tr>
+                            <td class="w-25"> <label for="" class="w-75 text-left pt-2 pl-3"><strong>PendingOrder FreezOuter</strong></label></td>
+                            <td class="w-75"> <input type="text" class="input-height sm-font mt-2 freezOuter"></td>
+                        </tr>
+                        <tr>
+                            <td class="w-25"> <label for="" class="w-75 text-left pt-2 pl-3"><strong>PendingOrder FreezInner</strong></label></td>
+                            <td class="w-75"> <input type="text" class="input-height sm-font mt-2 freezInner"></td>
+                        </tr>
+                        <tr>
+                            <td class="w-25"> <label for="" class="w-75 text-left pt-2 pl-3"><strong>Off Quotes</strong></label></td>
+                            <td class="w-75"> <input type="text" class="input-height sm-font mt-2 offQuotes"></td>
+                        </tr>
+                        <tr>
+                            <td class="w-25"> <label for="" class="w-75 text-left pt-2 pl-3"><strong>PendingOrder Delete Time</strong></label></td>
+                            <td class="w-75"> <input type="time" class="input-height sm-font mt-2 pendingOrderDelete"></td>
+                        </tr>
+                    </table>
+                    <div class="sbt text-center py-2">
+                        <button class="btn common-bg updateOrderSetting">Update</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 px-2 mt-2">
+
+                <div class="horizontal-form-box bg-gray">
+                    <div class="cnp text-center">
+                        <h5 class="common-bg py-1 text-center rounded">Change Password</h5>
+                    </div>
+                    <table>
+                        <tr>
+                            <td class="w-25"> <label for="" class="w-75 text-left pt-2 pl-3"><strong>Old Password</strong></label></td>
+                            <td class="w-75"> <input type="password" class="input-height sm-font mt-2 oldPassword"></td>
+                        </tr>
+                        <tr>
+                            <td class="w-25"> <label for="" class="w-75 text-left pt-2 pl-3"><strong>New Password</strong></label></td>
+                            <td class="w-75"> <input type="password" class="input-height sm-font mt-2 newPassword"></td>
+                        </tr>
+                        <tr>
+                            <td class="w-25"> <label for="" class="w-75 text-left pt-2 pl-3"><strong>Confirm Password</strong></label></td>
+                            <td class="w-75"> <input type="password" class="input-height sm-font mt-2 confirmPassword"></td>
+                        </tr>
+                    </table>
+                    <div class="sbt text-center py-2">
+                        <button class="btn common-bg updatePassword">Update</button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-md-3 px-2 mt-2">
+
+                <div class="rate-dif-main-cover bg-gray pb-2">
+
+                    <h5 class="common-bg py-1 text-center rounded">Rate Difference</h5>
+                    <table>
+                        <tr>
+                            <td class="w-25"> <label for="" class="w-25 text-left pl-3 pt-2"><strong>Gold</strong></label></td>
+                            <td class="w-75"> <input type="text" class="input-height sm-font gold mt-2" value="100"></td>
+                        </tr>
+                        <tr>
+                            <td class="w-25"> <label for="" class="w-25 text-left pl-3 pt-2"><strong>Silver</strong></label></td>
+                            <td class="w-75"> <input type="text" class="input-height sm-font silver mt-2" value="100"></td>
+                        </tr>
+                    </table>
+                    <div class="sbt text-center py-2">
+                        <button class="btn common-bg updateRateDifferance">Submit</button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="col-md-3 px-2 mt-2">
+            <div class="horizontal-form-box bg-gray">
+               
+                <table>
+                    <tr>
+                        <td class="w-25">
+                            <label for="drpHistoryType" class="w-75 text-left pt-2 pl-3">
+                                <strong>Delete Order History</strong>
+                            </label>
+                        </td>
+                        <td class="w-75">
+                            <select id="drpHistoryType" class="input-height sm-font mt-2 freezOuter" style="display: inline-block; width: 20%; height: 33px; margin-right: 10px;">
+                                <option value="0">Please Select</option>
+                                <option value="1">CloseTrade</option>
+                                <option value="2">DeleteTrade</option>
+                            </select>
+                        </td>
+                    </tr> 
+                    <tr>
+                        <td class="w-25"> <label for="" class="w-75 text-left pt-2 pl-3"><strong> Delete From Time</strong></label></td>
+                        <td class="w-75">
+                            <input type="date" name="fromDate" id="fromDate" class="date_timte_button d-inline-block">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="w-25"> <label for="" class="w-75 text-left pt-2 pl-3"><strong> Delete To Time</strong></label></td>
+                        <td class="w-75">  <input type="date" name="fromDate" id="toDate" class="date_timte_button d-inline-block"></td>
+                    </tr>
+                    
+                </table>
+                <div class="sbt text-center py-2">
+                    <button class="btn btn btn-danger-coustom delOrder">Delete</button>
+
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+<script src="~/adminjs/setting.js"></script>

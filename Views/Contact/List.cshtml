@@ -1,0 +1,211 @@
+﻿@model Contact
+
+@{
+    ViewData["Title"] = "Contact";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+ <div class="tab-bottom-cvr w-100 d-inline-block py-1">
+            <div class="container-fluid">
+                <form enctype="multipart/form-data" asp-action="Edit">
+                     <input type="hidden" id="contactId" value="0" asp-for="id" />
+                <div class="row">
+                <div class="col-md-6 offset-md-3 px-2 mt-1">
+                        <div class="rate-dif-main-cover bg-gray">
+                            <h5 class="common-bg py-1 text-center rounded">Rate Hide/Show</h5>
+                            <table>
+                                <tbody>
+                                    <tr></tr>
+                                <tr class="rate-hide-show text-center">
+                                    <td class="wten"> <span><strong>Buy</strong> <input asp-for="isBuy" type="checkbox"></span></td>
+                                    <td class="wten"> <span><strong>Sell</strong> <input asp-for="isSell" type="checkbox"></span></td>
+                                    <td class="wten"> <span><strong>High</strong> <input asp-for="isHigh" type="checkbox"></span></td>
+                                    <td class="wten"> <span><strong>Low</strong> <input asp-for="isLow" type="checkbox"></span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                           
+                        </div>
+                    </div>
+                  
+                    <div class="col-md-8">
+                        <div class="contact-details-cover bg-gray pb-2">
+                            <h5 class="common-bg py-1 text-center rounded">Contact Details</h5>
+                            <div class="row">
+                                <div class="col-md-6 mt-2 border-r">
+                                    <table class="contact-table">
+                                        <tr>
+                                            <td class="w-50 text-left pb-2"><label for=""
+                                                    class="sm-font"><strong>Booking Number-1 :</strong></label></td>
+                                            <td class="w-50 pb-2"><input asp-for="number1" type="text" class="sm-font pl-2"
+                                                    style="width: 90%;"></td>
+                                        </tr>
+                                        <tr>
+                                        <td class="w-50 text-left pb-2">
+                                            <label for=""
+                                                    class="sm-font"><strong>Booking Number-2 :</strong></label></td>
+                                            <td class="w-50"><input asp-for="number2" type="text" class="sm-font pl-2"
+                                                    style="width: 90%;"></td>
+                                        </tr>
+                                        <tr>
+                                        <td class="w-50 text-left pb-2">
+                                            <label for=""
+                                                    class="sm-font"><strong>Booking Number-3 :</strong></label></td>
+                                            <td class="w-50"><input asp-for="number3" type="text" class="sm-font pl-2"
+                                                    style="width: 90%;"></td>
+                                        </tr>
+                                        <tr>
+                                        <td class="w-50 text-left pb-2">
+                                            <label for=""
+                                                    class="sm-font"><strong>Booking Number-4 :</strong></label></td>
+                                            <td class="w-50 pb-2"><input asp-for="number4" type="text" class="sm-font pl-2"
+                                                    style="width: 90%;"></td>
+                                        </tr>
+                                        <tr>
+                                        <td class="w-50 text-left pb-2">
+                                            <label for=""
+                                                    class="sm-font"><strong>Booking Number-5 :</strong></label></td>
+                                            <td class="w-50 pb-2"><input asp-for="number5" type="text" class="sm-font pl-2"
+                                                    style="width: 90%;"></td>
+                                        </tr>
+                                        <tr>
+                                        <td class="w-50 text-left pb-2">
+                                            <label for=""
+                                                    class="sm-font"><strong>Booking Number-6 :</strong></label></td>
+                                            <td class="w-50 pb-2"><input asp-for="number6" type="text" class="sm-font pl-2"
+                                                    style="width: 90%;"></td>
+                                        </tr>
+
+                                        <tr>
+                                        <td class="w-50 text-left pb-2">
+                                            <label for=""
+                                                    class="sm-font"><strong>Booking Number-7 :</strong></label></td>
+                                            <td class="w-50 pb-2"><input asp-for="number7" type="text" class="sm-font pl-2"
+                                                    style="width: 90%;"></td>
+                                        </tr>
+                                        <tr>
+                                        <td class="w-25 text-left">
+                                            <label for=""
+                                                   class="sm-font text-left">
+                                                <strong>
+                                                    <i class="fa fa-whatsapp text-success" style="font-size: 20px;"
+                                                            aria-hidden="true"></i> WhatsApp Number</strong></label>
+                                            </td>
+                                            <td class="w-75"><input asp-for="whatsAppNo" type="text" class="sm-font pl-2"
+                                                    style="width: 90%;"></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                                <div class="col-md-6 mt-2">
+                          
+                                    <table class="contact-table">
+                                        <tbody> 
+                                            <tr>
+                                            <td class="w-50 text-left pr-4 pb-2">
+                                                <label for=""
+                                                        class="sm-font"><strong>MarQueeTop :</strong></label></td>
+                                        
+                                                 <td class="w-50 pb-2"><textarea asp-for="marqueeTop" cols="30" rows="3"
+                                                        class="sm-font pl-2"></textarea></td>
+                                    </tr>
+                                             <tr>
+                                            <td class="w-50 text-left pr-4 pb-2">
+                                                <label for=""
+                                                        class="sm-font"><strong>MarQueeBottom :</strong></label></td>
+                                       
+                                                <td class="w-50 pb-2"><textarea asp-for="marqueeBottom" cols="30" rows="3"
+                                                        class="sm-font pl-2"></textarea></td>
+                                    </tr>
+                                      
+                                            <tr>
+                                            <td class="w-50 text-left pr-4 pb-2">
+                                                <label for=""
+                                                        class="sm-font"><strong>Address-1 :</strong></label></td>
+                                                <td class="w-50 pb-2"><textarea asp-for="address1" cols="30" rows="3"
+                                                        class="sm-font pl-2"></textarea></td>
+                                            </tr>
+                                            <tr>
+                                            <td class="w-50 text-left pr-4 pb-2">
+                                                <label for=""
+                                                        class="sm-font"><strong>Address-2 :</strong></label></td>
+                                                <td class="w-50"><textarea asp-for="address2" cols="30" rows="3"
+                                                        class="sm-font pl-2"></textarea></td>
+                                            </tr>
+                                            <tr>
+                                            <td class="w-50 text-left pr-4 pb-2">
+                                                <label for=""
+                                                        class="sm-font"><strong>Address-3 :</strong></label></td>
+                                                <td class="w-50"><textarea asp-for="address3" cols="30" rows="3"
+                                                        class="sm-font pl-2"></textarea></td>
+                                            </tr>
+                                            <tr>
+                                            <td class="w-50 text-left pr-4 pb-2">
+                                                <label for=""
+                                                        class="sm-font"><strong>E-Mail Address-1 :</strong></label></td>
+                                                <td class="w-50 pb-2"><input asp-for="email1" type="text" class="sm-font pl-2"
+                                                        style="width: 90%;"></td>
+                                            </tr>
+                                            <tr>
+                                            <td class="w-50 text-left pr-4 pb-2">
+                                                <label for=""
+                                                        class="sm-font"><strong>E-Mail Address-2 :</strong></label></td>
+                                                <td class="w-50 pb-2"><input asp-for="email2" type="text" class="sm-font pl-2"
+                                                        style="width: 90%;"></td>
+                                            </tr>
+                                        </tbody>
+                                       
+                                    </table>
+                                </div>
+                             </div>
+                        </div>
+                    </div>
+
+                <div class="col-md-4">
+                    <div class="rate-dif-main-cover bg-gray pb-2">
+                        <h5 class="common-bg py-1 text-center rounded">Advertise Banner</h5>
+
+                        <table>
+                            <tbody>
+                                <tr class="adbr pb-1">
+                                    <td class="w-25 text-right pr-2 pt-4 pb-4"><label for="" class="sm-font  econe"><strong>Web :</strong></label></td>
+                                    <td class="w-75 pt-2 pt-2 pb-4">
+                                        <input asp-for="bannerWebImage" type="file" onchange="document.getElementById('showWeb').src=window.URL.createObjectURL(this.files[0])" class="w-50 sm-font pl-2 border-0">
+                                        <img id="showWeb" src="~/img/noimage.png" height="100" width="100" alt="Logo Image">
+                                        <p class="sm-font text-danger noticeban"><strong>Note: Please Upload Images with 600px*500px size</strong></p>
+                                    </td>
+
+                                    <td class="w-25 text-right pr-2 pt-2 pb-4">
+                                        <button class="dtone" asp-action="Delete" asp-route-type="web" onclick="return confirmDelete()">
+                                            <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="w-25 text-right pr-2 pt-4 pb-2"><label for="" class="sm-font  ectwo"><strong>Application :</strong></label></td>
+                                    <td class="w-75 pt-2 pb-4">
+                                        <input asp-for="bannerAppImage" type="file" onchange="document.getElementById('showApp').src=window.URL.createObjectURL(this.files[0])" class="w-50 sm-font pl-2 border-0"> <img id="showApp" src="~/img/noimage.png" height="100" width="100" alt="Logo Image">
+                                        <p class="sm-font text-danger noticeban"><strong>Note: Please Upload Images with 640px*1136px size</strong></p>
+                                    </td>
+                                    <td class="w-25 text-right pr-2 pt-2 pb-4">
+                                        <button class="dtone" asp-action="Delete" asp-route-type="app" onclick="return confirmDelete()">
+                                            <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+                <div class="col-md-12 mt-4 text-center">
+                    <div class="sub-btn text-center ">
+                        <button class="btn common-bg">Submit</button>
+                    </div>
+                </div>
+
+                </div>
+                </form>
+            </div>
+        </div>
+        <script src="~/adminjs/contact.js"></script>

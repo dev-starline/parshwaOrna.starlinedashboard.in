@@ -1,0 +1,93 @@
+﻿@model Slider
+<div class="modal fade" id="addSlider" tabindex="-1" role="dialog" aria-labelledby="bankaddmodal" style="padding-right: 17px;">
+	<div class="modal-dialog modal-md">
+		<div class="modal-content">
+			<div class="modal-header common-bg rounded-0">
+				<h5 class="modal-title h4 color-white md-font"></h5>
+				<button type="button" class="close color-white" data-dismiss="modal" aria-label="Close">
+					<span class="color-white" aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form method="post" asp-action="Create" enctype="multipart/form-data">
+					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+					<table>
+						<tbody>
+							<tr>
+								<div class="form-group">
+									<label asp-for="SliderImage" class="control-label"></label>
+									<input asp-for="SliderImage" class="form-control" type="file" onchange="document.getElementById('showWeb').src=window.URL.createObjectURL(this.files[0])" />
+									<span asp-validation-for="SliderThumbnailPath" class="text-danger"></span>
+								</div>
+							</tr>
+							<tr>
+								<div class="form-group">
+									<img id="showWeb" src="#" alt="Image preview will appear here" style="display: none; max-width: 100%; height: auto; border: 1px solid #ddd; padding: 5px;" />
+								</div>
+							</tr>
+						</tbody>
+					</table>
+					<div class="btn-sub text-center">
+						<button class="btn common-bg sm-font">Submit</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="editModal" tabindex="-1" role="dialog"
+	 aria-labelledby="bankaddmodal" style="padding-right: 17px;">
+	<div class="modal-dialog modal-md">
+		<div class="modal-content">
+			<div class="modal-header common-bg rounded-0">
+				<h5 class="modal-title h4 color-white md-font"></h5>
+				<button type="button" class="close color-white" data-dismiss="modal" aria-label="Close">
+					<span class="color-white" aria-hidden="true">×</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				<form asp-action="Edit" method="post" enctype="multipart/form-data">
+					<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+					<input type="hidden" asp-for="SliderId" />
+					<table>
+						<tbody>
+							<tr>
+								<div class="form-group">
+									<label asp-for="SliderImage" class="control-label"></label>
+									<input asp-for="SliderImage" class="form-control" type="file" onchange="document.getElementById('showWeb').src=window.URL.createObjectURL(this.files[0])" />
+									<span asp-validation-for="SliderThumbnailPath" class="text-danger"></span>
+								</div>
+
+								<div class="form-group">
+									<input type="submit" value="Save" class="btn btn-primary" />
+								</div>
+
+								<div class="form-group">
+									@if (!string.IsNullOrEmpty(Model.SliderPath))
+									{
+										<p>Current Image:</p>
+										<img id="showWeb" src="@Model.SliderPath" style="max-width: 100px;" />
+									}
+								</div>
+							</tr>
+						</tbody>
+					</table>
+
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+<script>
+	document.querySelector('input[type="file"]').addEventListener('change', function() {
+		const preview = document.getElementById('showWeb');
+		if (this.files && this.files[0]) {
+			preview.src = window.URL.createObjectURL(this.files[0]);
+			preview.style.display = 'block';
+		} else {
+			preview.style.display = 'none';
+		}
+	});
+</script>

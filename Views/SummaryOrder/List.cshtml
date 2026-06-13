@@ -1,0 +1,143 @@
+﻿@model SL_Bullion.Models.TradeSummaryResponse
+@{
+    ViewData["Title"] = "SummaryOrder";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    string fromDateQuery = Context.Request.Query["fromDate"];
+    string toDateQuery = Context.Request.Query["toDate"];
+    string loginIdQuery = Context.Request.Query["loginId"];
+    string defaultDate = DateTime.Today.ToString("yyyy-MM-dd");
+    string fromDateValue = string.IsNullOrEmpty(fromDateQuery) ? defaultDate : fromDateQuery;
+    string toDateValue = string.IsNullOrEmpty(toDateQuery) ? defaultDate : toDateQuery;
+
+}
+
+<div class="container-fluid">
+    <div class="table-cover">
+        <div class="row ml-0 mr-0">
+            <div class="col-lg-4 col-md-0 col-sm-12"></div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <h4 class="text-center mt-1 mb-2">Summary Order</h4>
+            </div>
+        </div>
+        <div class="table-wrapper vg oncover">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="common-bg thead-font ab">Date</th>
+                        <th class="common-bg thead-font ab">Symbol</th>
+                        <th class="common-bg thead-font ab">Buy Order Count</th>
+                        <th class="common-bg thead-font ab">Buy Grams/Kg</th>
+                        <th class="common-bg thead-font ab">Buy Average</th>
+                        <th class="common-bg thead-font ab">Sell Order Count</th>
+                        <th class="common-bg thead-font ab">Sell Grams/Kg</th>
+                        <th class="common-bg thead-font ab">Sell Average</th>
+                     
+                    </tr>
+                </thead>
+                <tbody class="executeOrder ovrcover">
+                    @foreach (var item in Model.SymbolSummary)
+                    {
+                        <tr>
+                            <td class="ab"><div class="content"><p>@item.orderTime</p></div></td>
+                            <td class="ab"><div class="content"><p>@item.symbolName</p></div></td>
+                            <td class="ab"><div class="content"><p>@item.buyCount</p></div></td>
+                            <td class="ab"><div class="content"><p>@item.buyVolume</p></div></td>
+                            <td class="ab"><div class="content"><p>@item.buyAvg.ToString("F2")</p></div></td>
+                            <td class="ab"><div class="content"><p>@item.sellCount</p></div></td>
+                            <td class="ab"><div class="content"><p>@item.sellVolume</p></div></td>
+                            <td class="ab"><div class="content"><p>@item.sellAvg.ToString("F2")</p></div></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+<div class="container-fluid">
+    <div class="table-cover">
+        <div class="row ml-0 mr-0">
+            <div class="col-lg-4 col-md-0 col-sm-12"></div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <h4 class="text-center mt-1 mb-2">Exchange Average Summary</h4>
+            </div>
+        </div>
+        <div class="table-wrapper oncover">
+            <table>
+                <thead>
+                    <tr>
+                        <th class="common-bg thead-font bb">Date</th>
+                        <th class="common-bg thead-font bb">Gold Total Volume(Gram)</th>
+                        <th class="common-bg thead-font bb">Silver Total Volume</th>
+                        <th class="common-bg thead-font bb">Buy Gold</th>
+                        <th class="common-bg thead-font bb">Sell Gold</th>
+                        <th class="common-bg thead-font bb">Buy Silver</th>
+                        <th class="common-bg thead-font bb">Sell Silver</th>
+                    </tr>
+                </thead>
+                <tbody class="executeOrder ovrcover">
+                    @foreach (var item in Model.MetalSummary)
+                    {
+                        <tr>
+                            <td class="bb"><div class="content"><p>@item.Date</p></div></td>
+                            <td class="bb"><div class="content"><p>@item.TotalBuyGold</p></div></td>
+                            <td class="bb"><div class="content"><p>@item.TotalBuySilver</p></div></td>
+                            <td class="bb"><div class="content"><p>@item.AverageBuyGold.ToString("F2")</p></div></td>
+                            <td class="bb"><div class="content"><p>@item.AverageSellGold.ToString("F2")</p></div></td>
+                            <td class="bb"><div class="content"><p>@item.AverageBuySilver.ToString("F2")</p></div></td>
+                            <td class="bb"><div class="content"><p>@item.AverageSellSilver.ToString("F2")</p></div></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+
+
+<div class="container-fluid">
+    <div class="table-cover">
+        <div class="row ml-0 mr-0">
+            <div class="col-lg-4 col-md-0 col-sm-12"></div>
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <h4 class="text-center mt-1 mb-2">SymbolWise Summary Order</h4>
+            </div>
+        </div>
+        <div class="table-wrapper oncover">
+            <table>
+                <thead>
+                    <tr>
+                       
+                        <th class="common-bg thead-font ab">Symbol</th>
+                        <th class="common-bg thead-font ab">Buy Order Count</th>
+                        <th class="common-bg thead-font ab">Buy Grams/Kg</th>
+                        <th class="common-bg thead-font ab">Buy Average</th>
+                        <th class="common-bg thead-font ab">Sell Order Count</th>
+                        <th class="common-bg thead-font ab">Sell Grams/Kg</th>
+                        <th class="common-bg thead-font ab">Sell Average</th>
+
+                    </tr>
+                </thead>
+                <tbody class="executeOrder ovrcover">
+                    @foreach (var item in Model.SummarySymbol)
+                    {
+                        <tr>
+                           
+                            <td class="ab"><div class="content"><p>@item.symbolName</p></div></td>
+                            <td class="ab"><div class="content"><p>@item.buyCount</p></div></td>
+                            <td class="ab"><div class="content"><p>@item.buyVolume</p></div></td>
+                            <td class="ab"><div class="content"><p>@item.buyAvg.ToString("F2")</p></div></td>
+                            <td class="ab"><div class="content"><p>@item.sellCount</p></div></td>
+                            <td class="ab"><div class="content"><p>@item.sellVolume</p></div></td>
+                            <td class="ab"><div class="content"><p>@item.sellAvg.ToString("F2")</p></div></td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+</div>
+<script src="~/adminjs/order.js"></script>

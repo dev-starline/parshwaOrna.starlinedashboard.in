@@ -1,0 +1,214 @@
+﻿@model IEnumerable<SL_Bullion.Models.Master>
+@{
+    Layout = null;
+    ViewData["Title"] = "Client";
+}
+<!doctype html>
+<html lang="en">
+
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link rel="stylesheet" href="~/css/bootstrap.min.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/common.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/responsive.css" asp-append-version="true" />
+        <link rel="stylesheet" href="~/css/style.css" asp-append-version="true" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" asp-append-version="true" />
+    <title>@ViewData["Title"] - Master</title>
+    <style>
+        input#myfile {
+            min-height: 25px;
+            font-size: 12px;
+            border: 1px solid #d2d2d2;
+            border-radius: 2px;
+            width: 90% !important;
+            padding: 4px 10px;
+        }
+
+
+        .input-height {
+            min-height: 30px;
+            padding-left: 5px;
+        }
+
+        .aclabel {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .input-height1 {
+            min-height: 30px;
+        }
+
+        .access-cover span input {
+            margin-right: 4px;
+        }
+
+        .access-cover p span {
+            padding-top: 10px;
+            display: inline-block;
+            font-weight: bold;
+            color: #323232;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+        .access-cover {
+            text-align: center;
+        }
+
+        .modal-body .table tr td input {
+            border: 1px solid #dadada;
+            color: #000;
+            border-radius: 2px;
+            height: 30px;
+            width: 100%;
+        }
+
+        input#savepp {
+            padding: 7px 10px;
+            color: #000;
+        }
+
+        /* edit modal css start */
+        .comex-cover h6 {
+            background: linear-gradient(180deg, #3a3a3a 0%, #282626 50%, #0b0b0b 100%);
+            padding: 8px 0;
+            text-align: center;
+            color: #fff;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+
+        .input-height2 {
+            min-height: 32px;
+            padding-left: 5px;
+            width: 100%;
+            margin-bottom: 8px;
+        }
+
+        #update {
+            padding: 7px 10px;
+            color: #000;
+            margin-bottom: 8px;
+        }
+
+        .aclabel p{color:#000; font-size:13px; font-weight:600;}
+
+    </style>
+    </head>
+
+    <body>
+       
+        <div class="tab-bottom-cvr w-100 d-inline-block py-2">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-4 col-sm-12">
+                        <div class="top-cover">
+                            <div class="form-inline my-2 my-lg-0 justify-content-start">
+                                <button class="btn common-bg color-white my-2 mx-2 my-sm-0 sm-font"data-toggle="modal" data-target=".masterAdd">Add Client</button>
+                          
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                    <form style="float:right;">
+                        <button asp-action="Logout" class="btn common-bg color-white my-2 mx-2 my-sm-0 sm-font">Logout</button>
+                    </form>
+                    </div>
+                   
+                </div>
+            </div>
+        </div>
+    
+        <div class="table-cover">
+            <div class="container-fluid">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th class="common-bg thead-font wfive">ClientId</th>
+                                <th class="common-bg thead-font wten">UserName</th>
+                                <th class="common-bg thead-font wten">Password</th>
+                                <th class="common-bg thead-font wten">FirmName</th>
+                                <th class="common-bg thead-font wten">ClientName</th>
+                                <th class="common-bg thead-font wten">Mobile</th>
+                                <th class="common-bg thead-font wten">City</th>
+                                <th class="common-bg thead-font wten">Active</th>
+                                <th class="common-bg thead-font wten">Edit</th>
+                            </tr>
+                        </thead>
+                    <tbody>
+                        @foreach (var item in Model) {
+                        <tr>
+                            <td>
+                                <div class="content">
+                                        <p>@Html.DisplayFor(modelItem => item.id)</p>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="content">
+                                        <p>@Html.DisplayFor(modelItem => item.userName)</p>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="content">
+                                        <p>@Html.DisplayFor(modelItem => item.password)</p>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="content">
+                                        <p>@Html.DisplayFor(modelItem => item.firmName)</p>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="content">
+                                        <p>@Html.DisplayFor(modelItem => item.clientName)</p>
+                                </div>
+                            </td>
+
+                            <td>
+                                <div class="content">
+                                        <p>@Html.DisplayFor(modelItem => item.mobile)</p>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="content">
+                                        <p>@Html.DisplayFor(modelItem => item.city)</p>
+                                </div>
+                            </td>
+                            <td class="wfive">
+                                <div class="content">
+                                        <p>@Html.DisplayFor(modelItem => item.isActive)</p>
+                                </div>
+                            </td>
+                            <td class="wfive">
+                                <div class="content">
+                                        <button class="ajax-model-master" id="@item.id" data-url="@Url.Action($"Edit/{item.id}")">
+                                        <i class="fa fa-pencil-square-o text-primary" aria-hidden="true"></i>
+                                    </button>
+                                </div>
+                            </td>
+                            
+                        </tr>
+                        }
+                    </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    <div id="modelPopup"></div>
+    <script src="~/js/jquery-3.2.1.slim.min.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/popper.min.js"></script>
+    <script src="~/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@@microsoft/signalr@latest/dist/browser/signalr.min.js"></script>
+    <script src="~/adminJS/common.js"></script>
+    <script src="~/adminJS/master.js"></script>
+    @await Html.PartialAsync("Action",new Master())
+    @await Component.InvokeAsync("NToastNotify")
+    
+    </body>
+
+</html>

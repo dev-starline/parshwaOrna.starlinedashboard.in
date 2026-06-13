@@ -1,0 +1,94 @@
+﻿@model Coin
+<div class="container mt-5">
+	<div class="modal fade" id="symbolCreate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header common-bg rounded-0">
+					<h5 class="modal-title h4 color-white md-font" id="symboladdmodal">Add Symbol</h5>
+					<button type="button" class="close color-white" data-dismiss="modal" aria-label="Close">
+						<span class="color-white" aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form asp-action="Create" method="post">
+						<div class="mp-sec1">
+							<div class="row">
+								<div class="col-lg-12 col-md-12 col-sm-12">
+									<table>
+										<tbody>
+											<tr>
+												<td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Name</label><span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2"> <input asp-for="name" type="text" class="input-height sm-font" class="w-75 sm-font pl-2"></td>
+
+											</tr>
+											<tr>
+												<td class="sym-mod-lef pb-2 text-left pr-3"> <label for="" class="sm-font mb-0">Source</label><span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2">
+													<select asp-for="source" class="sm-font py-1">
+														<option value="gold">Gold</option>
+														<option value="silver">Silver</option>
+													</select>
+												</td>
+											</tr>
+
+										</tbody>
+									</table>
+									<div class="btn-sub text-center mt-4">
+										<button class="btn common-bg">Create</button>
+									</div>
+								</div>
+
+							</div>
+
+						</div>
+					</form>
+				</div>
+
+			</div>
+		</div>
+	</div>
+
+</div>
+
+<div class="container mt-5">
+	<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-xl">
+			<div class="modal-content">
+				<div class="modal-header common-bg rounded-0">
+					<h5 class="modal-title h4 color-white md-font" id="symboleditaddmodal">Set coin image</h5>
+					<button type="button" class="close color-white" data-dismiss="modal" aria-label="Close">
+						<span class="color-white" aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form enctype="multipart/form-data" asp-action="Edit" method="post">
+						<div class="mp-sec1">
+							<div class="row">
+								<div class="col-lg-12 col-md-12 col-sm-12">
+									<table>
+										<tbody>
+											<tr>
+												<td class="w-75 pt-2 pt-2 pb-4">
+													<input asp-for="image" type="file" onchange="document.getElementById('show').src=window.URL.createObjectURL(this.files[0])" class="w-50 sm-font pl-2 border-0">
+													<img id="show" src="@ViewData["url"]" height="100" width="100" alt="Logo Image">
+												</td>
+												<td class="w-25 text-right pr-2 pt-2 pb-4">
+													<button asp-action="DeleteCoin" asp-route-id=@Model.id onclick="return confirmDelete()">
+														<i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+													</button>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+									<div class="btn-sub text-center mt-4">
+										<button class="btn common-bg">Edit</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

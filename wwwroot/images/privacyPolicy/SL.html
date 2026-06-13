@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+</head>
+
+<body ng-app="digitalGold">
+    <table ng-controller="ctrlDigital">
+      <tr>
+        <th>total</th>
+      </tr>
+      <tr>
+        <td>{{ calculateTotal(11) }}</td>
+      </tr>
+      <tr>
+        <td>{{ calculateTotal(12) }}</td>
+      </tr>
+      <tr>
+        <td>{{ calculateTotal(13) }}</td>
+      </tr>
+      <tr>
+        <td>{{ calculateTotal(14) }}</td>
+      </tr>
+    </table>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.0/socket.io.js"></script>
+    <script>
+      const socket = io("https://starlineadmin.in:10001", {});
+      var objPremium={"11":{"premium":1000,"source":"Gold"},"12":{"premium":2000,"source":"Gold"},"13":{"premium":3000,"source":"Silver"},"14":{"premium":4000,"source":"Silver"}}
+      angular.module('digitalGold', [])
+        .controller('ctrlDigital', ['$scope', function ($scope) {
+  
+          socket.on('connect', function () {
+            socket.emit('room', 'somnathtrading');
+          });
+  
+          socket.on('Liverate', function (data) {
+            $scope.$apply(function () {
+                $scope.mcxGold = data[0].Ask;
+                $scope.mcxSilver = data[1].Ask;
+            });
+          });
+  
+          $scope.calculateTotal = function (index) {
+            let mcxValue = $scope['mcx' + objPremium[index].source];;
+            let premiumValue = objPremium[index].premium || 0;
+            $(".premium"+index).val(premiumValue);
+            let total = (parseFloat(mcxValue) + parseFloat(premiumValue)).toFixed(2);
+            return total;
+          };
+        }]);
+    </script>
+  </body>
+  
+</html>
