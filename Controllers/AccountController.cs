@@ -193,6 +193,7 @@ namespace SL_Bullion.Controllers
                     _context.Update(account);
                     await _context.SaveChangesAsync();
                     _constatnt.pushAccountDetails(id, groupId);
+                    _constatnt.pushSingleLoginDetails(id);
                 }
                 catch (DbUpdateConcurrencyException)
                 {
