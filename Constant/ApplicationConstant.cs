@@ -1079,6 +1079,7 @@ namespace SL_Bullion.Constant
                          isA = c.isActive,
                          mobile = c.mobile,
                          loginId = c.loginId,
+                         rd = (c.endDate.Value - DateTime.Now).Days,
                          user = _context.tblMaster.Where(m => m.id == c.clientId).Select(m => m.userName).FirstOrDefault(),
                      }).ToJson();
             var result = _context.tblAccount
@@ -1090,6 +1091,7 @@ namespace SL_Bullion.Constant
                          isA = c.isActive,
                          user = _context.tblMaster.Where(m => m.id == c.clientId).Select(m => m.userName).FirstOrDefault(),
                          mobile = c.mobile,
+                         rd = (c.endDate.Value - DateTime.Now).Days,
                          loginId = c.loginId
                      }).ToList();
             string jsonString = JsonSerializer.Serialize(result);
