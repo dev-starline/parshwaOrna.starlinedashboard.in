@@ -214,7 +214,7 @@ namespace SL_Bullion.WebAPI
                 if (user.endDate < DateTime.Now.Date)
                 {
                     _response.code = 400;
-                    _response.message = _message.C110;
+                    _response.message = _message.C139;
                     return Json(_response);
                 }
 
