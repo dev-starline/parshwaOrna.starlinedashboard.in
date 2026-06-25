@@ -127,7 +127,7 @@ namespace SL_Bullion.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,clientId,name,source,sourceType,isView,isTerminal,isTrade,rateType,buyPremium,identifier,sellPremium,buyCommonPremium,sellCommonPremium,typeCommonPremium,symbolType,division,multiply,gst,digit,stock,initialMargin,isBill,gstBill,tcsBill,tdsBill,high,low,createDate,modifiedDate,changePremiumDate,CityId")] Symbol symbol)
+        public async Task<IActionResult> Edit(int id, [Bind("id,clientId,name,source,sourceType,isView,isTerminal,isTrade,isComment,rateType,buyPremium,identifier,sellPremium,buyCommonPremium,sellCommonPremium,typeCommonPremium,symbolType,division,multiply,gst,digit,stock,initialMargin,isBill,gstBill,tcsBill,tdsBill,high,low,createDate,modifiedDate,changePremiumDate,CityId")] Symbol symbol)
         {
             if (id != symbol.id)
             {

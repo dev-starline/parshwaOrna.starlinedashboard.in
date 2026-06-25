@@ -65,6 +65,8 @@ namespace SL_Bullion.Models
         }
       
         public int CityId { get; set; } = 0;
+
+        public bool isComment { get; set; } = false;
     }
     
 }

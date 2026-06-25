@@ -85,11 +85,16 @@
                                     </tr>
                                             <tr>
                                                 <td class="sym-mod-lef text-left pr-3 pb-2"> <label for="" class="sm-font mb-0">isTrade</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                                <td class="sym-mod-right pb-2"> <input asp-for="isTrade" type="checkbox" checked="@(Model.isTrade ? "checked" : null)" id="txtTrade"></td>
+                                                <td class="sym-mod-right pb-2"> <input asp-for="isTrade" type="checkbox" checked="@(Model.isTrade ? "checked" : null)" id="txtTrade">
 
                                             </tr>
-                                    
-                                    <tr>
+
+                                            <tr>
+                                                <td class="sym-mod-lef text-left pb-3 pr-2"> <label for="" class="sm-font mb-0">Is Comment</label><span class="pl-rgt pr-2" style="float: right;">:</span></td>
+                                                <td class="sym-mod-right pb-2"> <input asp-for="isComment" name="isComment" type="checkbox"></td>
+                                            </tr>
+
+                                            <tr>
                                         <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Name</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
                                             <td class="sym-mod-right pb-2"> <input asp-for="name" type="text" class="input-height sm-font" ></td>
 

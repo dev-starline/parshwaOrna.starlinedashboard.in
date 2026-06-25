@@ -1720,6 +1720,9 @@ namespace SL_Bullion.Migrations
                     b.Property<bool>("isBill")
                         .HasColumnType("bit");
 
+                    b.Property<bool>("isComment")
+                     .HasColumnType("bit");
+
                     b.Property<bool>("isTerminal")
                         .HasColumnType("bit");
 

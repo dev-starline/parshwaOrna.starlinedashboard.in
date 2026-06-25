@@ -65,6 +65,7 @@ namespace SL_Bullion.Controllers
                     a.firmName,
                     a.mobile,
                     a.city,
+                    a.mac,
                     a.tradeAccess,
                     groupName = _context.tblGroup.Where(g => g.id == a.groupId).Select(g => g.name).FirstOrDefault()
                 }).ToListAsync();
@@ -171,29 +172,36 @@ namespace SL_Bullion.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,clientId,loginId,password,name,firmName,mobile,email,city,groupId,tradeAccess,isActive,gst,margin,type,modifiedDate,startDate,endDate")] Account account)
+        public async Task<IActionResult> Edit(int id, [Bind("id,clientId,loginId,password,name,firmName,mobile,email,city,groupId,tradeAccess,isActive,gst,margin,type,modifiedDate,startDate,endDate,mac")] Account account)
         {
             if (string.IsNullOrWhiteSpace(account.name))
             {
                 _alert.AddWarningToastMessage("Name is required.");
                 return RedirectToAction(nameof(List));
             }
-
             if (id != account.id)
             {
                 return NotFound();
             }
+
+            var existingAccount = await _context.tblAccount.AsNoTracking().Where(a => a.id == id).Select(a => new { a.mac }).FirstOrDefaultAsync();
+
+            if (existingAccount == null)
+            {
+                return NotFound();
+            }            
 
             if (ModelState.IsValid)
             {
                 try
                 {
                     int groupId = getGroupId(id);
+                    account.mac = existingAccount.mac;
                     account.clientId = HttpContext.Session.GetInt32("clientId").GetValueOrDefault();
                     _context.Update(account);
                     await _context.SaveChangesAsync();
                     _constatnt.pushAccountDetails(id, groupId);
-                    _constatnt.pushSingleLoginDetails(id);
+                  
                 }
                 catch (DbUpdateConcurrencyException)
                 {

@@ -27,6 +27,7 @@ function getBankCalculation() {
         $('input[name="isRate"][value=' + data.contact[0].isRate + ']').prop("checked", true);
         $('input[name="isLogin"][value=' + data.contact[0].isLogin + ']').prop("checked", true);
         $('input[name="isTrade"][value=' + data.contact[0].isTrade + ']').prop("checked", true);
+       
     }
 }
 
@@ -77,6 +78,7 @@ $("body").on("click", ".updatePremium", async function () {
         isView: $row.find(".isView").is(":checked"),
         isTerminal: $row.find(".isTerminal").is(":checked"),
         isTrade: $row.find(".isTrade").is(":checked"),
+        isComment: $row.find(".isComment").is(":checked"),
         name: $row.find(".sbName").val(),
         buyPremium: buyPremium,
         sellPremium: sellPremium
@@ -125,6 +127,7 @@ $("body").on("click", ".saveAll", function () {
             isView: $row.find(".isView").is(':checked'),
             isTerminal: $row.find(".isTerminal").is(':checked'),
             isTrade: $row.find(".isTrade").is(':checked'),
+            isComment: $row.find(".isComment").is(":checked"),
             name: $row.find(".sbName").val(),
             buyPremium: buyPremium,
             sellPremium: sellPremium
@@ -151,6 +154,7 @@ $(".isSwitch").on("change", function () {
     data.isRate = $('input[name="isRate"]:checked').val();
     data.isLogin = $('input[name="isLogin"]:checked').val();
     data.isTrade = $('input[name="isTrade"]:checked').val();
+  
     var response = ajaxPost('Symbol/isRateUpdate', JSON.stringify(data));
     if (response == 200) {
     }

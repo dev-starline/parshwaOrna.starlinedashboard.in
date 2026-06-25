@@ -789,6 +789,7 @@ namespace SL_Bullion.Migrations
                     index = table.Column<int>(type: "int", nullable: false),
                     digit = table.Column<int>(type: "int", nullable: false),
                     isBill = table.Column<bool>(type: "bit", nullable: false),
+                    isComment = table.Column<bool>(type: "bit", nullable: false),
                     gstBill = table.Column<double>(type: "float", nullable: false),
                     tcsBill = table.Column<double>(type: "float", nullable: false),
                     tdsBill = table.Column<double>(type: "float", nullable: false),
