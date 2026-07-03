@@ -353,7 +353,9 @@ namespace SL_Bullion.WebAPI
                 JsonObject orderDetails = _apiService.verifyOrder((int)obj["tradeType"], user, (int)obj["symbolId"], clientId, loginId, (double)obj["rate"], (double)obj["volume"]);
                 if (!ValidateOrderConditions(orderDetails, obj))
                 {
+                    await _apiService.LogOrderFailure(clientId, (int)obj["symbolId"], loginId,(double)obj["volume"], (double)obj["rate"], _response.message);
                     return Json(_response);
+                   
                 }
                 OpenOrder order = new OpenOrder();
                 order.clientId = clientId;
@@ -374,25 +376,38 @@ namespace SL_Bullion.WebAPI
                 order.margin = (double)orderDetails?["margin"];
                 order.ip = HttpContext.Connection.RemoteIpAddress.ToString();
                 order.deviceType = obj["deviceType"].ToString();
-                order.comment = string.IsNullOrWhiteSpace(comment) ? null : comment;
-
-                if (ModelState.IsValid)
-                {
-                    _context.Add(order);
-                    await _context.SaveChangesAsync();
-                    JsonObject afterOrder = await _apiService.updateOrder(user, (int)obj["tradeType"], (int)obj["symbolId"], (double)obj["volume"], order.dealNo, (int)orderDetails["accountId"], order.deviceType, order.id);
-
-                    if (afterOrder.ContainsKey("code") && (int)afterOrder["code"] == 400)
+                 order.comment = string.IsNullOrWhiteSpace(comment) ? null : comment;
+ 
+                 if (ModelState.IsValid)
+                 {
+                    await using var transaction = await _context.Database.BeginTransactionAsync();
+                    try
                     {
-                        _response.code = 400;
-                        _response.message = afterOrder["message"].ToString();
+                        _context.Add(order);
+                        await _context.SaveChangesAsync();
+
+                        JsonObject afterOrder = await _apiService.updateOrder(user, (int)obj["tradeType"], (int)obj["symbolId"], (double)obj["volume"], order.dealNo, (int)orderDetails["accountId"], order.deviceType, order.id);
+
+                        if (afterOrder.ContainsKey("code") && (int)afterOrder["code"] == 400)
+                        {
+                            await transaction.RollbackAsync();
+                            _response.code = 400;                            
+                            _response.message = afterOrder["message"]?.ToString() ?? "Trade not executed";
+                            await _apiService.LogOrderFailure(clientId, (int)obj["symbolId"], loginId, (double)obj["volume"], (double)obj["rate"], _response.message);
+                        }
+                        else
+                        {
+                            await transaction.CommitAsync();
+                            _response.code = 200;
+                            _response.message = _message.C112;
+                        }
                     }
-                    else
+                    catch
                     {
-                        _response.code = 200;
-                        _response.message = _message.C112;
+                        await transaction.RollbackAsync();
+                        throw;
                     }
-                }
+                 }
 
             }
             catch (Exception ex)

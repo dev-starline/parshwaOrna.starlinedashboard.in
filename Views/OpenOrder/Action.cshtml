@@ -10,6 +10,7 @@
             </div>
             <div class="modal-body">
                 <form asp-action="closeOrder" method="post">
+                    <input type="hidden" name="tradeFilter" id="tradeFilter" value="" />
                     <table>
                         <tbody>
                             <tr>
@@ -57,3 +58,13 @@
         </div>
     </div>
 </div>
+<script>
+    (function () {
+        const params = new URLSearchParams(window.location.search);
+        const tradeFilter = params.get('tradeFilter') || 'all';
+        const hidden = document.getElementById('tradeFilter');
+        if (hidden) {
+            hidden.value = tradeFilter;
+        }
+    })();
+</script>

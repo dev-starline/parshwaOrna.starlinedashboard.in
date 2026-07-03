@@ -265,8 +265,10 @@ namespace SL_Bullion.Constant
                           number6 = s.number6,
                           number7 = s.number7,
                           marqueeTop = s.marqueeTop,
+                          marqueeTop1 = s.marqueeTop1,
                           whatsAppNo = s.whatsAppNo,
                           marqueeBottom = s.marqueeBottom,
+                          marqueeBottom1=s.marqueeBottom1,
                           address1 = s.address1,
                           address2 = s.address2,
                           address3 = s.address3,
@@ -552,6 +554,18 @@ namespace SL_Bullion.Constant
             var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
             var response = client.PostAsync(adminNodeUrl + "/orderDetails", content);
         }
+
+
+        internal async Task pushOrderfaieldAlert(string action, string user, int accountId,string reason, string symbol,double quantity, double price)
+        {
+            string message = $"Order Failure on Symbol {symbol}, Quantity: {quantity}, Price: {price:N2}. Reason: {reason}. User: {user}.";
+            var obj = new {action,user, accountId,symbol, quantity, price,reason, message,isAlert = true};
+            string jsonString = JsonSerializer.Serialize(obj);
+            var content = new StringContent(jsonString, Encoding.UTF8, "application/json");
+            await client.PostAsync(adminNodeUrl + "/orderFailure", content);
+        }
+
+
         OpenOrder GetOrderDetails(string action, int clientId, int actionId)
         {
             var query = from o in _context.tblOpenOrder

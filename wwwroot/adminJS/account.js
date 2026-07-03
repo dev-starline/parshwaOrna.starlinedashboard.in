@@ -13,7 +13,7 @@ function updateAmount(type) {
     data.loginId = $(".loginId").val();
     data.type = type;
     data.amount = $('.amount').val();   
-    var response = ajaxPost('/Account/updateAmount', JSON.stringify(data));
+    var response = ajaxPost('/admin/Account/updateAmount', JSON.stringify(data));
     if (response) {
         $('#viewMargin').text(response.margin);
         $('#margin').val(response.margin);

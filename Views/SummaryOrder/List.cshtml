@@ -2,12 +2,6 @@
 @{
     ViewData["Title"] = "SummaryOrder";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    string fromDateQuery = Context.Request.Query["fromDate"];
-    string toDateQuery = Context.Request.Query["toDate"];
-    string loginIdQuery = Context.Request.Query["loginId"];
-    string defaultDate = DateTime.Today.ToString("yyyy-MM-dd");
-    string fromDateValue = string.IsNullOrEmpty(fromDateQuery) ? defaultDate : fromDateQuery;
-    string toDateValue = string.IsNullOrEmpty(toDateQuery) ? defaultDate : toDateQuery;
 
 }
 

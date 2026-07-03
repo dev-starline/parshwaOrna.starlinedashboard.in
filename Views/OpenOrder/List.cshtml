@@ -27,6 +27,7 @@
 			<form asp-action="search" method="GET" class="col-lg-7 col-md-12 col-sm-12">
 				<div class="top-cover">
 					<div class="form-inline my-2 my-lg-0 justify-content-end">
+						<input type="hidden" name="tradeFilter" value="@Context.Request.Query["tradeFilter"]" />
 						<div class="datepicket order-sm-1">
 							<label for="loginId" class="d-inline-block">OrderNo or LoginId :</label>
 							<input name="loginId" type="text" id="loginId" value="@loginIdQuery">
@@ -59,7 +60,9 @@
 			<div class="col-lg-4 col-md-6 col-sm-12">
 				<div class="top-cover">
 					<div class="form-inline my-2 my-lg-0 justify-content-end">
-						<button class="btn common-bg color-white sm-font">All Order</button>
+						<a class="btn common-bg color-white sm-font" href="@Url.Action("List", new { tradeFilter = "all" })">All Order</a>
+						<a class="btn common-bg color-white sm-font ml-2" href="@Url.Action("List", new { tradeFilter = "buy" })">Buy Order</a>
+						<a class="btn common-bg color-white sm-font ml-2" href="@Url.Action("List", new { tradeFilter = "sell" })">Sell Order</a>
 						<button onclick="selectOrder('close')" class="btn common-bg color-white sm-font ml-2">CloseAll</button>
 						<button onclick="selectOrder('delete')" class="btn common-bg color-white sm-font ml-2">DeleteAll</button>
 					</div>
@@ -76,12 +79,12 @@
 						<th class="common-bg thead-font wtwo">OrderNo</th>
 						<th class="common-bg thead-font wtwo">LoginId</th>
 						<th class="common-bg thead-font wfive">Name/Firm</th>
+						<th class="common-bg thead-font wtwo">Mobile</th>
 						<th class="common-bg thead-font wfive">Symbol</th>
 						<th class="common-bg thead-font wone">RateType</th>
 						<th class="common-bg thead-font wtwo">TradeType</th>
 						<th class="common-bg thead-font wtwo">Quantity</th>
 						<th class="common-bg thead-font wtwo">Margin</th>
-						<th class="common-bg thead-font wtwo">Exchange</th>
 						<th class="common-bg thead-font wfive">Diffrence</th>
 						<th class="common-bg thead-font wtwo">Price</th>
 						<th class="common-bg thead-font wfive">Total</th>
@@ -124,12 +127,12 @@
 								</td>
 								@* <td class="wtwo"><div class="content"><p>@item.loginId</p></div></td> *@
 								<td class="wfive"><div class="content"><p>@item.name/@item.firm</p></div></td>
+								<td class="wtwo"><div class="content"><p>@item.mobile</p></div></td>
 								<td class="wfive"><div class="content @(item.isHedge ? "text-isHedge" : "")"><p>@item.symbolName</p></div></td>
 								<td class="wone"><div class="content"><p>@(item.rateType == "mcx" ? "exchange" : item.rateType)</p></div></td>
 								<td class="wtwo"><div class="content"><p>@item.tradeTypeView</p></div></td>
 								<td class="wtwo"><div class="content"><p>@item.volume</p></div></td>
 								<td class="wtwo"><div class="content"><p>@item.margin</p></div></td>
-								<td class="wtwo"><div class="content"><p>@item.exchange</p></div></td>
 								<td class="wfive"><div class="content"><p>@item.differenceRate</p></div></td>
 								<td class="wtwo"><div class="content"><p>@item.rate</p></div></td>
 								<td class="wfive"><div class="content"><p>@item.total</p></div></td>
@@ -140,7 +143,7 @@
 								<td class="wfive"><div class="content"><p>@item.ip</p></div></td>
 								<td class="wfive"><div class="content"><p>@item.comment</p></div></td>
 								<td class="wtwo"><div class="content"><button class="ajax-model" data-url="@Url.Action($"CloseOrder/{item.id}")"><i class="fa fa-external-link text-danger" aria-hidden="true"></i></button></div></td>
-								<td class="wtwo"><div class="content"><form asp-action="Delete" asp-route-id="@item.id"><button onclick="return confirmDelete()"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i></button></form></div></td>
+								<td class="wtwo"><div class="content"><form asp-action="Delete" asp-route-id="@item.id" asp-route-tradeFilter="@Context.Request.Query["tradeFilter"]"><button onclick="return confirmDelete()"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i></button></form></div></td>
 							</tr>
 						}
 					}
@@ -268,8 +271,8 @@
 								<td class="wten"><div class="content"><p>@item.orderTime.ToString("dd-MM-yyyy HH:mm:ss")</p></div></td>
 								<td class="wten"><div class="content"><p>@item.editorderTime.ToString("dd-MM-yyyy HH:mm:ss")</p></div></td>
 								<td class="wfive"><div class="content"><p>@item.ip</p></div></td>
-								<td class="wtwo"><div class="content"><form asp-action="Open" asp-route-id="@item.id"><button onclick="return confirmDelete('open')"><i class="fa fa-external-link text-success" aria-hidden="true"></i></button></form></div></td>
-								<td class="wtwo"><div class="content"><form asp-action="Delete" asp-route-id="@item.id"><button onclick="return confirmDelete()"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i></button></form></div></td>
+								<td class="wtwo"><div class="content"><form asp-action="Open" asp-route-id="@item.id" asp-route-tradeFilter="@Context.Request.Query["tradeFilter"]"><button onclick="return confirmDelete('open')"><i class="fa fa-external-link text-success" aria-hidden="true"></i></button></form></div></td>
+								<td class="wtwo"><div class="content"><form asp-action="Delete" asp-route-id="@item.id" asp-route-tradeFilter="@Context.Request.Query["tradeFilter"]"><button onclick="return confirmDelete()"><i class="fa fa-trash-o text-danger" aria-hidden="true"></i></button></form></div></td>
 							</tr>
 						}
 					}

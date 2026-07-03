@@ -5,6 +5,8 @@ function getContactDetails() {
         $('#contactId').val(response[0].id);
         $('#marqueeTop').val(response[0].marqueeTop);
         $('#marqueeBottom').val(response[0].marqueeBottom);
+        $('#marqueeTop1').val(response[0].marqueeTop1);
+        $('#marqueeBottom1').val(response[0].marqueeBottom1);
         $('#number1').val(response[0].number1);
         $('#number2').val(response[0].number2);
         $('#number3').val(response[0].number3);

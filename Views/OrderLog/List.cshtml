@@ -1,0 +1,82 @@
+﻿@model IEnumerable<SL_Bullion.Models.OrderFailureLogViewModel>
+@{
+    ViewData["Title"] = "Order  Log";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+     int currentPage = ViewBag.CurrentPage ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
+}
+  
+        <div class="table-cover">
+            <div class="container-fluid">
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                    <tr>
+                        <th class="common-bg thead-font ab">Date</th>
+                        <th class="common-bg thead-font ab">Client Name</th>
+                        <th class="common-bg thead-font ab">Firm/LoginId</th>
+                        <th class="common-bg thead-font ab">Mobile</th>
+                        <th class="common-bg thead-font ab">Symbol</th>
+                        <th class="common-bg thead-font ab">Quantity</th>
+                        <th class="common-bg thead-font ab">Price</th>
+                        <th class="common-bg thead-font ab">Reason</th>
+                        <th class="common-bg thead-font ab">Delete</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                                <td class="ab">
+                                    <div class="content">
+                                        <p>                                          
+                                            @item.createdAt.ToLocalTime().ToString("dd-MM-yyyy HH:mm")
+                                        </p>
+                                    </div>
+                                </td>
+                            <td class="ab"><div class="content"><p>@item.name</p></div></td>
+                            <td class="ab"><div class="content"><p>@item.firmName/@item.loginId</p></div></td>
+                                <td class="ab"><div class="content"><p>@item.mobileNumber</p></div></td>
+                                <td class="ab"><div class="content"><p>@item.symbolName?</p></div></td>
+                            <td class="ab"><div class="content"><p>@item.quantity</p></div></td>
+                            <td class="ab"><div class="content"><p>@item.price</p></div></td>
+                            <td class="ab"><div class="content"><p>@item.reason</p></div></td>
+                                <td class="ab">
+                                    <div class="content">
+                                        <form asp-action="Delete" asp-route-id="@item.id">
+                                            <button onclick="return confirmDelete()">
+                                                <i class="fa fa-trash-o text-danger" aria-hidden="true"></i>
+                                            </button>
+                                        </form>
+                                        </div>
+                                    
+                                </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+<div class="pagination text-center mt-3" style="float: right; margin-right: 20px;">
+    @if (totalPages > 1)
+    {
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-end">
+                <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                    <a class="page-link common-bg" asp-action="List" asp-route-page="@(currentPage > 1 ? currentPage - 1 : 1)">
+                        <i class="fa fa-angle-double-left"></i> Previous
+                    </a>
+                </li>
+                <li class="page-item">
+                    <span class="page-link"> @currentPage / @totalPages</span>
+                </li>
+                <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                    <a class="page-link common-bg" asp-action="List" asp-route-page="@(currentPage < totalPages ? currentPage + 1 : totalPages)">
+                        Next <i class="fa fa-angle-double-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    }
+</div>

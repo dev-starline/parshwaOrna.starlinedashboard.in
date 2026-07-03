@@ -21,13 +21,13 @@ namespace SL_Bullion.Controllers
             _constatnt = constatnt;
             _adminService = adminService;
         }
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string tradeFilter = "all")
         {
-            var orders = getOrder("", "", DateTime.Now, DateTime.Now);
+            var orders = getOrder("", "", DateTime.Now, DateTime.Now, tradeFilter);
             return View(await orders);
         }
 
-        private async Task<List<CloseOrder>> getOrder(string type, string data, DateTime fromDate, DateTime toDate)
+        private async Task<List<CloseOrder>> getOrder(string type, string data, DateTime fromDate, DateTime toDate, string tradeFilter)
         {
             var query = from o in _context.tblCloseOrder
                         join a in _context.tblAccount
@@ -35,29 +35,7 @@ namespace SL_Bullion.Controllers
                             equals new { a.clientId, a.loginId } into ac
                         from a in ac.DefaultIfEmpty()
                         where o.clientId == HttpContext.Session.GetInt32("clientId")
-                        select new CloseOrder
-                        {
-                            id = o.id,
-                            dealNo = o.dealNo,
-                            loginId = o.loginId,
-                            name = _context.tblAccount.Where(a => a.clientId == o.clientId && a.loginId == o.loginId).Select(a => a.name).FirstOrDefault(),
-                            firm = _context.tblAccount.Where(a => a.clientId == o.clientId && a.loginId == o.loginId).Select(a => a.firmName).FirstOrDefault(),
-                            symbolName = o.symbolName,
-                            rateType = o.rateType,
-                            tradeTypeView = o.tradeType == 1 ? "Buy" : o.tradeType == 2 ? "Sell" : o.tradeType == 3 ? "BuyLimit" : "SellLimit",
-                            volumeOpen = o.volumeOpen,
-                            volume = o.volume,
-                            exchange = o.exchange,
-                            rateOpen = o.rateOpen,
-                            rate = o.rate,
-                            total = o.total,
-                            deviceType = o.deviceType,
-                            orderTime = o.orderTime,
-                            editorderTime = o.editorderTime,
-                            closeTime = o.closeTime,
-                            ip = o.ip,
-                            comment = o.comment
-                        };
+                        select new { o, a };
 
             if (type == "search")
             {
@@ -66,20 +44,20 @@ namespace SL_Bullion.Controllers
                     if (int.TryParse(data, out var parsedDealNo))
                     {
                         query = query.Where(o =>
-                            (o.loginId.Contains(data) || o.dealNo == parsedDealNo) &&
-                            (o.closeTime.Date >= fromDate.Date && o.closeTime.Date <= toDate.Date));
+                            (o.o.loginId.Contains(data) || o.o.dealNo == parsedDealNo) &&
+                            (o.o.closeTime.Date >= fromDate.Date && o.o.closeTime.Date <= toDate.Date));
                     }
                     else
                     {
                         query = query.Where(o =>
-                             (o.loginId.Contains(data) || o.name.Contains(data) || o.firm.Contains(data)) &&
-                             (o.closeTime >= fromDate && o.closeTime <= toDate));
+                             (o.o.loginId.Contains(data) || o.a.name.Contains(data) || o.a.firmName.Contains(data)) &&
+                             (o.o.closeTime >= fromDate && o.o.closeTime <= toDate));
                     }
                 }
                 else
                 {
                     query = query.Where(o =>
-                        o.closeTime.Date >= fromDate.Date && o.closeTime.Date <= toDate.Date);
+                        o.o.closeTime.Date >= fromDate.Date && o.o.closeTime.Date <= toDate.Date);
                 }
             }
 
@@ -87,10 +65,44 @@ namespace SL_Bullion.Controllers
             {
                 // When no search → show ONLY today's closed orders
                 var today = DateTime.Today;
-                query = query.Where(o => o.closeTime.Date == today);
+                query = query.Where(o => o.o.closeTime.Date == today);
+            }
+            if (string.Equals(tradeFilter, "buy", StringComparison.OrdinalIgnoreCase))
+            {
+                query = query.Where(x => x.o.tradeType == 1);
+            }
+            else if (string.Equals(tradeFilter, "sell", StringComparison.OrdinalIgnoreCase))
+            {
+                query = query.Where(x => x.o.tradeType == 2);
             }
 
-            var orders = await query.OrderByDescending(o => o.closeTime).ToListAsync();
+            var orders = await query
+                .OrderByDescending(x => x.o.closeTime)
+                .Select(x => new CloseOrder
+                {
+                    id = x.o.id,
+                    dealNo = x.o.dealNo,
+                    loginId = x.o.loginId,
+                    name = x.a != null ? x.a.name : string.Empty,
+                    firm = x.a != null ? x.a.firmName : string.Empty,
+                    mobile = x.a != null ? x.a.mobile : string.Empty,
+                    symbolName = x.o.symbolName,
+                    rateType = x.o.rateType,
+                    tradeTypeView = x.o.tradeType == 1 ? "Buy" : x.o.tradeType == 2 ? "Sell" : x.o.tradeType == 3 ? "BuyLimit" : "SellLimit",
+                    volumeOpen = x.o.volumeOpen,
+                    volume = x.o.volume,
+                    exchange = x.o.exchange,
+                    rateOpen = x.o.rateOpen,
+                    rate = x.o.rate,
+                    total = x.o.total,
+                    deviceType = x.o.deviceType,
+                    orderTime = x.o.orderTime,
+                    editorderTime = x.o.editorderTime,
+                    closeTime = x.o.closeTime,
+                    ip = x.o.ip,
+                    comment = x.o.comment
+                })
+                .ToListAsync();
             return orders;
         }
 
@@ -106,28 +118,29 @@ namespace SL_Bullion.Controllers
                 return RedirectToAction(nameof(List));
             }
             toDateValue = toDateValue.Date.Add(new TimeSpan(23, 59, 59));
-            var orders = getOrder("search", loginId, fromDateValue, toDateValue);
+            var tradeFilter = Request.Query["tradeFilter"].ToString();
+            var orders = getOrder("search", loginId, fromDateValue, toDateValue, tradeFilter);
             return View("List", await orders);
         }
 
         [HttpPost, ActionName("Open")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> OpenConfirmed(int id)
+        public async Task<IActionResult> OpenConfirmed(int id, string tradeFilter = "all")
         {
             await _adminService.removeOrder(id, "close", "open");
             await _context.SaveChangesAsync();
             _alert.AddSuccessToastMessage("order open.");
-            return RedirectToAction(nameof(List));
+            return RedirectToAction(nameof(List), new { tradeFilter });
         }
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, string tradeFilter = "all")
         {
             await _adminService.removeOrder(id, "close", "delete");
             await _context.SaveChangesAsync();
             _alert.AddSuccessToastMessage("order open.");
-            return RedirectToAction(nameof(List));
+            return RedirectToAction(nameof(List), new { tradeFilter });
         }
 
         public async Task<IActionResult> ExportToExcel(string fromDate, string toDate)
@@ -147,7 +160,7 @@ namespace SL_Bullion.Controllers
             var excelData = await (from o in _context.tblCloseOrder
                                    join a in _context.tblAccount
                                        on new { o.clientId, o.loginId } equals new { a.clientId, a.loginId }
-                                   where o.clientId == clientId && o.closeTime >= fromDateValue
+                where o.clientId == clientId && o.closeTime >= fromDateValue
                                     && o.closeTime <= toDateValue
                                    orderby o.closeTime descending // ✅ LIFO: Last orders first
                                    select new
@@ -155,12 +168,12 @@ namespace SL_Bullion.Controllers
                                        OrderNo = o.dealNo,
                                        LoginId = o.loginId,
                                        FirmName = a != null ? a.firmName : string.Empty,
+                                       Mobile = a != null ? a.mobile : string.Empty,
                                        Symbol = o.symbolName,
                                        RateType = o.rateType,
                                        TradeType = o.tradeType == 1 ? "Buy" : o.tradeType == 2 ? "Sell" : o.tradeType == 3 ? "BuyLimit" : "SellLimit",
                                        OpenQuantity = o.volumeOpen,
                                        Quantity = o.volume,
-                                       Exchange = o.exchange,
                                        OpenPrice = o.rateOpen,
                                        Price = o.rate,
                                        Total = o.total,

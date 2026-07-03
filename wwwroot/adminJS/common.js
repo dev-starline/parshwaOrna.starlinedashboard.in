@@ -28,17 +28,20 @@ connection.on("activeUsers", (count) => {
 startConnection();
 
 connection.on('adminAlertDetails', function (data) {
+  
     if (Notification.permission === 'granted') {
         showNotification(data);
     } else if (Notification.permission !== 'denied') {
         Notification.requestPermission().then(permission => {
             if (permission === 'granted') {
+          
                 showNotification(data);
             }
         });
     }
 });
 function showNotification(data) {
+
     let notification = new Notification(data.user, {
         icon: window.location.origin + '/img/logo-dark.png',
         body: data.message,
@@ -48,6 +51,42 @@ function showNotification(data) {
         window.open(window.location.origin + '/OpenOrder', '_blank');
     };
 }
+
+
+connection.on('orderFailure', function (data) {
+
+    console.log("orderFailure", data);
+    debugger;
+
+    if (Notification.permission === 'granted') {
+        showOrderFailureNotification(data);
+    }
+    else if (Notification.permission !== 'denied') {
+        Notification.requestPermission().then(permission => {
+            console.log(permission);
+
+            if (permission === 'granted') {
+                showOrderFailureNotification(data);
+            }
+        });
+    }
+});
+
+function showOrderFailureNotification(data) {
+
+    let notification = new Notification("Order Failure", {
+        icon: window.location.origin + '/img/logo-dark.png',
+        body: data.message
+    });
+
+    notification.onclick = function () {
+        window.focus();
+        window.location.href = window.location.origin + '/OrderLog/List';
+    };
+}
+
+
+
 function ajaxPost(url, data) {
     var Response
     $.ajax({

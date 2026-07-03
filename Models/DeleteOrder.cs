@@ -43,6 +43,8 @@ namespace SL_Bullion.Models
         [NotMapped]
         public string? firm;
         [NotMapped]
+        public string? mobile;
+        [NotMapped]
         public string? tradeTypeView;
         [NotMapped]
         public DateTime? fromDate;

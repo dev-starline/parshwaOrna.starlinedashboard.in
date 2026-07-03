@@ -55,16 +55,15 @@ namespace SL_Bullion.WebAPI
 
             if (symbol != null)
             {
-                symbol.useStock = tradeType switch
-                {
-                    1 => symbol.useStock + (int)volume,
-                    3 => symbol.useStock + (int)volume,
-                    2 => symbol.useStock - (int)volume,
-                    4 => symbol.useStock - (int)volume,
-                    _ => throw new ArgumentException("Invalid tradeType value.")
-                };
-
-                await _context.SaveChangesAsync();
+                   symbol.useStock = tradeType switch
+                    {
+                        1 => symbol.useStock + (int)volume,
+                        3 => symbol.useStock + (int)volume,
+                        2 => symbol.useStock - (int)volume,
+                        4 => symbol.useStock - (int)volume,
+                        _ => throw new ArgumentException("Invalid tradeType value.")
+                    };
+                            
             }
             if (tradeType == 3 || tradeType == 4)
             {
@@ -81,6 +80,8 @@ namespace SL_Bullion.WebAPI
                     {
                         afterOrder["code"] = response.code;
                         afterOrder["message"] = response.message;
+                        LogOrderFailure(accountId, symbolId, user, volume, 0, afterOrder["message"].ToString());
+                        
 
                     }
                 }
@@ -90,6 +91,8 @@ namespace SL_Bullion.WebAPI
             return afterOrder;
         }
 
+       
+        
         private async Task<ResponseBody> updateHedgeData(int orderId, string exchange)
         {
             var openOrder = await _context.tblOpenOrder.FindAsync(orderId);
@@ -947,6 +950,67 @@ namespace SL_Bullion.WebAPI
             }
             return objRate;
         }
+
+
+
+        //internal async Task LogOrderFailure(int clientId, int symbolId, string loginId,double quantity, double price, string reason)
+        //{
+        //    var clientInfo = await _context.tblAccount.Where(a => a.loginId == loginId && a.clientId == clientId).Select(a => new { a.name, a.firmName, a.mobile }).FirstOrDefaultAsync();
+        //    var symbolName = await _context.tblSymbol.Where(s => s.id == symbolId).Select(s => s.name).FirstOrDefaultAsync();
+        //    var log = new OrderFailureLog
+        //    {
+        //        clientId = clientId,
+        //        symbolId = symbolId,
+        //        loginId = loginId,
+        //        name = clientInfo?.name,
+        //        firmName = clientInfo?.firmName,
+        //        mobile = clientInfo?.mobile,
+        //        quantity = (decimal)quantity,
+        //        price = (decimal)price,
+        //        reason = reason,
+        //        cdate = DateTime.UtcNow
+        //    };
+
+        //    _context.tblOrderFailureLog.Add(log);
+        //    int rows = await _context.SaveChangesAsync();
+        //    _constatnt.pushOrderfaieldAlert(action: "failure",user: clientInfo?.name ?? "", loginId: loginId, reason: reason,symbol: symbolName, quantity,price);
+        //}
+
+
+
+        internal async Task LogOrderFailure(int clientId, int symbolId, string loginId,double quantity, double price, string reason)
+        {           
+            var clientInfo = await _context.tblAccount.Where(a => a.loginId == loginId && a.clientId == clientId).Select(a => new { a.name, a.firmName, a.mobile, a.id }).FirstOrDefaultAsync();          
+            var symbolName = await _context.tblSymbol.Where(s => s.id == symbolId).Select(s => s.name).FirstOrDefaultAsync();
+           
+            var log = new OrderFailureLog
+            {
+                clientId = clientId,
+                symbolId = symbolId,
+                loginId = loginId,
+                name = clientInfo?.name,
+                firmName = clientInfo?.firmName,
+                mobile = clientInfo?.mobile,
+                quantity = (decimal)quantity,
+                price = (decimal)price,
+                reason = reason,
+                cdate = DateTime.UtcNow
+            };
+
+            _context.tblOrderFailureLog.Add(log);
+            int rows = await _context.SaveChangesAsync();
+            // user from tblMaster (not clientInfo.name)
+            var userName = await _context.tblMaster.Where(m => m.id == clientId).Select(m => m.userName).FirstOrDefaultAsync();   
+            if (clientInfo != null)
+            {
+                await _constatnt.pushOrderfaieldAlert(action: "failure", user: userName ?? "", accountId: clientInfo.id, reason: reason, symbol: symbolName, quantity: quantity, price: price);
+            }
+        }
+
+
+
+
+
         private DataTable JsonStringToDataTable(string jsonString)
         {
             DataTable dt = new DataTable();

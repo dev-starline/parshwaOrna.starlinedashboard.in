@@ -18,48 +18,78 @@
             console.error(status + " : " + error);
         });
 })
+//function getGroupSymbol(type) {
+//    var data = JSON.parse(ajaxGet('/admin/Group/getGroupSymbol?id=' + type));
+//    console.log(data);
+//    if (data.length > 0) {
+//        var html = '';
+//        for (var i = 0; i < data.length; i++) {
+//            if (data[i].id <= 3) {
+//                continue;
+//            }
+//            var check = '';
+//            if (data[i].isView) {
+//                check = 'checked'
+//            }
+
+//            html += '<tr id=' + data[i].id + '>' +
+//                '    <td class="numeric wtwo">' +
+//                '        <span>' + data[i].name + '</span>' +
+//                '    </td>' +
+//                '    <td class="numeric wtwo">' +
+//                '        <input class="isView" type="checkbox" ' + check + ' />' +
+//                '    </td>' +
+//                '    <td class="numeric wtwo">' +
+//                '        <input type="text" class="input-height sm-font buyPremium" value=' + data[i].buyPremium + ' />' +
+//                '    </td>' +
+//                '    <td class="numeric wtwo">' +
+//                '        <input type="text" class="input-height sm-font sellPremium" value=' + data[i].sellPremium + ' />' +
+//                '    </td>' +
+//                '    <td class="numeric wtwo">' +
+//                '        <input type="text" class="input-height sm-font oneClick" value=' + data[i].oneClick + ' />' +
+//                '    </td>' +
+//                '    <td class="numeric wtwo">' +
+//                '        <input type="text" class="input-height sm-font step" value=' + data[i].step + ' />' +
+//                '    </td>' +
+//                '    <td class="numeric wtwo">' +
+//                '        <input type="text" class="input-height sm-font inTotal" value=' + data[i].inTotal + ' />' +
+//                '    </td>' +
+//                '</tr>';
+
+
+//        }
+//        $('.printSymbol').html(html);
+//    }
+//}
+
+
 function getGroupSymbol(type) {
     var data = ajaxGet('/admin/Group/getGroupSymbol?id=' + type);
-    if (data.length > 0) {
+    // data is already an object (array of symbols)
+
+    console.log(data); // check the structure
+
+    if (data && data.length > 0) {
         var html = '';
         for (var i = 0; i < data.length; i++) {
-            if (data[i].id <= 3) {
-                continue;
-            }
-            var check = '';
-            if (data[i].isView) {
-                check = 'checked'
-            }
+            if (data[i].id < 3) continue; // skip only system groups
 
-            html += '<tr id=' + data[i].id + '>' +
-                '    <td class="numeric wtwo">' +
-                '        <span>' + data[i].name + '</span>' +
-                '    </td>' +
-                '    <td class="numeric wtwo">' +
-                '        <input class="isView" type="checkbox" ' + check + ' />' +
-                '    </td>' +
-                '    <td class="numeric wtwo">' +
-                '        <input type="text" class="input-height sm-font buyPremium" value=' + data[i].buyPremium + ' />' +
-                '    </td>' +
-                '    <td class="numeric wtwo">' +
-                '        <input type="text" class="input-height sm-font sellPremium" value=' + data[i].sellPremium + ' />' +
-                '    </td>' +
-                '    <td class="numeric wtwo">' +
-                '        <input type="text" class="input-height sm-font oneClick" value=' + data[i].oneClick + ' />' +
-                '    </td>' +
-                '    <td class="numeric wtwo">' +
-                '        <input type="text" class="input-height sm-font step" value=' + data[i].step + ' />' +
-                '    </td>' +
-                '    <td class="numeric wtwo">' +
-                '        <input type="text" class="input-height sm-font inTotal" value=' + data[i].inTotal + ' />' +
-                '    </td>' +
+            var check = data[i].isView ? 'checked' : '';
+
+            html += '<tr id="' + data[i].id + '">' +
+                '<td class="numeric wtwo"><span>' + data[i].name + '</span></td>' +
+                '<td class="numeric wtwo"><input class="isView" type="checkbox" ' + check + ' /></td>' +
+                '<td class="numeric wtwo"><input type="text" class="input-height sm-font buyPremium" value="' + data[i].buyPremium + '" /></td>' +
+                '<td class="numeric wtwo"><input type="text" class="input-height sm-font sellPremium" value="' + data[i].sellPremium + '" /></td>' +
+                '<td class="numeric wtwo"><input type="text" class="input-height sm-font oneClick" value="' + data[i].oneClick + '" /></td>' +
+                '<td class="numeric wtwo"><input type="text" class="input-height sm-font step" value="' + data[i].step + '" /></td>' +
+                '<td class="numeric wtwo"><input type="text" class="input-height sm-font inTotal" value="' + data[i].inTotal + '" /></td>' +
                 '</tr>';
-
-
         }
         $('.printSymbol').html(html);
     }
 }
+
 function edit(id) {
     var arraySymbol = [];
     let objGroup = new Object();

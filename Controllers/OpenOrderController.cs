@@ -29,13 +29,13 @@ namespace SL_Bullion.Controllers
             _constatnt = constatnt;
             _adminService = adminService;
         }
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string tradeFilter = "all")
         {
-            var orders = getOpenOrder("", "", DateTime.Now, DateTime.Now);
+            var orders = getOpenOrder("", "", DateTime.Now, DateTime.Now, tradeFilter);
             return View(await orders);
         }
 
-        private async Task<List<OpenOrder>> getOpenOrder(string type, string data, DateTime fromDate, DateTime toDate)
+        private async Task<List<OpenOrder>> getOpenOrder(string type, string data, DateTime fromDate, DateTime toDate, string tradeFilter)
         {
             var clientId = HttpContext.Session.GetInt32("clientId");
 
@@ -76,6 +76,15 @@ namespace SL_Bullion.Controllers
                 }
             }
 
+            if (string.Equals(tradeFilter, "buy", StringComparison.OrdinalIgnoreCase))
+            {
+                query = query.Where(x => x.o.tradeType == 1);
+            }
+            else if (string.Equals(tradeFilter, "sell", StringComparison.OrdinalIgnoreCase))
+            {
+                query = query.Where(x => x.o.tradeType == 2);
+            }
+
 
             var orders = await query
                 .Select(x => new OpenOrder
@@ -85,15 +94,15 @@ namespace SL_Bullion.Controllers
                     loginId = x.o.loginId,
                     name = x.a.name,
                     firm = x.a.firmName,
+                    mobile = x.a.mobile,
                     symbolName = x.o.symbolName,
                     rateType = x.o.rateType,
                     tradeType = x.o.tradeType,
                     tradeTypeView = x.o.tradeType == 1 && x.o.isLimit == false ? "Buy" : x.o.tradeType == 1 && x.o.isLimit == true ? "BuyLimit" : x.o.tradeType == 2 && x.o.isLimit == false ? "Sell" : x.o.tradeType == 2 && x.o.isLimit == true ? "SellLimit" : x.o.tradeType == 3 ? "BuyLimit" : x.o.tradeType == 4 ? "SellLimit" : "Buy",
                     volume = x.o.volume,
                     margin = x.o.margin,
-                    exchange = x.o.exchange,
-                    rate = x.o.rate,
                     differenceRate = x.o.rate - x.o.exchange,
+                    rate = x.o.rate,
                     total = x.o.total,
                     tax = x.o.tax,
                     deviceType = x.o.deviceType,
@@ -119,7 +128,8 @@ namespace SL_Bullion.Controllers
                 return RedirectToAction(nameof(List));
             }
             toDateValue = toDateValue.Date.Add(new TimeSpan(23, 59, 59));
-            var orders = getOpenOrder("search", loginId, fromDateValue, toDateValue);
+            var tradeFilter = Request.Query["tradeFilter"].ToString();
+            var orders = getOpenOrder("search", loginId, fromDateValue, toDateValue, tradeFilter);
             return View("List", await orders);
         }
 
@@ -158,21 +168,21 @@ namespace SL_Bullion.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, string tradeFilter = "all")
         {
             await _adminService.removeOrder(id, "open", "delete");
             await _context.SaveChangesAsync();
             _alert.AddSuccessToastMessage("order deleted.");
-            return RedirectToAction(nameof(List));
+            return RedirectToAction(nameof(List), new { tradeFilter });
         }
         [HttpPost, ActionName("Open")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> OpenConfirmed(int id)
+        public async Task<IActionResult> OpenConfirmed(int id, string tradeFilter = "all")
         {
             await _adminService.removeOrder(id, "open", "open");
             await _context.SaveChangesAsync();
             _alert.AddSuccessToastMessage("order open.");
-            return RedirectToAction(nameof(List));
+            return RedirectToAction(nameof(List), new { tradeFilter });
         }
         public async Task<IActionResult> CloseOrder(int? id)
         {
@@ -190,7 +200,7 @@ namespace SL_Bullion.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CloseOrder(int id, [Bind("id,clientId,volume,rate,comment")] OpenOrder order)
+        public async Task<IActionResult> CloseOrder(int id, [Bind("id,clientId,volume,rate,comment")] OpenOrder order, string tradeFilter = "all")
         {
             if (id != order.id)
             {
@@ -208,7 +218,7 @@ namespace SL_Bullion.Controllers
                 throw;
             }
 
-            return RedirectToAction(nameof(List));
+            return RedirectToAction(nameof(List), new { tradeFilter });
         }
 
         private async Task<int> openToClose(int id, double volume, double rate, string comment)
@@ -272,7 +282,7 @@ namespace SL_Bullion.Controllers
             return code;
         }
 
-        public async Task<IActionResult> ExportToExcel(string fromDate, string toDate)
+        public async Task<IActionResult> ExportToExcel(string fromDate, string toDate, string tradeFilter = "all")
         {
             int clientId = HttpContext.Session.GetInt32("clientId") ?? 0;
             DateTime fromDateValue;
@@ -281,10 +291,9 @@ namespace SL_Bullion.Controllers
             if (!DateTime.TryParseExact(fromDate, dateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out fromDateValue) ||
                 !DateTime.TryParseExact(toDate, dateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out toDateValue))
             {
-                _alert.AddSuccessToastMessage("Invalid date format.");
-                return RedirectToAction(nameof(List));
+                _alert.AddSuccessToastMessage("Invalid date format.");               
+                return RedirectToAction(nameof(List), new { tradeFilter });
             }
-
 
             toDateValue = toDateValue.Date.Add(new TimeSpan(23, 59, 59));
             var excelData = await (
@@ -306,11 +315,9 @@ namespace SL_Bullion.Controllers
                                 (o.tradeType == 4) ? "SellLimit" : "Buy",
                     Quantity = o.volume,
                     Margin = o.margin,
-                    Exchange = o.exchange,
                     Price = o.rate,
                     Total = o.total,
                     Premium = o.premium,
-                    DifferenceRate = o.rate - o.exchange,
                     TotalTax = o.tax,
                     From = o.deviceType,
                     Time = o.orderTime.ToString("dd-MM-yyyy ") ?? string.Empty,
@@ -318,9 +325,18 @@ namespace SL_Bullion.Controllers
                     Comment = o.comment
                 }).ToListAsync();
 
+            if (string.Equals(tradeFilter, "buy", StringComparison.OrdinalIgnoreCase))
+            {
+                excelData = excelData.Where(x => x.TradeType.StartsWith("Buy", StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+            else if (string.Equals(tradeFilter, "sell", StringComparison.OrdinalIgnoreCase))
+            {
+                excelData = excelData.Where(x => x.TradeType.StartsWith("Sell", StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
             if (excelData == null || !excelData.Any())
             {
-                return RedirectToAction(nameof(List));
+                return RedirectToAction(nameof(List), new { tradeFilter });
             }
 
 

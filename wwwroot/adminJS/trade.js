@@ -5,7 +5,7 @@ $(function () {
     $("#searchBox").autocomplete({
         source: function (request, response) {
             $.ajax({
-                url: '/Trade/search',
+                url: '/admin/Trade/search',
                 data: { query: request.term },
                 success: function (data) {
                     //response(data);

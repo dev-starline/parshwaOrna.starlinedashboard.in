@@ -11,7 +11,9 @@ namespace SL_Bullion.Models
         [Required]
         public int clientId { get; set; }
         public string? marqueeTop { get; set; } 
-        public string? marqueeBottom { get; set; } 
+        public string? marqueeBottom { get; set; }
+        public string? marqueeTop1 { get; set; }
+        public string? marqueeBottom1 { get; set; }
         public string? number1 { get; set; }
         public string? number2 { get; set; }
         public string? number3 { get; set; } 

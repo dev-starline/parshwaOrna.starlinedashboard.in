@@ -41,7 +41,7 @@ namespace SL_Bullion.DAL
         public virtual DbSet<SubCategory> tblSubCategory { get; set; }
         public virtual DbSet<Category> tblCategory { get; set; }
         public virtual DbSet<Jewellery> tblJewellery { get; set; }
-
+        public virtual DbSet<OrderFailureLog> tblOrderFailureLog { get; set; }
         public virtual DbSet<Slider> tblSlider { get; set; }
     }
 }

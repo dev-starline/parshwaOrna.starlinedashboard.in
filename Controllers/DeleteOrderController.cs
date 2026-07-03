@@ -21,12 +21,12 @@ namespace SL_Bullion.Controllers
             _constatnt = constatnt;
             _adminService = adminService;
         }
-        public async Task<IActionResult> List()
+        public async Task<IActionResult> List(string tradeFilter = "all")
         {
-            var orders = getOrder("", "", DateTime.Now, DateTime.Now);
+            var orders = getOrder("", "", DateTime.Now, DateTime.Now, tradeFilter);
             return View(await orders);
         }
-        private async Task<List<DeleteOrder>> getOrder(string type, string data, DateTime fromDate, DateTime toDate)
+        private async Task<List<DeleteOrder>> getOrder(string type, string data, DateTime fromDate, DateTime toDate, string tradeFilter)
         {
             int clientId = HttpContext.Session.GetInt32("clientId") ?? 0;
 
@@ -34,12 +34,13 @@ namespace SL_Bullion.Controllers
                             join a in _context.tblAccount
                             on new { o.clientId, o.loginId }
                             equals new { a.clientId, a.loginId }
-                            where o.clientId == clientId
-                            select new
-                            {
-                                o,
-                                FirmName = a.firmName
-                            };
+                where o.clientId == clientId
+                select new
+                {
+                    o,
+                    FirmName = a.firmName,
+                    Mobile = a.mobile
+                };
 
             if (type == "search")
             {
@@ -68,6 +69,15 @@ namespace SL_Bullion.Controllers
                 baseQuery = baseQuery.Where(x => x.o.deleteTime.Date == DateTime.Today);
             }
 
+            if (string.Equals(tradeFilter, "buy", StringComparison.OrdinalIgnoreCase))
+            {
+                baseQuery = baseQuery.Where(x => x.o.tradeType == 1);
+            }
+            else if (string.Equals(tradeFilter, "sell", StringComparison.OrdinalIgnoreCase))
+            {
+                baseQuery = baseQuery.Where(x => x.o.tradeType == 2);
+            }
+
             // Final projection (safe now)
             return await baseQuery
                 .OrderByDescending(x => x.o.deleteTime)
@@ -77,6 +87,7 @@ namespace SL_Bullion.Controllers
                     dealNo = x.o.dealNo,
                     loginId = x.o.loginId,
                     firm = x.FirmName,
+                    mobile = x.Mobile,
                     symbolName = x.o.symbolName,
                     rateType = x.o.rateType,
                     tradeTypeView = x.o.tradeType == 1 ? "Buy" : x.o.tradeType == 2 ? "Sell" : x.o.tradeType == 3 ? "BuyLimit" : "SellLimit",
@@ -105,17 +116,18 @@ namespace SL_Bullion.Controllers
                 return RedirectToAction(nameof(List));
             }
             toDateValue = toDateValue.Date.Add(new TimeSpan(23, 59, 59));
-            var orders = getOrder("search", loginId, fromDateValue, toDateValue);
+            var tradeFilter = Request.Query["tradeFilter"].ToString();
+            var orders = getOrder("search", loginId, fromDateValue, toDateValue, tradeFilter);
             return View("List", await orders);
         }
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(int id, string tradeFilter = "all")
         {
             await _adminService.removeOrder(id, "delete", "open");
             await _context.SaveChangesAsync();
             _alert.AddSuccessToastMessage("order open.");
-            return RedirectToAction(nameof(List));
+            return RedirectToAction(nameof(List), new { tradeFilter });
         }
     }
 }

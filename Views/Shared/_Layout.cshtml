@@ -45,8 +45,9 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
+		</div>
+	</div>
+	
 	@{
 		var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
 	}
@@ -164,6 +165,13 @@
 							<a class="nav-link @(currentController == "Slider" ? "active" : "")"
 							   asp-controller="Slider" asp-action="List">Slider</a>
 						</li>
+
+
+						<li class="nav-item">
+							<a class="nav-link @(currentController == "OrderLog" ? "active" : "")" asp-controller="OrderLog" asp-action="List">OrderLog</a>
+						</li>
+
+
 					</ul>
 				</div>
 			</nav>
@@ -171,8 +179,8 @@
 	</div>
 	<script src="https://cdn.jsdelivr.net/npm/@@microsoft/signalr@latest/dist/browser/signalr.min.js"></script>
 
-	<script src="~/adminjs/common.js"></script>
 
+	<script src="~/adminjs/common.js"></script>
 	@RenderBody()
 	<script src="~/js/popper.min.js"></script>
 	<script src="~/js/bootstrap.min.js"></script>
