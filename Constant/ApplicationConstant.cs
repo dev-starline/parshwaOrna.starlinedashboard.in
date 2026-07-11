@@ -88,12 +88,14 @@ namespace SL_Bullion.Constant
                         high = s.high,
                         cityId = s.CityId,
                         low = s.low,
-                        symbolType = s.symbolType
+                        symbolType = s.symbolType,
+                        rateDisplayProductId = s.rateDisplayProductId
                     }).ToList();
 
             string jsonString = JsonSerializer.Serialize(result);
             setValueRedis("symbolDetails", jsonString);
         }
+
         internal void setCoinSymbolRedis()
         {
             var result = _context.tblCoin
@@ -120,6 +122,7 @@ namespace SL_Bullion.Constant
             string jsonString = JsonSerializer.Serialize(result);
             setValueRedis("coinSymbolDetails", jsonString);
         }
+
         internal void setBankRateRedis()
         {
             var result = _context.tblBankRate
@@ -151,6 +154,7 @@ namespace SL_Bullion.Constant
             string jsonString = JsonSerializer.Serialize(result);
             setValueRedis("bankRateDetails", jsonString);
         }
+
         internal void setCoinBankRateRedis()
         {
             var result = _context.tblCoinBank
@@ -182,6 +186,7 @@ namespace SL_Bullion.Constant
             string jsonString = JsonSerializer.Serialize(result);
             setValueRedis("coinBankRateDetails", jsonString);
         }
+
         internal void setUserRedis()
         {
             var result = _context.tblMaster.Where(s => s.isActive == true)

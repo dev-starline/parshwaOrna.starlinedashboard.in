@@ -28,9 +28,61 @@ namespace SL_Bullion.Controllers
 
         public async Task<IActionResult> List()
         {
-            var clientId = HttpContext.Session.GetInt32("clientId");    
-            var symbols = await _context.tblSymbol.Where(s => s.clientId == clientId).OrderBy(s => s.index).ToListAsync();
+            var clientId = HttpContext.Session.GetInt32("clientId");
+            var symbols = await _context.tblSymbol.Where(s => s.clientId == clientId).OrderBy(s => s.index)
+                    .Select(x => new SymbolList
+                    {
+                        id = x.id,
+                        name = x.name,
+                        source = x.source,
+                        sourceType = x.sourceType,
+                        isView = x.isView,
+                        isTerminal = x.isTerminal,
+                        isTrade = x.isTrade,
+                         isComment = x.isComment,
+                        rateType = x.rateType,
+                        buyPremium = x.buyPremium,
+                        sellPremium = x.sellPremium,
+                        buyCommonPremium = x.buyCommonPremium,
+                        sellCommonPremium = x.sellCommonPremium,
+                        symbolType = x.symbolType,
+                        index = x.index,
+                        identifier = x.identifier,
+                        division = x.division,
+                        multiply = x.multiply,
+                        gst = x.gst,
+                        digit = x.digit,
+                        stock = x.stock,
+                        initialMargin = x.initialMargin,
+                        isBill = x.isBill,
+                        gstBill = x.gstBill,
+                        tcsBill = x.tcsBill,
+                        tdsBill = x.tdsBill,
+                        high = x.high,
+                        low = x.low,
+                        CityId = x.CityId,
+                       
+                        rateDisplayProductId = x.rateDisplayProductId
+                    }).ToListAsync();
             await SetCityViewDataAsync();
+
+            // Step 1: Fetch groups (in memory)
+            var baseSymbolList = await _context.tblSymbol
+                .Where(x => x.clientId == clientId)
+                .Select(a => new { a.id, a.name })
+                .ToListAsync();
+            // Step 3: Attach dropdowns in memory
+            foreach (var symbol in symbols)
+            {
+                symbol.Symbols = baseSymbolList
+                    .Select(g => new SelectListItem
+                    {
+                        Value = g.id.ToString(),
+                        Text = g.name,
+                        Selected = (g.id == symbol.rateDisplayProductId)
+                    })
+                    .ToList();
+            }
             var vm = new SymbolViewModel { Symbols = symbols };
             return View(vm);
         }
@@ -55,6 +107,7 @@ namespace SL_Bullion.Controllers
             return Json(obj);
         }
 
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("id,clientId,name,source,sourceType,isView,rateType,buyPremium,sellPremium,division,multiply,gst,createDate,modifiedDate,changePremiumDate")] Symbol symbol)
@@ -74,6 +127,9 @@ namespace SL_Bullion.Controllers
                     _alert.AddWarningToastMessage("Symbol not created due to limit exceeded.");
                     return RedirectToAction(nameof(List));
                 }
+                var symbolObj = await _context.tblSymbol.Where(x => x.source == symbol.source).Select(x => new { x.buyCommonPremium, x.sellCommonPremium }).FirstOrDefaultAsync();
+                symbol.buyCommonPremium = symbolObj == null ? 0 : symbolObj.buyCommonPremium;
+                symbol.sellCommonPremium = symbolObj == null ? 0 : symbolObj.sellCommonPremium;
                 symbol.clientId = clientId;
                 var data = _context.tblSymbol.Add(symbol);
                 await _context.SaveChangesAsync();
@@ -85,6 +141,8 @@ namespace SL_Bullion.Controllers
                     session.symbolId = data.Entity.id;
                     _context.Add(session);
                     await _context.SaveChangesAsync();
+                    await _context.tblSymbol.Where(x => x.id == data.Entity.id)
+                        .ExecuteUpdateAsync(setter => setter.SetProperty(x => x.rateDisplayProductId, x => data.Entity.id));
                     _alert.AddSuccessToastMessage("Symbol created.");
                 }
                 return RedirectToAction(nameof(List));
@@ -96,16 +154,11 @@ namespace SL_Bullion.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
-
-            if (id == null)
-            {
-                return NotFound();
-            }
             var symbol = await _context.tblSymbol.FindAsync(id);
             if (symbol == null) return NotFound();
 
             await SetCityViewDataAsync();
-           return PartialView("Action", symbol);
+            return PartialView("Action", symbol);
         }
 
         private async Task SetCityViewDataAsync()
@@ -127,7 +180,7 @@ namespace SL_Bullion.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("id,clientId,name,source,sourceType,isView,isTerminal,isTrade,isComment,rateType,buyPremium,identifier,sellPremium,buyCommonPremium,sellCommonPremium,typeCommonPremium,symbolType,division,multiply,gst,digit,stock,initialMargin,isBill,gstBill,tcsBill,tdsBill,high,low,createDate,modifiedDate,changePremiumDate,CityId")] Symbol symbol)
+        public async Task<IActionResult> Edit(int id, [Bind("id,clientId,name,source,sourceType,isView,isTerminal,isTrade,rateType,buyPremium,identifier,sellPremium,buyCommonPremium,sellCommonPremium,typeCommonPremium,symbolType,division,multiply,gst,digit,stock,initialMargin,isBill,gstBill,tcsBill,tdsBill,high,low,createDate,modifiedDate,changePremiumDate,CityId")] Symbol symbol)
         {
             if (id != symbol.id)
             {
@@ -163,6 +216,8 @@ namespace SL_Bullion.Controllers
                     _context.Entry(existingData).State = EntityState.Detached;
                     symbol.clientId = HttpContext.Session.GetInt32("clientId").GetValueOrDefault();
                     symbol.index = existingData.index;
+                 
+                    symbol.rateDisplayProductId = existingData.rateDisplayProductId;
 
                     _context.Update(symbol);
                     await _context.SaveChangesAsync();
@@ -202,6 +257,16 @@ namespace SL_Bullion.Controllers
             symbol.buyPremium = obj["buyPremium"].ToString();
             symbol.name = obj["name"].ToString();
             symbol.sellPremium = obj["sellPremium"].ToString();
+            symbol.rateDisplayProductId = int.Parse(obj["rateDisplayProductId"].ToString());
+            if (symbol.id != int.Parse(obj["rateDisplayProductId"].ToString()))
+            {
+                var refProduct = await _context.tblSymbol.FindAsync(symbol.rateDisplayProductId);
+                symbol.identifier = refProduct != null ? "Rate_" + refProduct.name.Replace(" ", "") : "0";
+            }
+            else
+            {
+                symbol.identifier = "0";
+            }
             if (TryValidateModel(symbol))
             {
                 try
@@ -240,18 +305,34 @@ namespace SL_Bullion.Controllers
         [HttpPost]
         public async Task<IActionResult> saveAll([FromBody] JsonArray obj)
         {
-            if (obj.Count > 0 && obj != null)
+            if (obj != null && obj.Count > 0)
             {
                 foreach (var item in obj)
                 {
-                    var symbol = await _context.tblSymbol.FindAsync(Convert.ToInt32(item["id"].ToString())); 
+                    var symbolId = Convert.ToInt32(item["id"].ToString());
+                    var symbol = await _context.tblSymbol.FindAsync(symbolId);
+                    if (symbol == null)
+                    {
+                        continue;
+                    }
+
                     symbol.isView = ConvertToBool(item["isView"]);
                     symbol.isTerminal = ConvertToBool(item["isTerminal"]);
                     symbol.isTrade = ConvertToBool(item["isTrade"]);
                     symbol.name = item["name"].ToString();
                     symbol.buyPremium = item["buyPremium"].ToString();
                     symbol.sellPremium = item["sellPremium"].ToString();
-
+                    var rateDisplayProductId = item["rateDisplayProductId"] != null ? int.Parse(item["rateDisplayProductId"].ToString()) : 0;
+                    symbol.rateDisplayProductId = rateDisplayProductId;
+                    if (symbol.id != rateDisplayProductId && rateDisplayProductId > 0)
+                    {
+                        var refProduct = await _context.tblSymbol.FindAsync(rateDisplayProductId);
+                        symbol.identifier = refProduct != null ? "Rate_" + refProduct.name.Replace(" ", "") : "0";
+                    }
+                    else
+                    {
+                        symbol.identifier = "0";
+                    }
                     if (ModelState.IsValid)
                     {
                         try
@@ -293,6 +374,11 @@ namespace SL_Bullion.Controllers
             {
                 _context.tblSymbol.Remove(symbol);
                 await _context.Database.ExecuteSqlInterpolatedAsync($"DELETE FROM tblGroupSymbol WHERE symbolId = {id}");
+                await _context.Database.ExecuteSqlInterpolatedAsync($"DELETE FROM tblSymbolSession WHERE symbolId = {id}");
+                await _context.tblSymbol.Where(x => x.rateDisplayProductId == id)
+                    .ExecuteUpdateAsync(setter => setter
+                            .SetProperty(x => x.identifier, x => "0")
+                            .SetProperty(x => x.modifiedDate, x => DateTime.Now));
             }
 
             await _context.SaveChangesAsync();
@@ -311,6 +397,27 @@ namespace SL_Bullion.Controllers
                     await _context.Database.ExecuteSqlInterpolatedAsync($"UPDATE tblSymbol SET rateType = {obj["rateType"].ToString()} WHERE clientId = {HttpContext.Session.GetInt32("clientId")}");
                     _constatnt.setSymbolRedis();
                     _alert.AddSuccessToastMessage("Symbol rate type edited.");
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+
+                }
+            }
+
+            return Ok(200);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> changeRateDisplay([FromBody] JsonObject obj)
+        {
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    int? clientId = HttpContext.Session.GetInt32("clientId");
+                    await _context.Database.ExecuteSqlInterpolatedAsync($"UPDATE tblContact SET rateDisplay = {obj["rateDisplay"].ToString()} WHERE clientId = {HttpContext.Session.GetInt32("clientId")}");
+                    _constatnt.pushContactDetails(clientId ?? 0);
+                    _alert.AddSuccessToastMessage("Rate display edited.");
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -399,6 +506,8 @@ namespace SL_Bullion.Controllers
             return Ok(200);
         }
 
+       
+
         [HttpPost]
         public async Task<IActionResult> IsRateUpdate([FromBody] JsonObject obj)
         {
@@ -480,7 +589,17 @@ namespace SL_Bullion.Controllers
 
         public JsonResult getSession(int symbolId)
         {
-            var session = _context.tblSymbolSession.Where(ss => ss.symbolId == symbolId).FirstOrDefault();
+            var session = new SymbolSession();
+            if (symbolId == 0)
+            {
+                var symbol = _context.tblSymbol.FirstOrDefault();
+                session = _context.tblSymbolSession.Where(x => x.symbolId == symbol.id).FirstOrDefault();
+            }
+            else
+            {
+                session = _context.tblSymbolSession.Where(ss => ss.symbolId == symbolId).FirstOrDefault();
+            }
+
             return Json(session);
         }
         [HttpPost]
@@ -490,22 +609,54 @@ namespace SL_Bullion.Controllers
             {
                 try
                 {
-                    bool isExist = _context.tblSymbolSession.Any(ss => ss.symbolId == Convert.ToInt32(obj["symbolId"].ToString()));
-                    if (isExist)
+                    if (Convert.ToInt32(obj["symbolId"].ToString()) > 0)
                     {
-                        var symbolSession = _context.tblSymbolSession.FirstOrDefault(ss => ss.symbolId == Convert.ToInt32(obj["symbolId"].ToString()));
-                        symbolSession.session = JsonSerializer.Serialize(obj);
-                        _context.Update(symbolSession);
+                        bool isExist = _context.tblSymbolSession.Any(ss => ss.symbolId == Convert.ToInt32(obj["symbolId"].ToString()));
+                        if (isExist)
+                        {
+                            var symbolSession = _context.tblSymbolSession.FirstOrDefault(ss => ss.symbolId == Convert.ToInt32(obj["symbolId"].ToString()));
+                            symbolSession.session = JsonSerializer.Serialize(obj);
+                            _context.Update(symbolSession);
+                        }
+                        else
+                        {
+                            SymbolSession session = new SymbolSession();
+                            session.symbolId = Convert.ToInt32(obj["symbolId"].ToString());
+                            session.session = JsonSerializer.Serialize(obj);
+                            _context.Add(session);
+
+                        }
+                        await _context.SaveChangesAsync();
                     }
                     else
                     {
-                        SymbolSession session = new SymbolSession();
-                        session.symbolId = Convert.ToInt32(obj["symbolId"].ToString());
-                        session.session = JsonSerializer.Serialize(obj);
-                        _context.Add(session);
+                        var symbols = _context.tblSymbol.Where(s => s.clientId == HttpContext.Session.GetInt32("clientId")).ToList();
+                        var sessions = new List<SymbolSession>();
+                        foreach (var symbol in symbols)
+                        {
+                            bool isExist = _context.tblSymbolSession.Any(ss => ss.symbolId == symbol.id);
+                            if (isExist)
+                            {
+                                var json = JsonSerializer.Serialize(obj);
+                                await _context.tblSymbolSession.Where(ss => ss.symbolId == symbol.id)
+                               .ExecuteUpdateAsync(setters => setters
+                                   .SetProperty(e => e.session, e => json));
+                            }
+                            else
+                            {
+                                SymbolSession session = new SymbolSession();
+                                session.symbolId = symbol.id;
+                                session.session = JsonSerializer.Serialize(obj);
+                                sessions.Add(session);
+                            }
+                        }
+                        if (sessions.Count > 0)
+                        {
+                            _context.AddRange(sessions);
+                            await _context.SaveChangesAsync();
+                        }
 
                     }
-                    await _context.SaveChangesAsync();
                     _alert.AddSuccessToastMessage("Session details updated.");
                 }
                 catch (DbUpdateConcurrencyException)

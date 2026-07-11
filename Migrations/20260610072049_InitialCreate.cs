@@ -797,7 +797,8 @@ namespace SL_Bullion.Migrations
                     modifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     changePremiumDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CityId = table.Column<int>(type: "int", nullable: false)
+                    CityId = table.Column<int>(type: "int", nullable: false),
+                    rateDisplayProductId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {

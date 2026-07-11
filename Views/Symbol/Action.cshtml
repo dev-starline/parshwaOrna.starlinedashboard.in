@@ -1,268 +1,264 @@
 ﻿@model Symbol
 @{
-    var cityList = ViewData["Cities"] as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
+	var cityList = ViewData["Cities"] as IEnumerable<SelectListItem> ?? Enumerable.Empty<SelectListItem>();
 }
 
 <div class="container mt-5">
-    <div class="modal fade" id="symbolCreate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header common-bg rounded-0">
-                    <h5 class="modal-title h4 color-white md-font" id="symboladdmodal">Add Symbol</h5>
-                    <button type="button" class="close color-white" data-dismiss="modal" aria-label="Close">
-                        <span class="color-white" aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form asp-action="Create" method="post">
-                        <div class="mp-sec1">
-                            <div class="row">
-                                <div class="col-lg-12 col-md-12 col-sm-12">
-                                    <table>
-                                        <tbody>
-                                            <tr>
-                                                <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Name</label><span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                                <td class="sym-mod-right pb-2"> <input asp-for="name" type="text" class="input-height sm-font" class="w-75 sm-font pl-2"></td>
+	<div class="modal fade" id="symbolCreate" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header common-bg rounded-0">
+					<h5 class="modal-title h4 color-white md-font" id="symboladdmodal">Add Symbol</h5>
+					<button type="button" class="close color-white" data-dismiss="modal" aria-label="Close">
+						<span class="color-white" aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+					<form asp-action="Create" method="post">
+						<div class="mp-sec1">
+							<div class="row">
+								<div class="col-lg-12 col-md-12 col-sm-12">
+									<table>
+										<tbody>
+											<tr>
+												<td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Name</label><span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2"> <input asp-for="name" type="text" class="input-height sm-font" class="w-75 sm-font pl-2"></td>
 
-                                            </tr>
-                                            <tr>
-                                                <td class="sym-mod-lef pb-2 text-left pr-3"> <label for="" class="sm-font mb-0">Source</label><span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                                <td class="sym-mod-right pb-2">
-                                                    <select asp-for="source" class="sm-font py-1">
-                                                        <option value="gold">Gold</option>
-                                                        <option value="silver">Silver</option>
-                                                    </select>
-                                                </td>
-                                            </tr>
+											</tr>
+											<tr>
+												<td class="sym-mod-lef pb-2 text-left pr-3"> <label for="" class="sm-font mb-0">Source</label><span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2">
+													<select asp-for="source" class="sm-font py-1">
+														<option value="gold">Gold</option>
+														<option value="silver">Silver</option>
+													</select>
+												</td>
+											</tr>
 
-                                        </tbody>
-                                    </table>
-                                    <div class="btn-sub text-center mt-4">
-                                        <button class="btn common-bg">Create</button>
-                                    </div>
-                                </div>
+										</tbody>
+									</table>
+									<div class="btn-sub text-center mt-4">
+										<button class="btn common-bg">Create</button>
+									</div>
+								</div>
 
-                            </div>
+							</div>
 
-                        </div>
-                    </form>
-                </div>             
-            </div>
-        </div>
-    </div>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
 
 </div>
 
 <form asp-action="Edit">
-    <input type="hidden" asp-for="id" />
-    <input type="hidden" asp-for="buyCommonPremium" />
-    <input type="hidden" asp-for="sellCommonPremium" />
-<div class="container mt-5">
-        <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="symboleditaddmodal" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-        <div class="modal-content">
-            <div class="modal-header common-bg rounded-0">
-                <h5 class="modal-title h4 color-white md-font" id="symboleditaddmodal">Edit Symbol</h5>
-                <button type="button" class="close color-white" data-dismiss="modal" aria-label="Close">
-                    <span class="color-white" aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="mp-sec1">
-                    <div class="row">
-                        <div class="col-lg-6 col-md-6 col-sm-12 border-r">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td class="sym-mod-lef text-left pr-3 pb-2"> <label for="" class="sm-font mb-0">isView</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                                <td class="sym-mod-right pb-2"> <input asp-for="isView" type="checkbox" checked="@(Model.isView ? "checked" : null)" id="txtstatus"></td>
+	<input type="hidden" asp-for="id" />
+	<input type="hidden" asp-for="buyCommonPremium" />
+	<input type="hidden" asp-for="sellCommonPremium" />
+	<div class="container mt-5">
+		<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="symboleditaddmodal" aria-hidden="true">
+			<div class="modal-dialog modal-xl">
+				<div class="modal-content">
+					<div class="modal-header common-bg rounded-0">
+						<h5 class="modal-title h4 color-white md-font" id="symboleditaddmodal">Edit Symbol</h5>
+						<button type="button" class="close color-white" data-dismiss="modal" aria-label="Close">
+							<span class="color-white" aria-hidden="true">×</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<div class="mp-sec1">
+							<div class="row">
+								<div class="col-lg-6 col-md-6 col-sm-12 border-r">
+									<table>
+										<tbody>
+											<tr>
+												<td class="sym-mod-lef text-left pr-3 pb-2"> <label for="" class="sm-font mb-0">isView</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2"> <input asp-for="isView" type="checkbox" checked="@(Model.isView ? "checked" : null)" id="txtstatus"></td>
 
-                                    </tr>
-                                    <tr>
-                                        <td class="sym-mod-lef text-left pr-3 pb-2"> <label for="" class="sm-font mb-0">isTerminal</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                                <td class="sym-mod-right pb-2"> <input asp-for="isTerminal" type="checkbox" checked="@(Model.isTerminal ? "checked" : null)" id="txtTerminal"></td>
+											</tr>
+											<tr>
+												<td class="sym-mod-lef text-left pr-3 pb-2"> <label for="" class="sm-font mb-0">isTerminal</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2"> <input asp-for="isTerminal" type="checkbox" checked="@(Model.isTerminal ? "checked" : null)" id="txtTerminal"></td>
 
-                                    </tr>
-                                            <tr>
-                                                <td class="sym-mod-lef text-left pr-3 pb-2"> <label for="" class="sm-font mb-0">isTrade</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                                <td class="sym-mod-right pb-2"> <input asp-for="isTrade" type="checkbox" checked="@(Model.isTrade ? "checked" : null)" id="txtTrade">
+											</tr>
+											<tr>
+												<td class="sym-mod-lef text-left pr-3 pb-2"> <label for="" class="sm-font mb-0">isTrade</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2"> <input asp-for="isTrade" type="checkbox" checked="@(Model.isTrade ? "checked" : null)" id="txtTrade"></td>
 
-                                            </tr>
+											</tr>
 
-                                            <tr>
-                                                <td class="sym-mod-lef text-left pb-3 pr-2"> <label for="" class="sm-font mb-0">Is Comment</label><span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                                <td class="sym-mod-right pb-2"> <input asp-for="isComment" name="isComment" type="checkbox"></td>
-                                            </tr>
+											<tr>
+												<td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Name</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2"> <input asp-for="name" type="text" class="input-height sm-font"></td>
 
-                                            <tr>
-                                        <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Name</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                            <td class="sym-mod-right pb-2"> <input asp-for="name" type="text" class="input-height sm-font" ></td>
+											</tr>
+											<tr>
+												<td class="sym-mod-lef pb-2 text-left pr-3"> <label for="" class="sm-font mb-0">Source</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2">
+													<select asp-for="source" class="sm-font py-1">
+														<option value="gold">Gold</option>
+														<option value="silver">Silver</option>
+													</select>
+												</td>
 
-                                    </tr>
-                                    <tr>
-                                        <td class="sym-mod-lef pb-2 text-left pr-3"> <label for="" class="sm-font mb-0">Source</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                        <td class="sym-mod-right pb-2">
-                                                <select asp-for="source" class="sm-font py-1">
-                                                    <option value="gold">Gold</option>
-                                                    <option value="silver">Silver</option>
-                                            </select>
-                                        </td>
+											</tr>
+											<tr>
+												<td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">SourceType</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2">
+													<select asp-for="sourceType" class="sm-font py-1">
+														<option value="C_BA">Current_Bid_Ask</option>
+														<option value="C_A">Current_Ask</option>
+														<option value="C_B">Current_Bid</option>
+														<option value="O_BA">Old_Bid_Ask</option>
+														<option value="O_A">Old_Ask</option>
+														<option value="O_B">Old_Bid</option>
+													</select>
+												</td>
 
-                                    </tr>
-                                    <tr>
-                                        <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">SourceType</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                        <td class="sym-mod-right pb-2">
-                                            <select asp-for="sourceType" class="sm-font py-1">
-                                                    <option value="C_BA">Current_Bid_Ask</option>
-                                                    <option value="C_A">Current_Ask</option>
-                                                    <option value="C_B">Current_Bid</option>
-                                                    <option value="O_BA">Old_Bid_Ask</option>
-                                                    <option value="O_A">Old_Ask</option>
-                                                    <option value="O_B">Old_Bid</option>
-                                            </select>
-                                        </td>
+											</tr>
+											
+											<tr>
+												<td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">SymbolType</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2">
+													<select asp-for="symbolType" class="sm-font py-1">
+														<option value="1">GOLD999</option>
+														<option value="2">GOLD995</option>
+														<option value="3">SILVER</option>
+													</select>
+												</td>
 
-                                    </tr>
-                                            <tr>
-                                                <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">SymbolType</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                                <td class="sym-mod-right pb-2">
-                                                    <select asp-for="symbolType" class="sm-font py-1">
-                                                        <option value="1">GOLD999</option>
-                                                        <option value="2">GOLD995</option>
-                                                        <option value="3">SILVER</option>
-                                                    </select>
-                                                </td>
+											</tr>
+											<tr>
+												<td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Decimal Rate</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2">
+													<select asp-for="digit" class="sm-font py-1">
+														<option value="0">0</option>
+														<option value="1">1</option>
+														<option value="2">2</option>
+														<option value="3">3</option>
+														<option value="4">4</option>
+													</select>
+												</td>
 
-                                            </tr>
-                                            <tr>
-                                                <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Decimal Rate</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                                <td class="sym-mod-right pb-2">
-                                                    <select asp-for="digit" class="sm-font py-1">
-                                                        <option value="0">0</option>
-                                                        <option value="1">1</option>
-                                                        <option value="2">2</option>
-                                                        <option value="3">3</option>
-                                                        <option value="4">4</option>
-                                                    </select>
-                                                </td>
+											</tr>
+											<tr>
+												<td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">High</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2"> <input asp-for="high" type="text" class="input-height sm-font"></td>
 
-                                            </tr>
-                                            <tr>
-                                                <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">High</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                                <td class="sym-mod-right pb-2"> <input asp-for="high" type="text" class="input-height sm-font"></td>
+											</tr>
+											<tr>
+												<td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Low</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2"> <input asp-for="low" type="text" class="input-height sm-font"></td>
 
-                                            </tr>
-                                            <tr>
-                                                <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Low</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                                <td class="sym-mod-right pb-2"> <input asp-for="low" type="text" class="input-height sm-font"></td>
+											</tr>
 
-                                            </tr>
+											<tr>
+												<td class="sym-mod-lef text-left pb-2 pr-3"><label for="" class="sm-font mb-0">RateType</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2">
+													<label class="sm-font sym-mod pr-2 mb-0"><span>Exchange</span> <span class="px-2">:</span><input asp-for="rateType" value="mcx" type="radio" checked="@(Model.rateType == "mcx" ? "checked" : null)"></label>
+													<label class="sm-font sym-mod pr-2 pl-4 mb-0"><span>Bank</span> <span class="px-2">:</span><input asp-for="rateType" value="bank" type="radio" checked="@(Model.rateType == "bank" ? "checked" : null)"></label>
+													<label class="sm-font sym-mod pr-2 pl-4 mb-0"><span>Fix</span> <span class="px-2">:</span><input asp-for="rateType" value="fix" type="radio" checked="@(Model.rateType == "fix" ? "checked" : null)"></label>
+												</td>
 
-                                        <tr>
-                                            <td class="sym-mod-lef text-left pb-2 pr-3"><label for="" class="sm-font mb-0">RateType</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                            <td class="sym-mod-right pb-2">
-                                                    <label class="sm-font sym-mod pr-2 mb-0"><span>Exchange</span> <span class="px-2">:</span><input asp-for="rateType" value="mcx" type="radio" checked="@(Model.rateType == "mcx" ? "checked" : null)"></label>
-                                                    <label class="sm-font sym-mod pr-2 pl-4 mb-0"><span>Bank</span> <span class="px-2">:</span><input asp-for="rateType" value="bank" type="radio" checked="@(Model.rateType == "bank" ? "checked" : null)"></label>
-                                                    <label class="sm-font sym-mod pr-2 pl-4 mb-0"><span>Fix</span> <span class="px-2">:</span><input asp-for="rateType" value="fix" type="radio" checked="@(Model.rateType == "fix" ? "checked" : null)"></label>
-                                            </td>
+											</tr>
 
-                                        </tr>
-                                   
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-12 ">
-                            <table>
-                                <tbody>
-                                            <tr>
-                                                <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Stock</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                                <td class="sym-mod-right pb-2"> <input asp-for="stock" type="text" class="input-height sm-font"></td>
+										</tbody>
+									</table>
+								</div>
+								<div class="col-lg-6 col-md-6 col-sm-12 ">
+									<table>
+										<tbody>
+											<tr>
+												<td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Stock</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2"> <input asp-for="stock" type="text" class="input-height sm-font"></td>
 
-                                            </tr>
-                                            <tr>
-                                                <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Remaining Stock</label><span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                                <td class="sym-mod-right pb-2"><input type="text" readonly asp-for="remainingStock" class="input-height sm-font"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Initial Margin</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                                <td class="sym-mod-right pb-2"> <input asp-for="initialMargin" type="text" class="input-height sm-font"></td>
+											</tr>
+											<tr>
+												<td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Remaining Stock</label><span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2"><input type="text" readonly asp-for="remainingStock" class="input-height sm-font"></td>
+											</tr>
+											<tr>
+												<td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Initial Margin</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2"> <input asp-for="initialMargin" type="text" class="input-height sm-font"></td>
 
-                                            </tr>
-                                    <tr>
-                                        <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">BuyPremium</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                        <td class="sym-mod-right pb-2"> <input asp-for="buyPremium" type="text" class="input-height sm-font"></td>
+											</tr>
+											<tr>
+												<td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">BuyPremium</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2"> <input asp-for="buyPremium" type="text" class="input-height sm-font"></td>
 
-                                    </tr>
-                                    <tr>
-                                        <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">SellPremium</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                            <td class="sym-mod-right pb-2"> <input asp-for="sellPremium" type="text" class="input-height sm-font"></td>
+											</tr>
+											<tr>
+												<td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">SellPremium</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2"> <input asp-for="sellPremium" type="text" class="input-height sm-font"></td>
 
-                                    </tr>
-                                    <tr>
-                                        <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Division</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                            <td class="sym-mod-right pb-2"> <input asp-for="division" type="text" class="input-height sm-font"></td>
+											</tr>
+											<tr>
+												<td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Division</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2"> <input asp-for="division" type="text" class="input-height sm-font"></td>
 
-                                    </tr>
-                                    <tr>
-                                        <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Multiply</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                        <td class="sym-mod-right pb-2"> <input asp-for="multiply" type="text" class="input-height sm-font"></td>
+											</tr>
+											<tr>
+												<td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Multiply</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2"> <input asp-for="multiply" type="text" class="input-height sm-font"></td>
 
-                                    </tr>
-                                    <tr>
-                                        <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">GST(%)</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                            <td class="sym-mod-right pb-2"> <input asp-for="gst" type="text" class="input-height sm-font"></td>
+											</tr>
+											<tr>
+												<td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">GST(%)</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2"> <input asp-for="gst" type="text" class="input-height sm-font"></td>
 
-                                    </tr>
-                                    <tr>
-                                                <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Is Bill With GST(%)</label> <input asp-for="isBill" name="isBill" type="checkbox"></td>
-                                    </tr>
-                                            <tr class="divhide @(Model.isBill ? "" : "hide")">
-                                                <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">GST(%)</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                                <td class="sym-mod-right pb-2"> <input asp-for="gstBill" type="text" class="input-height sm-font"></td>
-                                            </tr>
-                                            <tr class="divhide @(Model.isBill ? "" : "hide")">
-                                                <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">TCS(%)</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                                <td class="sym-mod-right pb-2"> <input asp-for="tcsBill" type="text" class="input-height sm-font"></td>
-                                    </tr>
-                                            <tr class="divhide @(Model.isBill ? "" : "hide")">
-                                                <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">TDS(%)</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                                <td class="sym-mod-right pb-2"> <input asp-for="tdsBill" type="text" class="input-height sm-font"></td>
-                                            </tr>
-                                            <tr>
-                                                <td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Identifier</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
-                                                <td class="sym-mod-right pb-2"> <input asp-for="identifier" type="text" class="input-height sm-font"></td>
+											</tr>
+											<tr>
+												<td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Is Bill With GST(%)</label> <input asp-for="isBill" name="isBill" type="checkbox"></td>
+											</tr>
+											<tr class="divhide @(Model.isBill ? "" : "hide")">
+												<td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">GST(%)</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2"> <input asp-for="gstBill" type="text" class="input-height sm-font"></td>
+											</tr>
+											<tr class="divhide @(Model.isBill ? "" : "hide")">
+												<td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">TCS(%)</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2"> <input asp-for="tcsBill" type="text" class="input-height sm-font"></td>
+											</tr>
+											<tr class="divhide @(Model.isBill ? "" : "hide")">
+												<td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">TDS(%)</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2"> <input asp-for="tdsBill" type="text" class="input-height sm-font"></td>
+											</tr>
+											<tr>
+												<td class="sym-mod-lef text-left pb-2 pr-3"> <label for="" class="sm-font mb-0">Identifier</label> <span class="pl-rgt pr-2" style="float: right;">:</span></td>
+												<td class="sym-mod-right pb-2"> <input asp-for="identifier" type="text" class="input-height sm-font"></td>
 
-                                            </tr>
-                                            @if ((bool)ViewData["IsCityEnabled"])
-                                            {
-                                                <tr>
-                                                    <td class="sym-mod-lef text-left pb-2 pr-3">
-                                                        <label class="sm-font mb-0">City</label>
-                                                        <span class="pl-rgt pr-2" style="float: right;">:</span>
-                                                    </td>
+											</tr>
+											@if ((bool)ViewData["IsCityEnabled"])
+											{
+												<tr>
+													<td class="sym-mod-lef text-left pb-2 pr-3">
+														<label class="sm-font mb-0">City</label>
+														<span class="pl-rgt pr-2" style="float: right;">:</span>
+													</td>
 
-                                                    <td class="sym-mod-right pb-2">
-                                                       
-                                                        <select asp-for="CityId" asp-items="cityList" class="sm-font py-1">
-                                                            <option value="" disabled selected>-- Select City --</option>
-                                                        </select>
-                                                    </td>
-                                                </tr>
-                                            }
+													<td class="sym-mod-right pb-2">
 
-                                        </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="btn-sub text-center mt-4">
-                                <button class="btn common-bg updateCommonPremium">
-                            Edit
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-</div>
+														<select asp-for="CityId" asp-items="cityList" class="sm-font py-1">
+															<option value="" disabled selected>-- Select City --</option>
+														</select>
+													</td>
+												</tr>
+											}
+
+										</tbody>
+									</table>
+								</div>
+							</div>
+							<div class="btn-sub text-center mt-4">
+								<button class="btn common-bg updateCommonPremium">
+									Edit
+								</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 </form>

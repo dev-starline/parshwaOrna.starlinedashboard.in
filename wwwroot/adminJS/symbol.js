@@ -72,6 +72,7 @@ $("body").on("click", ".updatePremium", async function () {
 
     const buyPremium = cleanPremium($row.find(".buyPremium"), "Buy Premium");
     const sellPremium = cleanPremium($row.find(".sellPremium"), "Sell Premium");
+    const rateDisplayProductId = $row.find(".refDisplayProduct").val();
 
     const data = {
         id: this.id,
@@ -81,7 +82,8 @@ $("body").on("click", ".updatePremium", async function () {
         isComment: $row.find(".isComment").is(":checked"),
         name: $row.find(".sbName").val(),
         buyPremium: buyPremium,
-        sellPremium: sellPremium
+        sellPremium: sellPremium,
+        rateDisplayProductId: rateDisplayProductId
     };
 
     var response = ajaxPost('admin/Symbol/updatePremium', JSON.stringify(data));
@@ -130,7 +132,8 @@ $("body").on("click", ".saveAll", function () {
             isComment: $row.find(".isComment").is(":checked"),
             name: $row.find(".sbName").val(),
             buyPremium: buyPremium,
-            sellPremium: sellPremium
+            sellPremium: sellPremium,
+            rateDisplayProductId: $row.find(".refDisplayProduct").val()
         };
 
         array.push(data);

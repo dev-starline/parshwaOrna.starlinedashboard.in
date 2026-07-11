@@ -46,14 +46,25 @@ socket.on('mainProducts', function (data) {
         let objRate = mainProduct.filter(activity => (activity.id == $("#symbolId").val()));
         let objGroup = groupDetails.filter(activity => (activity.symbolId == $("#symbolId").val()));
         if (objRate.length > 0 && objGroup.length > 0) {
+            const referenceIdentifier = (objRate[0].identifier || "").toString();
+            const isReferenceRate = referenceIdentifier.startsWith("Rate_");
+            const referenceName = isReferenceRate ? referenceIdentifier.replace(/^Rate_/, "").replace(/\s+/g, "") : "";
+            const referenceRate = isReferenceRate
+                ? mainProduct.find(activity => {
+                    const name = (activity.name || "").toString().replace(/\s+/g, "");
+                    return name && name === referenceName;
+                })
+                : null;
+
+            const rateSource = referenceRate || objRate[0];
             let bid = 0, ask = 0;
-            bid =parseInt(objRate[0].bid) + objGroup[0].buyPremium;
-            ask =parseInt(objRate[0].ask) + objGroup[0].sellPremium;
-            if (objRate[0].src=='gold') {
+            bid = parseInt(rateSource.bid) + objGroup[0].buyPremium;
+            ask = parseInt(rateSource.ask) + objGroup[0].sellPremium;
+            if (rateSource.src=='gold') {
                 bid = bid + objGroup[0].buyPremiumGold;
                 ask = ask + objGroup[0].sellPremiumGold;
             }
-            else if (objRate[0].src == 'silver') {
+            else if (rateSource.src == 'silver') {
                 bid = bid + objGroup[0].buyPremiumSilver;
                 ask = ask + objGroup[0].sellPremiumSilver;
             }
@@ -64,8 +75,8 @@ socket.on('mainProducts', function (data) {
                 bid = '--'
             }
             if ($("#autoExchange").is(":checked") === true) {
-                $("#buyExchange").val(objRate[0].sell);
-                $("#sellExchange").val(objRate[0].buy);
+                $("#buyExchange").val(rateSource.sell);
+                $("#sellExchange").val(rateSource.buy);
             }
             if ($("#autoRate").is(":checked") === true) {
                 $("#buyRate").val(ask);

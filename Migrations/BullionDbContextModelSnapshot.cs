@@ -1710,6 +1710,9 @@ namespace SL_Bullion.Migrations
                     b.Property<int>("high")
                         .HasColumnType("int");
 
+                    b.Property<int>("rateDisplayProductId")
+                       .HasColumnType("int");
+
                     b.Property<string>("identifier")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");

@@ -132,6 +132,7 @@
 								<th class="common-bg wtwo thead-font">RateType</th>
 								<th class="common-bg wtwo thead-font">BuyPremium</th>
 								<th class="common-bg wtwo thead-font">SellPremium</th>
+								<th class="common-bg wtwo thead-font">RefDisplayProduct</th>
 								<th class="common-bg wtwo thead-font">Save</th>
 								<th class="common-bg wtwo thead-font">Edit</th>
 								<th class="common-bg wtwo thead-font">Delete</th>
@@ -192,6 +193,11 @@
 									<td class="wtwo">
 										<div class="content">
 											<input type="text" class="input-height sm-font sellPremium" value="@item.sellPremium" />
+										</div>
+									</td>
+									<td class="wtwo">
+										<div class="content">
+											@Html.DropDownList("SelectedSymbolId", (IEnumerable<SelectListItem>)@item.Symbols, null, new { @class = "d-inline-block refDisplayProduct", style = "font-size: small;" })
 										</div>
 									</td>
 									<td class="wtwo">

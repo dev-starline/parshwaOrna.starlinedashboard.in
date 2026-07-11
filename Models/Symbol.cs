@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace SL_Bullion.Models
 {
-    
+
 
     public class Symbol
     {
@@ -54,6 +54,7 @@ namespace SL_Bullion.Models
         public DateTime modifiedDate { get; set; }
         public DateTime changePremiumDate { get; set; }
         public string identifier { get; set; } = "0";
+      
         [NotMapped]
         public string remainingStock
         {
@@ -63,10 +64,17 @@ namespace SL_Bullion.Models
                 return $"{remaining}";
             }
         }
-      
-        public int CityId { get; set; } = 0;
 
         public bool isComment { get; set; } = false;
+
+        public int CityId { get; set; } = 0;
+       
+        public int rateDisplayProductId { get; set; } = 0;
     }
-    
+
+    public class SymbolList : Symbol
+    {
+        [NotMapped]
+        public List<SelectListItem> Symbols { get; set; }
+    }
 }

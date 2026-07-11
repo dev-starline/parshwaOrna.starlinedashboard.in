@@ -478,6 +478,7 @@ namespace SL_Bullion.WebAPI
 
                 var symbol = _context.tblSymbol.AsNoTracking().Where(s => s.id == symbolId).Select(s => new
                 {
+                    s.identifier,
                     s.division,
                     s.multiply,
                     s.rateType,
@@ -494,6 +495,10 @@ namespace SL_Bullion.WebAPI
                     isTrade = c.isTrade
                 }).FirstOrDefault();
                 commonPremium = _context.tblGroup.AsNoTracking().Where(g => g.id == account.groupId).Select(g => (tradeType == 1 || tradeType == 3) ? (mainProduct[0].GetProperty("src").ToString() == "gold" ? g.sellPremiumGold : g.sellPremiumSilver) : (tradeType == 2 || tradeType == 4) ? (mainProduct[0].GetProperty("src").ToString() == "gold" ? g.buyPremiumGold : g.buyPremiumSilver) : 0).FirstOrDefault();
+                if (!string.IsNullOrWhiteSpace(symbol?.identifier) && symbol.identifier.StartsWith("Rate_", StringComparison.OrdinalIgnoreCase))
+                {
+                    commonPremium = 0;
+                }
                 symbolPremium = _context.tblGroupSymbol.AsNoTracking().Where(gs => gs.groupId == account.groupId && gs.symbolId == symbolId).Select(gs => (tradeType == 3 || tradeType == 1) ? gs.sellPremium : gs.buyPremium).FirstOrDefault();
 
                 var checkVolume = _context.tblGroupSymbol.Where(g => g.groupId == account.groupId && g.symbolId == symbolId).Select(g => new { g.oneClick, g.inTotal }).FirstOrDefault();
