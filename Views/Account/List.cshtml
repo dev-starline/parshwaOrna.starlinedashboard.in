@@ -6,6 +6,7 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
     int currentPage = ViewBag.CurrentPage ?? 1;
     int totalPages = ViewBag.TotalPages ?? 1;
+    string currentSearch = ViewBag.Search as string ?? "";
 }
 <div class="tab-bottom-cvr w-100 d-inline-block py-1">
     <div class="container-fluid">
@@ -22,11 +23,11 @@
             </div>
             <div class="col-lg-4 col-md-12 col-sm-12">
                 <div class="top-cover">
-                    <form class="form-inline my-2 my-lg-0 justify-content-end account-form">
-                        <button asp-action="exportToExcel" method="GET" class="btn common-bg color-white my-2 mx-2 my-sm-0 sm-font">Export to Excel</button>
-                        <input name="search" class="form-control accout-inpur-search" type="search" placeholder="Search" aria-label="Search">
-                        <button asp-action="search" method="GET" class="btn common-bg color-white my-2 mx-2 my-sm-0 sm-font" type="submit">Search</button>
-                        <button class="btn common-bg color-white my-2 my-sm-0 sm-font">All</button>
+                    <form class="form-inline my-2 my-lg-0 justify-content-end account-form" method="get" asp-action="List">
+                        <button formaction="@Url.Action("exportToExcel")" class="btn common-bg color-white my-2 mx-2 my-sm-0 sm-font" type="submit">Export to Excel</button>
+                        <input name="search" value="@currentSearch" class="form-control accout-inpur-search" type="search" placeholder="LoginId / Name / FirmName / Mobile / City / Group" aria-label="Search">
+                        <button formaction="@Url.Action("search")" class="btn common-bg color-white my-2 mx-2 my-sm-0 sm-font" type="submit">Search</button>
+                        <a class="btn common-bg color-white my-2 my-sm-0 sm-font" href="@Url.Action("List")">All</a>
                     </form>
                 </div>
             </div>
@@ -127,7 +128,7 @@
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-end">
                 <li class="page-item @(currentPage == 1 ? "disabled" : "")">
-                    <a class="page-link common-bg" asp-action="List" asp-route-page="@(currentPage > 1 ? currentPage - 1 : 1)">
+                    <a class="page-link common-bg" asp-action="List" asp-route-page="@(currentPage > 1 ? currentPage - 1 : 1)" asp-route-search="@currentSearch">
                         <i class="fa fa-angle-double-left"></i> Previous
                     </a>
                 </li>
@@ -135,7 +136,7 @@
                     <span class="page-link"> @currentPage / @totalPages</span>
                 </li>
                 <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
-                    <a class="page-link common-bg" asp-action="List" asp-route-page="@(currentPage < totalPages ? currentPage + 1 : totalPages)">
+                    <a class="page-link common-bg" asp-action="List" asp-route-page="@(currentPage < totalPages ? currentPage + 1 : totalPages)" asp-route-search="@currentSearch">
                         Next <i class="fa fa-angle-double-right"></i>
                     </a>
                 </li>

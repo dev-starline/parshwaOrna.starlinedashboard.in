@@ -21,12 +21,12 @@ namespace SL_Bullion.Controllers
             _constatnt = constatnt;
             _adminService = adminService;
         }
-        public async Task<IActionResult> List(string tradeFilter = "all")
+        public async Task<IActionResult> List(string tradeFilter = "all", string sourceFilter = "all")
         {
-            var orders = getOrder("", "", DateTime.Now, DateTime.Now, tradeFilter);
+            var orders = getOrder("", "", DateTime.Now, DateTime.Now, tradeFilter, sourceFilter);
             return View(await orders);
         }
-        private async Task<List<DeleteOrder>> getOrder(string type, string data, DateTime fromDate, DateTime toDate, string tradeFilter)
+        private async Task<List<DeleteOrder>> getOrder(string type, string data, DateTime fromDate, DateTime toDate, string tradeFilter, string sourceFilter)
         {
             int clientId = HttpContext.Session.GetInt32("clientId") ?? 0;
 
@@ -78,6 +78,15 @@ namespace SL_Bullion.Controllers
                 baseQuery = baseQuery.Where(x => x.o.tradeType == 2);
             }
 
+            if (string.Equals(sourceFilter, "gold", StringComparison.OrdinalIgnoreCase))
+            {
+                baseQuery = baseQuery.Where(x => x.o.source == "gold");
+            }
+            else if (string.Equals(sourceFilter, "silver", StringComparison.OrdinalIgnoreCase))
+            {
+                baseQuery = baseQuery.Where(x => x.o.source == "silver");
+            }
+
             // Final projection (safe now)
             return await baseQuery
                 .OrderByDescending(x => x.o.deleteTime)
@@ -117,17 +126,18 @@ namespace SL_Bullion.Controllers
             }
             toDateValue = toDateValue.Date.Add(new TimeSpan(23, 59, 59));
             var tradeFilter = Request.Query["tradeFilter"].ToString();
-            var orders = getOrder("search", loginId, fromDateValue, toDateValue, tradeFilter);
+            var sourceFilter = Request.Query["sourceFilter"].ToString();
+            var orders = getOrder("search", loginId, fromDateValue, toDateValue, tradeFilter, sourceFilter);
             return View("List", await orders);
         }
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id, string tradeFilter = "all")
+        public async Task<IActionResult> DeleteConfirmed(int id, string tradeFilter = "all", string sourceFilter = "all")
         {
             await _adminService.removeOrder(id, "delete", "open");
             await _context.SaveChangesAsync();
             _alert.AddSuccessToastMessage("order open.");
-            return RedirectToAction(nameof(List), new { tradeFilter });
+            return RedirectToAction(nameof(List), new { tradeFilter, sourceFilter });
         }
     }
 }

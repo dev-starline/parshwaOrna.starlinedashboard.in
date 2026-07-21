@@ -5,6 +5,7 @@
 	string fromDateQuery = Context.Request.Query["fromDate"];
 	string toDateQuery = Context.Request.Query["toDate"];
 	string loginIdQuery = Context.Request.Query["loginId"];
+	string sourceFilterQuery = Context.Request.Query["sourceFilter"];
 	string defaultDate = DateTime.Today.ToString("yyyy-MM-dd");
 	string fromDateValue = string.IsNullOrEmpty(fromDateQuery) ? defaultDate : fromDateQuery;
 	string toDateValue = string.IsNullOrEmpty(toDateQuery) ? defaultDate : toDateQuery;
@@ -17,6 +18,7 @@
 				<div class="top-cover">
 					<div class="form-inline my-2 my-lg-0 justify-content-end">
 						<input type="hidden" name="tradeFilter" value="@Context.Request.Query["tradeFilter"]" />
+						<input type="hidden" name="sourceFilter" value="@sourceFilterQuery" />
 						@* <div class="datepicket order-sm-1">
 							<label for="datepicker" class="d-inline-block">Login Id :</label>
 							<input name="loginId" type="text">
@@ -60,11 +62,13 @@
 			<div class="col-lg-4 col-md-6 col-sm-12">
 				<div class="top-cover">
 					<div class="form-inline my-2 my-lg-0 justify-content-end">
-						<a class="btn common-bg color-white sm-font" href="@Url.Action("List", new { tradeFilter = "all" })">All Order</a>
-						<a class="btn common-bg color-white sm-font ml-2" href="@Url.Action("List", new { tradeFilter = "buy" })">Buy Order</a>
-						<a class="btn common-bg color-white sm-font ml-2" href="@Url.Action("List", new { tradeFilter = "sell" })">Sell Order</a>
+						<a class="btn common-bg color-white sm-font" href="@Url.Action("List", new { tradeFilter = "all", sourceFilter = sourceFilterQuery })">All Order</a>
+						<a class="btn common-bg color-white sm-font ml-2" href="@Url.Action("List", new { tradeFilter = "buy", sourceFilter = sourceFilterQuery })">Buy Order</a>
+						<a class="btn common-bg color-white sm-font ml-2" href="@Url.Action("List", new { tradeFilter = "sell", sourceFilter = sourceFilterQuery })">Sell Order</a>
+						<a class="btn common-bg color-white sm-font ml-2" href="@Url.Action("List", new { tradeFilter = Context.Request.Query["tradeFilter"].ToString(), sourceFilter = "gold" })">Gold</a>
+						<a class="btn common-bg color-white sm-font ml-2" href="@Url.Action("List", new { tradeFilter = Context.Request.Query["tradeFilter"].ToString(), sourceFilter = "silver" })">Silver</a>
 						<button class="btn common-bg color-white sm-font ml-2">Export to Excel</button>
-						<button onclick="selectOrder('close')" class="btn common-bg color-white sm-font ml-2">CloseAll</button>
+						
 						<button onclick="selectOrder('delete')" class="btn common-bg color-white sm-font ml-2">DeleteAll</button>
 					</div>
 				</div>
@@ -72,7 +76,7 @@
 		</div>
 		<div class="table-wrapper vg">
 			<table>
-				<thead class="scrolltb">
+				<thead>
 					<tr>
 						<th class="common-bg thead-font wtwo">OrderNo</th>
 						<th class="common-bg thead-font wtwo">LoginId</th>
@@ -113,7 +117,7 @@
 							<td class="wfive"><div class="content"><p>@item.editorderTime</p></div></td>
 							<td class="wfive"><div class="content"><p>@item.ip</p></div></td>
 							<td class="wten"><div class="content"><p>@item.comment</p></div></td>
-							<td class="wtwo"><div class="content"><form asp-action="Delete" asp-route-id="@item.id" asp-route-tradeFilter="@Context.Request.Query["tradeFilter"]"><button onclick="return confirmDelete('open')"><i class="fa fa-external-link text-success" aria-hidden="true"></i></button></form></div></td>
+							<td class="wtwo"><div class="content"><form asp-action="Delete" asp-route-id="@item.id" asp-route-tradeFilter="@Context.Request.Query["tradeFilter"]" asp-route-sourceFilter="@Context.Request.Query["sourceFilter"]"><button onclick="return confirmDelete('open')"><i class="fa fa-external-link text-success" aria-hidden="true"></i></button></form></div></td>
 						</tr>
 					}
 				</tbody>

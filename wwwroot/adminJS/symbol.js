@@ -158,7 +158,7 @@ $(".isSwitch").on("change", function () {
     data.isLogin = $('input[name="isLogin"]:checked').val();
     data.isTrade = $('input[name="isTrade"]:checked').val();
   
-    var response = ajaxPost('Symbol/isRateUpdate', JSON.stringify(data));
+    var response = ajaxPost('admin/Symbol/isRateUpdate', JSON.stringify(data));
     if (response == 200) {
     }
 });

@@ -34,11 +34,12 @@ namespace SL_Bullion.Controllers
             _config = configuration;
         }
 
-        public async Task<IActionResult> List(int page = 1)
+        public async Task<IActionResult> List(int page = 1, string search = "")
         {
-            var data = await getPaginationDetails(page, PageSize, "list");
+            var data = await getPaginationDetails(page, PageSize, search);
             ViewBag.CurrentPage = page;
             ViewBag.TotalPages = (int)Math.Ceiling((double)data.TotalItems / PageSize);
+            ViewBag.Search = search;
             return View(data);
         }
 
@@ -51,7 +52,14 @@ namespace SL_Bullion.Controllers
 
             if (!string.IsNullOrWhiteSpace(searchTerm) && searchTerm != "list")
             {
-                query = query.Where(a => a.loginId.Contains(searchTerm) || a.name.Contains(searchTerm) || a.firmName.Contains(searchTerm) || a.mobile.Contains(searchTerm));
+                var normalizedSearch = searchTerm.Trim();
+                query = query.Where(a =>
+                    a.loginId.Contains(normalizedSearch) ||
+                    a.name.Contains(normalizedSearch) ||
+                    a.firmName.Contains(normalizedSearch) ||
+                    a.mobile.Contains(normalizedSearch) ||
+                    a.city.Contains(normalizedSearch) ||
+                    (_context.tblGroup.Where(g => g.id == a.groupId).Select(g => g.name).FirstOrDefault() ?? "").Contains(normalizedSearch));
             }
 
             int totalItems = await query.CountAsync();
@@ -298,8 +306,7 @@ namespace SL_Bullion.Controllers
         }
         public async Task<IActionResult> search(string search)
         {
-            var data = await getPaginationDetails(1, 20, search);
-            return View("List", data);
+            return RedirectToAction(nameof(List), new { page = 1, search });
         }
 
         private bool AccountExists(int id)

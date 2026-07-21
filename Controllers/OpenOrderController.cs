@@ -29,13 +29,14 @@ namespace SL_Bullion.Controllers
             _constatnt = constatnt;
             _adminService = adminService;
         }
-        public async Task<IActionResult> List(string tradeFilter = "all")
+        public async Task<IActionResult> List(string tradeFilter = "all", string sourceFilter = "all")
         {
-            var orders = getOpenOrder("", "", DateTime.Now, DateTime.Now, tradeFilter);
-            return View(await orders);
+            var orders = await getOpenOrder("", "", DateTime.Now, DateTime.Now, tradeFilter, sourceFilter);
+            SetOpenOrderSummary(orders);
+            return View(orders);
         }
 
-        private async Task<List<OpenOrder>> getOpenOrder(string type, string data, DateTime fromDate, DateTime toDate, string tradeFilter)
+        private async Task<List<OpenOrder>> getOpenOrder(string type, string data, DateTime fromDate, DateTime toDate, string tradeFilter, string sourceFilter)
         {
             var clientId = HttpContext.Session.GetInt32("clientId");
 
@@ -85,6 +86,15 @@ namespace SL_Bullion.Controllers
                 query = query.Where(x => x.o.tradeType == 2);
             }
 
+            if (string.Equals(sourceFilter, "gold", StringComparison.OrdinalIgnoreCase))
+            {
+                query = query.Where(x => x.o.source == "gold");
+            }
+            else if (string.Equals(sourceFilter, "silver", StringComparison.OrdinalIgnoreCase))
+            {
+                query = query.Where(x => x.o.source == "silver");
+            }
+
 
             var orders = await query
                 .Select(x => new OpenOrder
@@ -129,8 +139,10 @@ namespace SL_Bullion.Controllers
             }
             toDateValue = toDateValue.Date.Add(new TimeSpan(23, 59, 59));
             var tradeFilter = Request.Query["tradeFilter"].ToString();
-            var orders = getOpenOrder("search", loginId, fromDateValue, toDateValue, tradeFilter);
-            return View("List", await orders);
+            var sourceFilter = Request.Query["sourceFilter"].ToString();
+            var orders = await getOpenOrder("search", loginId, fromDateValue, toDateValue, tradeFilter, sourceFilter);
+            SetOpenOrderSummary(orders);
+            return View("List", orders);
         }
 
         [HttpPost]
@@ -168,21 +180,21 @@ namespace SL_Bullion.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id, string tradeFilter = "all")
+        public async Task<IActionResult> DeleteConfirmed(int id, string tradeFilter = "all", string sourceFilter = "all")
         {
             await _adminService.removeOrder(id, "open", "delete");
             await _context.SaveChangesAsync();
             _alert.AddSuccessToastMessage("order deleted.");
-            return RedirectToAction(nameof(List), new { tradeFilter });
+            return RedirectToAction(nameof(List), new { tradeFilter, sourceFilter });
         }
         [HttpPost, ActionName("Open")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> OpenConfirmed(int id, string tradeFilter = "all")
+        public async Task<IActionResult> OpenConfirmed(int id, string tradeFilter = "all", string sourceFilter = "all")
         {
             await _adminService.removeOrder(id, "open", "open");
             await _context.SaveChangesAsync();
             _alert.AddSuccessToastMessage("order open.");
-            return RedirectToAction(nameof(List), new { tradeFilter });
+            return RedirectToAction(nameof(List), new { tradeFilter, sourceFilter });
         }
         public async Task<IActionResult> CloseOrder(int? id)
         {
@@ -200,7 +212,7 @@ namespace SL_Bullion.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> CloseOrder(int id, [Bind("id,clientId,volume,rate,comment")] OpenOrder order, string tradeFilter = "all")
+        public async Task<IActionResult> CloseOrder(int id, [Bind("id,clientId,volume,rate,comment")] OpenOrder order, string tradeFilter = "all", string sourceFilter = "all")
         {
             if (id != order.id)
             {
@@ -218,7 +230,7 @@ namespace SL_Bullion.Controllers
                 throw;
             }
 
-            return RedirectToAction(nameof(List), new { tradeFilter });
+            return RedirectToAction(nameof(List), new { tradeFilter, sourceFilter });
         }
 
         private async Task<int> openToClose(int id, double volume, double rate, string comment)
@@ -282,7 +294,7 @@ namespace SL_Bullion.Controllers
             return code;
         }
 
-        public async Task<IActionResult> ExportToExcel(string fromDate, string toDate, string tradeFilter = "all")
+        public async Task<IActionResult> ExportToExcel(string fromDate, string toDate, string tradeFilter = "all", string sourceFilter = "all")
         {
             int clientId = HttpContext.Session.GetInt32("clientId") ?? 0;
             DateTime fromDateValue;
@@ -292,7 +304,7 @@ namespace SL_Bullion.Controllers
                 !DateTime.TryParseExact(toDate, dateFormat, CultureInfo.InvariantCulture, DateTimeStyles.None, out toDateValue))
             {
                 _alert.AddSuccessToastMessage("Invalid date format.");               
-                return RedirectToAction(nameof(List), new { tradeFilter });
+                return RedirectToAction(nameof(List), new { tradeFilter, sourceFilter });
             }
 
             toDateValue = toDateValue.Date.Add(new TimeSpan(23, 59, 59));
@@ -325,6 +337,15 @@ namespace SL_Bullion.Controllers
                     Comment = o.comment
                 }).ToListAsync();
 
+            if (string.Equals(sourceFilter, "gold", StringComparison.OrdinalIgnoreCase))
+            {
+                excelData = excelData.Where(x => x.Symbol != null && x.Symbol.Contains("gold", StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+            else if (string.Equals(sourceFilter, "silver", StringComparison.OrdinalIgnoreCase))
+            {
+                excelData = excelData.Where(x => x.Symbol != null && x.Symbol.Contains("silver", StringComparison.OrdinalIgnoreCase)).ToList();
+            }
+
             if (string.Equals(tradeFilter, "buy", StringComparison.OrdinalIgnoreCase))
             {
                 excelData = excelData.Where(x => x.TradeType.StartsWith("Buy", StringComparison.OrdinalIgnoreCase)).ToList();
@@ -336,12 +357,19 @@ namespace SL_Bullion.Controllers
 
             if (excelData == null || !excelData.Any())
             {
-                return RedirectToAction(nameof(List), new { tradeFilter });
+                return RedirectToAction(nameof(List), new { tradeFilter, sourceFilter });
             }
 
 
             var fileContent = _constatnt.generateExcelFromList(excelData, "OpenOrderData");
             return File(fileContent, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", $"OpenOrder{DateTime.Now:yyyyMMddHHmmss}.xlsx");
+        }
+
+        private void SetOpenOrderSummary(List<OpenOrder> orders)
+        {
+            var displayedOrders = orders.Where(x => x.tradeType == 1 || x.tradeType == 2).ToList();
+            ViewBag.OpenOrderTotalQuantity = displayedOrders.Sum(x => x.volume);
+            ViewBag.OpenOrderAveragePrice = displayedOrders.Any() ? displayedOrders.Average(x => x.rate) : 0;
         }
     }
 
