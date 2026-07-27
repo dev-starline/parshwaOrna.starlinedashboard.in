@@ -801,3 +801,11 @@ thead.scrolltb {
     height: 26px;
     width: 100%;
 }
+.ord-drp {
+    display: flex;
+    align-items: center;
+}
+    .ord-drp select {
+        width: 20%;
+        margin-top: 6px;
+    }

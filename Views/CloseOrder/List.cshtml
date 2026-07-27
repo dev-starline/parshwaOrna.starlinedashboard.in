@@ -44,19 +44,69 @@
 <div class="container-fluid">
 	<div class="table-cover">
 		<div class="row ml-0 mr-0">
-			<div class="col-lg-4 col-md-0 col-sm-12"></div>
+			<div class="col-lg-4 col-md-0 col-sm-12">
+				<div class="ord-drp">
+				<select class="order-filter-select mr-2" onchange="window.location.href=this.value">
+					@if (string.IsNullOrWhiteSpace(Context.Request.Query["tradeFilter"]) || Context.Request.Query["tradeFilter"].ToString() == "all")
+					{
+						<option value="@Url.Action("List", new { tradeFilter = "all", sourceFilter = sourceFilterQuery })" selected>All</option>
+					}
+					else
+					{
+						<option value="@Url.Action("List", new { tradeFilter = "all", sourceFilter = sourceFilterQuery })">All</option>
+					}
+					@if (Context.Request.Query["tradeFilter"].ToString() == "buy")
+					{
+						<option value="@Url.Action("List", new { tradeFilter = "buy", sourceFilter = sourceFilterQuery })" selected>Buy</option>
+					}
+					else
+					{
+						<option value="@Url.Action("List", new { tradeFilter = "buy", sourceFilter = sourceFilterQuery })">Buy</option>
+					}
+					@if (Context.Request.Query["tradeFilter"].ToString() == "sell")
+					{
+						<option value="@Url.Action("List", new { tradeFilter = "sell", sourceFilter = sourceFilterQuery })" selected>Sell</option>
+					}
+					else
+					{
+						<option value="@Url.Action("List", new { tradeFilter = "sell", sourceFilter = sourceFilterQuery })">Sell</option>
+					}
+				</select>
+				<select class="order-filter-select mr-2" onchange="window.location.href=this.value">
+					@if (string.IsNullOrWhiteSpace(sourceFilterQuery) || sourceFilterQuery == "all")
+					{
+						<option value="@Url.Action("List", new { tradeFilter = Context.Request.Query["tradeFilter"].ToString(), sourceFilter = "all" })" selected>All</option>
+					}
+					else
+					{
+						<option value="@Url.Action("List", new { tradeFilter = Context.Request.Query["tradeFilter"].ToString(), sourceFilter = "all" })">All</option>
+					}
+					@if (sourceFilterQuery == "gold")
+					{
+						<option value="@Url.Action("List", new { tradeFilter = Context.Request.Query["tradeFilter"].ToString(), sourceFilter = "gold" })" selected>Gold</option>
+					}
+					else
+					{
+						<option value="@Url.Action("List", new { tradeFilter = Context.Request.Query["tradeFilter"].ToString(), sourceFilter = "gold" })">Gold</option>
+					}
+					@if (sourceFilterQuery == "silver")
+					{
+						<option value="@Url.Action("List", new { tradeFilter = Context.Request.Query["tradeFilter"].ToString(), sourceFilter = "silver" })" selected>Silver</option>
+					}
+					else
+					{
+						<option value="@Url.Action("List", new { tradeFilter = Context.Request.Query["tradeFilter"].ToString(), sourceFilter = "silver" })">Silver</option>
+					}
+				</select>
+				</div>
+			</div>
 			<div class="col-lg-4 col-md-6 col-sm-12">
 				<h4 class="text-center mt-1 mb-2">Close Order</h4>
 			</div>
 			<div class="col-lg-4 col-md-6 col-sm-12">
 				<div class="top-cover">
 					<div class="form-inline my-2 my-lg-0 justify-content-end">
-						<a class="btn common-bg color-white sm-font" href="@Url.Action("List", new { tradeFilter = "all", sourceFilter = sourceFilterQuery })">All Order</a>
-						<a class="btn common-bg color-white sm-font ml-2" href="@Url.Action("List", new { tradeFilter = "buy", sourceFilter = sourceFilterQuery })">Buy Order</a>
-						<a class="btn common-bg color-white sm-font ml-2" href="@Url.Action("List", new { tradeFilter = "sell", sourceFilter = sourceFilterQuery })">Sell Order</a>
-						<a class="btn common-bg color-white sm-font ml-2" href="@Url.Action("List", new { tradeFilter = Context.Request.Query["tradeFilter"].ToString(), sourceFilter = "gold" })">Gold</a>
-						<a class="btn common-bg color-white sm-font ml-2" href="@Url.Action("List", new { tradeFilter = Context.Request.Query["tradeFilter"].ToString(), sourceFilter = "silver" })">Silver</a>
-
+					
 						<button onclick="selectOrder('close')" class="btn common-bg color-white sm-font ml-2">CloseAll</button>
 						<button onclick="selectOrder('delete')" class="btn common-bg color-white sm-font ml-2">DeleteAll</button>
 					</div>
