@@ -75,30 +75,16 @@ namespace SL_Bullion.Controllers
 
         private string GenerateRandomPassword(int length)
         {
-            const string upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             const string numbers = "0123456789";
-            const string allChars = upperCase + numbers;
             Random random = new Random();
 
             char[] password = new char[length];
 
-            password[0] = upperCase[random.Next(upperCase.Length)];
-            password[1] = upperCase[random.Next(upperCase.Length)];
-            password[2] = numbers[random.Next(numbers.Length)];
-            password[3] = numbers[random.Next(numbers.Length)];
-
-            for (int i = 4; i < length; i++)
-            {
-                password[i] = allChars[random.Next(allChars.Length)];
-            }
-
             for (int i = 0; i < length; i++)
             {
-                int randomIndex = random.Next(i, length);
-                char temp = password[i];
-                password[i] = password[randomIndex];
-                password[randomIndex] = temp;
+                password[i] = numbers[random.Next(numbers.Length)];
             }
+
             return new string(password);
         }
 

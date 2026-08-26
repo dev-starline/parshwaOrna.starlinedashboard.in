@@ -33,7 +33,9 @@ namespace SL_Bullion.Migrations
                     gst = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     margin = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     modifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    mac = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    mac = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    startDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    endDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -294,6 +296,8 @@ namespace SL_Bullion.Migrations
                     clientId = table.Column<int>(type: "int", nullable: false),
                     marqueeTop = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     marqueeBottom = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    marqueeTop1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    marqueeBottom1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     number1 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     number2 = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     number3 = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -687,6 +691,28 @@ namespace SL_Bullion.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "tblOrderFailureLog",
+                columns: table => new
+                {
+                    id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    clientId = table.Column<int>(type: "int", nullable: false),
+                    name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    loginId = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    firmName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    mobile = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    symbolId = table.Column<int>(type: "int", nullable: false),
+                    quantity = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    reason = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    cdate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_tblOrderFailureLog", x => x.id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "tblOtr",
                 columns: table => new
                 {
@@ -789,7 +815,6 @@ namespace SL_Bullion.Migrations
                     index = table.Column<int>(type: "int", nullable: false),
                     digit = table.Column<int>(type: "int", nullable: false),
                     isBill = table.Column<bool>(type: "bit", nullable: false),
-                    isComment = table.Column<bool>(type: "bit", nullable: false),
                     gstBill = table.Column<double>(type: "float", nullable: false),
                     tcsBill = table.Column<double>(type: "float", nullable: false),
                     tdsBill = table.Column<double>(type: "float", nullable: false),
@@ -797,6 +822,7 @@ namespace SL_Bullion.Migrations
                     modifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     changePremiumDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     identifier = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    isComment = table.Column<bool>(type: "bit", nullable: false),
                     CityId = table.Column<int>(type: "int", nullable: false),
                     rateDisplayProductId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -953,6 +979,9 @@ namespace SL_Bullion.Migrations
 
             migrationBuilder.DropTable(
                 name: "tblOpenOrderCoinHistory");
+
+            migrationBuilder.DropTable(
+                name: "tblOrderFailureLog");
 
             migrationBuilder.DropTable(
                 name: "tblOtr");

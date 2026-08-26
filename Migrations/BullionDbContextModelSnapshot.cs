@@ -39,6 +39,9 @@ namespace SL_Bullion.Migrations
                     b.Property<string>("email")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("endDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("firmName")
                         .HasColumnType("nvarchar(max)");
 
@@ -78,18 +81,15 @@ namespace SL_Bullion.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime?>("startDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<int>("tradeAccess")
                         .HasColumnType("int");
 
                     b.Property<string>("type")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-
-                    b.Property<DateTime?>("startDate")
-                        .HasColumnType("datetime2");
-                    b.Property<DateTime?>("endDate")
-                       .HasColumnType("datetime2");
 
                     b.HasKey("id");
 
@@ -715,7 +715,13 @@ namespace SL_Bullion.Migrations
                     b.Property<string>("marqueeBottom")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("marqueeBottom1")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("marqueeTop")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("marqueeTop1")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<DateTime>("modifiedDate")
@@ -1538,6 +1544,54 @@ namespace SL_Bullion.Migrations
                     b.ToTable("tblOpenOrderCoinHistory");
                 });
 
+            modelBuilder.Entity("SL_Bullion.Models.OrderFailureLog", b =>
+                {
+                    b.Property<int>("id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("id"));
+
+                    b.Property<DateTime>("cdate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("clientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("firmName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("loginId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("mobile")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("price")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<decimal>("quantity")
+                        .HasColumnType("decimal(18,2)");
+
+                    b.Property<string>("reason")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("symbolId")
+                        .HasColumnType("int");
+
+                    b.HasKey("id");
+
+                    b.ToTable("tblOrderFailureLog");
+                });
+
             modelBuilder.Entity("SL_Bullion.Models.Otr", b =>
                 {
                     b.Property<int>("id")
@@ -1710,9 +1764,6 @@ namespace SL_Bullion.Migrations
                     b.Property<int>("high")
                         .HasColumnType("int");
 
-                    b.Property<int>("rateDisplayProductId")
-                       .HasColumnType("int");
-
                     b.Property<string>("identifier")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -1724,6 +1775,9 @@ namespace SL_Bullion.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool>("isBill")
+                        .HasColumnType("bit");
+
+                    b.Property<bool>("isComment")
                         .HasColumnType("bit");
 
                     b.Property<bool>("isTerminal")
@@ -1747,6 +1801,9 @@ namespace SL_Bullion.Migrations
                     b.Property<string>("name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("rateDisplayProductId")
+                        .HasColumnType("int");
 
                     b.Property<string>("rateType")
                         .IsRequired()
