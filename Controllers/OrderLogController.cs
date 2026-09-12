@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using NToastNotify;
 using SL_Bullion.DAL;
 using SL_Bullion.Models;
+using System.Text.Json.Nodes;
 
 namespace SL_Bullion.Controllers
 {
@@ -73,6 +74,33 @@ namespace SL_Bullion.Controllers
             }
 
             return RedirectToAction(nameof(List));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> selectedItems([FromBody] JsonArray obj)
+        {
+            try
+            {
+                if (obj == null || obj.Count == 0)
+                    return BadRequest("No records selected.");
+
+                string type = obj[0]["type"]?.ToString();
+
+                if (type == "delete")
+                {
+                    var ids = obj.Select(x => Convert.ToInt32(x["id"]?.ToString())).ToList();
+                    var records = await _context.tblOrderFailureLog.Where(x => ids.Contains(x.id)).ToListAsync();
+                    _context.tblOrderFailureLog.RemoveRange(records);
+                    await _context.SaveChangesAsync();
+                    _alert.AddSuccessToastMessage("Order log deleted successfully.");
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex.Message);
+            }
         }
     }
 }

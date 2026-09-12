@@ -35,7 +35,7 @@ td.b1, td.b2{
     tbody.executeOrder.ovrcover {
         width: 100%;
         overflow-y: auto;
-        height: 350px;
+      /*  height: 350px;*/
         display: block;
     }
 .tbx {
@@ -135,7 +135,7 @@ table.texchangemain {
 
 tbody.executeOrder {
     display: block;
-    height: 300px;
+  /*  height: 300px;*/
     width: 100%;
     overflow-y: auto;
 }
@@ -240,6 +240,10 @@ tr.adbr {
 
 .table-cover .table-wrapper {
     overflow-x: auto;
+}
+.tabletop_head {
+display:flex; justify-content:end;
+padding:5px 0;
 }
 .table-cover {
     box-shadow: 0 0 1px 0 #000;
